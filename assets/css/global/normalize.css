@@ -13,8 +13,9 @@ html {
 
 body {
 	background-image: url("../../img/global/background/background-light.png");
-	background-repeat: no-repeat;
-	background-size: cover;
+	background-repeat: repeat-y;       
+  background-size: cover;         
+  background-position: top center; 
   font-family: var(--font-primary);
   font-size: 1.6rem;
 	-moz-osx-font-smoothing: grayscale;

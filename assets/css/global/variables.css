@@ -13,6 +13,19 @@
 	--color-royal-blue: #0065DA;
 	--color-light-blue: #40A8F5;
 	--color-red: #ff0000;
+	--color-green-light: #D1FAE5;
+    --color-green-dark: #065F46;
+    --color-green-border: #A7F3D0;
+    --color-amber-light: #FEF3C7;
+    --color-amber-dark: #92400E;
+    --color-amber-border: #FDE68A;
+    --color-gray-hover: #E5E7EB;
+    --color-green-emerald: #10B981;
+    --color-green-emerald-dark: #059669;
+    --color-blue-bright: #3B82F6;
+    --color-blue-dark: #2563EB;
+    --color-red-strong: #EF4444;
+    --color-red-dark: #DC2626;
 
 	/* Typography */
 	--font-primary: "Inter", arial, helvetica, sans-serif;
@@ -46,15 +59,14 @@
 	--bg-button-hover: var(--color-medium-blue);
 	--bg-button-hover-secondary: var(--color-dark-blue);
 
-
 	/* Border Colors */
 	--border-primary: var(--color-lavender-mist);
-	--border-segundary: var(var(--color-black));
+	--border-secondary: var(--color-black);
 	--border-hover: var(--color-medium-blue);
 
 	/* Box Shadow */
 	--shadow-primary: rgb(0 0 0 / 10%);
-	--shadow-segundary: rgb(0 0 0 / 20%);
+	--shadow-secondary: rgb(0 0 0 / 20%);
 	--shadow-quaternary: rgb(0 0 0 / 30%);
 	--shadow-quintennial: rgb(0 0 0 / 35%);
 

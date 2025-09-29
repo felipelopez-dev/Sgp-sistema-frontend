@@ -1,5 +1,6 @@
 # Dependencies
 node_modules/
+serviceAccountKey.json
 
 # Build files
 dist/

@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Controle de Produção</title>
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding-top: 50px;
+            margin: 0;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 900px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #0056b3;
+        }
+
+        #formulario-lancamento {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        #formulario-lancamento label {
+            font-weight: bold;
+        }
+
+        #formulario-lancamento input,
+        #formulario-lancamento select {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        #formulario-lancamento button {
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        #formulario-lancamento button:hover {
+            background-color: #0056b3;
+        }
+
+        #tabela-lancamentos {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        #tabela-lancamentos th, #tabela-lancamentos td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        #tabela-lancamentos th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+
+        #tabela-lancamentos tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .botoes-acao {
+            display: flex;
+            gap: 5px;
+        }
+
+        .btn-ok {
+            background-color: #28a745;
+            color: #fff;
+        }
+        
+        .btn-ok:hover {
+            background-color: #218838;
+        }
+
+        .btn-excluir {
+            background-color: #dc3545;
+            color: #fff;
+        }
+
+        .btn-excluir:hover {
+            background-color: #c82333;
+        }
+        
+        .btn-editar {
+            background-color: #ffc107;
+            color: #333;
+        }
+
+        .btn-editar:hover {
+            background-color: #e0a800;
+        }
+        
+        .btn-salvar {
+            background-color: #17a2b8;
+            color: #fff;
+        }
+
+        .btn-salvar:hover {
+            background-color: #138496;
+        }
+
+        #tabela-lancamentos button {
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        #tabela-lancamentos .concluido {
+            text-decoration: line-through;
+            color: #888;
+        }
+
+        .status-blocos {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .bloco-status {
+            flex: 1;
+            background-color: #e9ecef;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .bloco-status.total {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .bloco-status.restante {
+            background-color: #ffc107;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Controle de Produção</h1>
+
+        <form id="formulario-lancamento">
+            <label for="quantidade">Quantidade de Caixas:</label>
+            <input type="number" id="quantidade" name="quantidade" required>
+
+            <label for="categoria">Categoria:</label>
+            <select id="categoria" name="categoria" required>
+                <option value="">Selecione a Categoria</option>
+                <option value="interno">Mercado Interno</option>
+                <option value="externo">Mercado Externo</option>
+            </select>
+
+            <label for="produto">Produto:</label>
+            <select id="produto" name="produto" required disabled>
+                <option value="">Selecione um Produto</option>
+            </select>
+
+            <label for="descricao">Descrição (Opcional):</label>
+            <input type="text" id="descricao" name="descricao">
+
+            <button type="submit">Adicionar Lançamento</button>
+        </form>
+
+        <div class="status-blocos">
+            <div id="bloco-total" class="bloco-status total">
+                Total de Caixas: 0
+            </div>
+            <div id="bloco-restante" class="bloco-status restante">
+                Caixas Restantes: 0
+            </div>
+        </div>
+
+        <table id="tabela-lancamentos">
+            <thead>
+                <tr>
+                    <th>Quantidade</th>
+                    <th>Categoria</th>
+                    <th>Produto</th>
+                    <th>Descrição</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const formulario = document.getElementById('formulario-lancamento');
+            const tabelaBody = document.querySelector('#tabela-lancamentos tbody');
+            const categoriaSelect = document.getElementById('categoria');
+            const produtoSelect = document.getElementById('produto');
+            const descricaoInput = document.getElementById('descricao');
+            const blocoTotalDiv = document.getElementById('bloco-total');
+            const blocoRestanteDiv = document.getElementById('bloco-restante');
+            
+            let totalGeralCaixas = 0;
+            let caixasRestantes = 0;
+
+            const produtosPorCategoria = {
+                interno: ['Caixa baixa', 'Pernil com pele', 'Torresmo'],
+                externo: ['Exportações', 'Exportação barriga', 'Exportação de sobrepaleta', 'Exportação de costela', 'Exportação lombo', 'Exportação bisteca', 'Exportação máscara', 'Exportação de miúdos']
+            };
+
+            categoriaSelect.addEventListener('change', () => {
+                const categoriaSelecionada = categoriaSelect.value;
+                produtoSelect.innerHTML = '<option value="">Selecione um Produto</option>';
+                
+                if (categoriaSelecionada) {
+                    produtoSelect.disabled = false;
+                    produtosPorCategoria[categoriaSelecionada].forEach(produto => {
+                        const option = document.createElement('option');
+                        option.value = produto;
+                        option.textContent = produto;
+                        produtoSelect.appendChild(option);
+                    });
+                } else {
+                    produtoSelect.disabled = true;
+                }
+            });
+
+            formulario.addEventListener('submit', (evento) => {
+                evento.preventDefault();
+                
+                const quantidadeInput = document.getElementById('quantidade');
+                const quantidade = parseInt(quantidadeInput.value);
+                const categoria = categoriaSelect.value;
+                const produto = produtoSelect.value;
+                const descricao = descricaoInput.value;
+                
+                if (!isNaN(quantidade) && quantidade > 0 && categoria && produto) {
+                    adicionarLinhaNaTabela(quantidade, categoria, produto, descricao);
+                    
+                    totalGeralCaixas += quantidade;
+                    caixasRestantes += quantidade;
+                    atualizarTotais();
+                    
+                    quantidadeInput.value = '';
+                    categoriaSelect.value = '';
+                    produtoSelect.innerHTML = '<option value="">Selecione um Produto</option>';
+                    produtoSelect.disabled = true;
+                    descricaoInput.value = '';
+                }
+            });
+
+            function adicionarLinhaNaTabela(quantidade, categoria, produto, descricao) {
+                const novaLinha = document.createElement('tr');
+                novaLinha.dataset.quantidade = quantidade;
+                
+                const celulaQuantidade = document.createElement('td');
+                celulaQuantidade.textContent = quantidade;
+                
+                const celulaCategoria = document.createElement('td');
+                celulaCategoria.textContent = categoria === 'interno' ? 'Mercado Interno' : 'Mercado Externo';
+
+                const celulaProduto = document.createElement('td');
+                celulaProduto.textContent = produto;
+
+                const celulaDescricao = document.createElement('td');
+                celulaDescricao.textContent = descricao || '-';
+
+                const celulaAcao = document.createElement('td');
+                const botoesContainer = document.createElement('div');
+                botoesContainer.classList.add('botoes-acao');
+
+                const botaoOK = document.createElement('button');
+                botaoOK.textContent = 'OK';
+                botaoOK.classList.add('btn-ok');
+
+                const botaoEditar = document.createElement('button');
+                botaoEditar.textContent = 'Editar';
+                botaoEditar.classList.add('btn-editar');
+
+                const botaoExcluir = document.createElement('button');
+                botaoExcluir.textContent = 'Excluir';
+                botaoExcluir.classList.add('btn-excluir');
+
+                botaoOK.addEventListener('click', () => {
+                    if (novaLinha.classList.contains('concluido')) {
+                        return;
+                    }
+                    novaLinha.classList.add('concluido');
+                    caixasRestantes -= quantidade;
+                    botaoOK.disabled = true;
+                    atualizarTotais();
+                });
+
+                botaoExcluir.addEventListener('click', () => {
+                    if (!novaLinha.classList.contains('concluido')) {
+                        totalGeralCaixas -= quantidade;
+                        caixasRestantes -= quantidade;
+                    } else {
+                        totalGeralCaixas -= quantidade;
+                    }
+                    tabelaBody.removeChild(novaLinha);
+                    atualizarTotais();
+                });
+
+                botaoEditar.addEventListener('click', () => {
+                    // Células atuais da linha
+                    const celulas = novaLinha.querySelectorAll('td');
+                    const [tdQuantidade, tdCategoria, tdProduto, tdDescricao, tdAcao] = celulas;
+
+                    // Salva os valores originais para possível reversão
+                    const dadosOriginais = {
+                        quantidade: parseInt(tdQuantidade.textContent),
+                        categoria: tdCategoria.textContent,
+                        produto: tdProduto.textContent,
+                        descricao: tdDescricao.textContent
+                    };
+                    
+                    // Converte as células em inputs e selects
+                    tdQuantidade.innerHTML = `<input type="number" value="${dadosOriginais.quantidade}" style="width: 70px;">`;
+                    
+                    tdCategoria.innerHTML = `
+                        <select id="edit-categoria" style="width: 100px;">
+                            <option value="interno">Mercado Interno</option>
+                            <option value="externo">Mercado Externo</option>
+                        </select>
+                    `;
+                    tdCategoria.querySelector('select').value = dadosOriginais.categoria === 'Mercado Interno' ? 'interno' : 'externo';
+
+                    const editProdutoSelect = document.createElement('select');
+                    editProdutoSelect.style.width = '100px';
+                    // Cria as opções de produto dinamicamente
+                    const categoriaEdicao = tdCategoria.querySelector('select').value;
+                    produtosPorCategoria[categoriaEdicao].forEach(prod => {
+                        const option = document.createElement('option');
+                        option.value = prod;
+                        option.textContent = prod;
+                        editProdutoSelect.appendChild(option);
+                    });
+                    editProdutoSelect.value = dadosOriginais.produto;
+                    tdProduto.innerHTML = '';
+                    tdProduto.appendChild(editProdutoSelect);
+
+                    tdDescricao.innerHTML = `<input type="text" value="${dadosOriginais.descricao}" style="width: 100px;">`;
+
+                    // Altera os botões de ação para Salvar e Cancelar
+                    tdAcao.innerHTML = `
+                        <button class="btn-salvar">Salvar</button>
+                        <button class="btn-excluir">Cancelar</button>
+                    `;
+
+                    // Lógica para o botão "Salvar" após a edição
+                    tdAcao.querySelector('.btn-salvar').addEventListener('click', () => {
+                        const novaQuantidade = parseInt(tdQuantidade.querySelector('input').value);
+                        const novaCategoria = tdCategoria.querySelector('select').value;
+                        const novoProduto = tdProduto.querySelector('select').value;
+                        const novaDescricao = tdDescricao.querySelector('input').value;
+                        
+                        if (!isNaN(novaQuantidade) && novaQuantidade > 0 && novaCategoria && novoProduto) {
+                            // Atualiza os totais removendo o valor antigo e adicionando o novo
+                            if (!novaLinha.classList.contains('concluido')) {
+                                caixasRestantes = caixasRestantes - dadosOriginais.quantidade + novaQuantidade;
+                            }
+                            totalGeralCaixas = totalGeralCaixas - dadosOriginais.quantidade + novaQuantidade;
+
+                            // Atualiza a linha com os novos dados
+                            tdQuantidade.textContent = novaQuantidade;
+                            tdCategoria.textContent = novaCategoria === 'interno' ? 'Mercado Interno' : 'Mercado Externo';
+                            tdProduto.textContent = novoProduto;
+                            tdDescricao.textContent = novaDescricao || '-';
+
+                            // Restaura os botões de ação
+                            tdAcao.innerHTML = '';
+                            tdAcao.appendChild(botoesContainer);
+                            
+                            atualizarTotais();
+                        }
+                    });
+
+                    // Lógica para o botão "Cancelar" após a edição
+                    tdAcao.querySelector('.btn-excluir').addEventListener('click', () => {
+                        // Restaura a linha com os dados originais
+                        tdQuantidade.textContent = dadosOriginais.quantidade;
+                        tdCategoria.textContent = dadosOriginais.categoria;
+                        tdProduto.textContent = dadosOriginais.produto;
+                        tdDescricao.textContent = dadosOriginais.descricao;
+                        
+                        // Restaura os botões de ação
+                        tdAcao.innerHTML = '';
+                        tdAcao.appendChild(botoesContainer);
+                    });
+                });
+
+                botoesContainer.appendChild(botaoOK);
+                botoesContainer.appendChild(botaoEditar);
+                botoesContainer.appendChild(botaoExcluir);
+                celulaAcao.appendChild(botoesContainer);
+
+                novaLinha.appendChild(celulaQuantidade);
+                novaLinha.appendChild(celulaCategoria);
+                novaLinha.appendChild(celulaProduto);
+                novaLinha.appendChild(celulaDescricao);
+                novaLinha.appendChild(celulaAcao);
+
+                tabelaBody.appendChild(novaLinha);
+            }
+            
+            function atualizarTotais() {
+                blocoTotalDiv.textContent = `Total de Caixas: ${totalGeralCaixas}`;
+                blocoRestanteDiv.textContent = `Caixas Restantes: ${caixasRestantes}`;
+            }
+        });
+    </script>
+</body>
+</html>

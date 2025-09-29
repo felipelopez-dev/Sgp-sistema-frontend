@@ -4,10 +4,11 @@ body.dark-mode {
 	--text-button: var(--color-white);
 	--text-button-hover: var(--color-royal-blue);
 
-	background-image: url("../../img/global/background/background_black.png");
-	background-repeat: no-repeat;
-	background-size: cover;
-	height: 100%;
+	min-height: 100vh;
+  	background-image: url("../../img/global/background/background-black.png");
+  	background-repeat: repeat-y;       
+  	background-size: cover;         
+  	background-position: top center;  
 
 	.sgp-header {
 		background-color: var(--bg-septenary);
@@ -32,4 +33,17 @@ body.dark-mode {
 		background-color: var(--bg-septenary);
 		border-bottom: 1px solid var(--border-segundary);
   }
+
+  .sub-menu {
+	background-color: var(--bg-septenary);
+  }
+
+  .sub-menu li a:hover {
+	background-color: var(--color-medium-blue);
+  }
+  
+  /* footer */
+  .footer {
+        color: var(--text-title);
+    }
 }
