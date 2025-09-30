@@ -1,20 +1,21 @@
 import { database } from './firebaseConfig.js';
 import { ref, push, onValue, remove, get, update } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
 
-const inputField           = document.querySelectorAll('.register-card__input');
-const erroMessages         = document.querySelectorAll('.register-validation');
-const clickValidation      = document.querySelectorAll('.register-button__add');
-const registerReturn       = document.querySelector('.register-return');
-const container            = document.querySelector('.exit-content');
-const historyContainer     = document.querySelector('.history-content');
+const inputField        = document.querySelectorAll('.register-card__input');
+const erroMessages      = document.querySelectorAll('.register-validation');
+const clickValidation   = document.querySelectorAll('.register-button__add');
+const registerReturn    = document.querySelector('.register-return');
+const container         = document.querySelector('.exit-content');
+const historyContainer  = document.querySelector('.history-content');
 
-const filterInput          = document.getElementById('filter-input__date');
-const applyFilterBtn       = document.querySelector('.filter-button__1');
-const showAllBtn           = document.querySelector('.filter-button__2');
+const filterInput       = document.getElementById('filter-input__date');
+const applyFilterBtn    = document.querySelector('.filter-button__1');
+const showAllBtn        = document.querySelector('.filter-button__2');
 
-const notificationSound    = new Audio('../../../assets/audio/notification.mp3'); 
-const alarmAdd             = document.querySelector('.alarm--add');
-const alarmUpdate          = document.querySelector('.alarm--update');
+const notificationSound = new Audio('/assets/audio/notification.mp3'); 
+
+const alarmAdd          = document.querySelector('.alarm--add');
+const alarmUpdate       = document.querySelector('.alarm--update');
 
 let allHistoryData = {};
 let allSaidasData = {};
@@ -23,11 +24,11 @@ let isFirstLoad = true;
 let isUpdating = false;
 let notificationInterval = null; 
 
-const modal                = document.querySelector('.delete');
-const btnCancel            = modal ? modal.querySelector('.button--link1') : null;
-const btnConfirm           = modal ? modal.querySelector('.button--link2') : null;
+const modal             = document.querySelector('.delete');
+const btnCancel         = modal ? modal.querySelector('.button--link1') : null;
+const btnConfirm        = modal ? modal.querySelector('.button--link2') : null;
 
-let currentEditingKey  = null;
+let currentEditingKey   = null;
 let currentEditingCard = null;
 
 
@@ -73,7 +74,6 @@ const exitContent = (data, key) => {
     card.classList.add('exit-card');
     card.dataset.key = key;
 
-    // A borda permanece, pois esta flag não será mais limpa pelo alarme.
     if (data.updated) {
         card.classList.add('card-updated');
     }
@@ -116,6 +116,22 @@ const exitContent = (data, key) => {
 
     const deleteBtn = card.querySelector('.exit-right__card-delete');
     deleteBtn.addEventListener('click', () => showDeleteConfirmation(card));
+    
+    const editBtn = card.querySelector('.exit-right__card-edit');
+    editBtn.addEventListener('click', (event) => {
+        event.stopPropagation(); 
+        const descriptionElement = card.querySelector('.exit-center__text');
+        
+        const editModal      = document.querySelector('.edit');
+        const editTextarea   = document.querySelector('.edit-textarea');
+        
+        currentEditingKey   = card.dataset.key;
+        currentEditingCard = card;
+        
+        editTextarea.value = descriptionElement.textContent;
+        editModal.classList.add('edit--active');
+    });
+
     if(container) {
         container.appendChild(card);
     }
@@ -223,10 +239,13 @@ const addToHistory = (data, key) => {
 
 const playNotification = () => {
     try {
+        notificationSound.load(); 
         notificationSound.currentTime = 0; 
         notificationSound.play();
     } catch (error) {
-        console.warn("Erro ao tentar reproduzir o áudio (pode ser bloqueio do navegador):", error);
+        if (error.name !== "NotAllowedError") {
+             console.warn("Erro ao tentar reproduzir o áudio:", error);
+        }
     }
 }
 
@@ -252,6 +271,7 @@ const hideAlarm = (type) => {
         clearInterval(notificationInterval);
         notificationInterval = null;
         notificationSound.pause(); 
+        notificationSound.currentTime = 0; 
     }
 };
 
@@ -263,11 +283,25 @@ if (alarmAdd) {
 
 if (alarmUpdate) {
     alarmUpdate.querySelector('.alarm-button').addEventListener('click', () => {
-        // CORREÇÃO: Apenas esconde o alarme e o som, mas mantém a flag 'updated: true' no Firebase,
-        // garantindo que a borda '.card-updated' permaneça no card.
         hideAlarm('update');
-        
-        // Removemos a lógica de update(cardRef, { updated: null }) daqui.
+
+        const updates = {};
+        let resetNeeded = false;
+
+        for (const key in allSaidasData) {
+            if (allSaidasData[key].updated) {
+                updates[`saidas/${key}/updated`] = null;
+                resetNeeded = true;
+            }
+        }
+
+        if (resetNeeded) {
+            update(ref(database), updates)
+                .then(() => {})
+                .catch((error) => {
+                    console.error("Erro ao resetar flags 'updated':", error);
+                });
+        }
     });
 }
 
@@ -284,16 +318,17 @@ if (clickValidation) {
                 return;
             }
 
-            // --- CORREÇÃO DE DESBLOQUEIO DE ÁUDIO ---
             try {
+                notificationSound.volume = 0;
                 notificationSound.play().then(() => {
                     notificationSound.pause();
                     notificationSound.currentTime = 0;
-                }).catch(e => console.warn('Falha no desbloqueio silencioso de áudio.', e));
+                    notificationSound.volume = 1; 
+                }).catch(e => {
+                    notificationSound.volume = 1; 
+                });
             } catch (e) {
-                console.warn('Falha no desbloqueio de áudio (erro síncrono).', e);
             }
-            // ----------------------------------------
 
             const data = {
                 name: inputField[0].value.trim(),
@@ -331,22 +366,19 @@ if (isRegisterPage) {
                 lastKnownKeys = currentKeys;
                 isFirstLoad = false;
             } else {
-                // Lógica de alarme de atualização
                 const updatedKeys = [...lastKnownKeys].filter(key => {
                     const data = currentData[key];
-                    // Mostra o alarme se houver a flag 'updated'
                     return data && data.updated && key !== currentEditingKey; 
                 });
                 
                 if (updatedKeys.length > 0) {
                     showAlarm('update');
                 } else {
-                    // Lógica de alarme de adição
                     const addedKeys = [...currentKeys].filter(key => !lastKnownKeys.has(key));
                     if (addedKeys.length > 0) {
                         const latestKey = addedKeys[addedKeys.length - 1];
                         const data = currentData[latestKey];
-                        if (!data.updated) {
+                        if (data && !data.updated) { 
                             showAlarm('add');
                         }
                     }
@@ -355,7 +387,6 @@ if (isRegisterPage) {
                 lastKnownKeys = currentKeys;
             }
 
-            // Renderiza os cards
             container.innerHTML = '';
             snapshot.forEach((childSnapshot) => {
                 const data = childSnapshot.val();
@@ -369,22 +400,6 @@ if (isRegisterPage) {
     const editTextarea   = document.querySelector('.edit-textarea');
     const editConfirmBtn = document.querySelector('.button--confirm-edit');
     const editCancelBtn  = document.querySelector('.button--cancel-edit');
-
-    if (container) {
-        container.addEventListener('click', (event) => {
-            const editButton = event.target.closest('.exit-right__card-edit');
-            if (editButton) {
-                const card                 = editButton.closest('.exit-card');
-                const descriptionElement = card.querySelector('.exit-center__text');
-                
-                currentEditingKey  = card.dataset.key;
-                currentEditingCard = card;
-                
-                editTextarea.value = descriptionElement.textContent;
-                editModal.classList.add('edit--active');
-            }
-        });
-    }
 
     if (editCancelBtn) {
         editCancelBtn.addEventListener('click', () => {
@@ -402,7 +417,7 @@ if (isRegisterPage) {
 
                 update(cardRef, { 
                     description: newDescription,
-                    updated: true // Mantém a flag 'updated' para que a borda fique permanente
+                    updated: true 
                 })
                     .then(() => {
                         alert('Descrição atualizada com sucesso!');
