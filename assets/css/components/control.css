@@ -1,5 +1,6 @@
 .control {
-    max-width: 130rem;
+    width: 100%;
+    max-width: 120rem;
     margin: 2.5rem auto;
     padding: 1.25rem;
     background-color: var(--bg-primary);
@@ -62,37 +63,36 @@
     outline: none;
 }
 
-.control-form button[type="button"] {
-    grid-column: 4 / 2;
-    padding: 1.3rem 3rem;
-    font-size: 1.8rem;
-    font-weight: 600;
-    border: none;
-    border-radius: 0.5rem;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-}
-
-.control-form button[type="submit"] {
-    grid-column: 4 / 2;
-    padding: 1.3rem 3rem;
-    font-size: 1.8rem;
-    font-weight: 600;
-    border: none;
-    border-radius: 0.5rem;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    margin-top: 4rem;
+.form-button__area {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    margin-top: 6rem;
 }
 
 .add-table {
+    padding: 1.3rem 3rem;
+    font-size: 1.8rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
     background-color: var(--color-dark-blue);
     color: var(--color-white);
 }
 
 .reset-table {
     background-color: var(--color-green-emerald);
-      color: var(--color-white);
+    color: var(--color-white);
+    padding: 1.3rem 5rem;
+    font-size: 1.8rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 .control-form button[type="submit"]:hover {
@@ -225,7 +225,6 @@
     border-radius: 0.4rem;
     text-align: center;
 }
-
 
 .botoes-acao button {
     border: none;
@@ -390,7 +389,8 @@
     background-color: var(--bg-quaternary);
     color: var(--color-white);
 }
-@media only screen and (min-width: 320px) and (max-width: 480px) {
+
+@media (min-width: 320px) and (max-width: 480px) {
     .form-description__area input[type="number"], .form-description__area input[type="text"], .form-description__area select {
         width: 100%;
     }
@@ -481,7 +481,7 @@
     }
 }
 
-@media only screen and (min-width: 481px) and (max-width: 768px) {
+@media (min-width: 481px) and (max-width: 768px) {
     .control {
         max-width: 95%;
         margin: 2rem auto;
@@ -548,7 +548,7 @@
 }
 
 
-@media only screen and (min-width: 769px) and (max-width: 1024px) {
+@media (min-width: 769px) and (max-width: 1024px) {
     .control {
         max-width: 90%;
         margin: 3rem auto;
@@ -592,9 +592,10 @@
 }
 
 
-@media only screen and (min-width: 1025px) and (max-width: 1200px) {
+@media (min-width: 1025px) and (max-width: 1200px) {
     .control {
         max-width: 110rem;
+        width: 100%;
         margin: 3rem auto;
     }
 

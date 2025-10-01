@@ -44,7 +44,20 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     /**
+     * Formata um timestamp para o formato DD/MM/AAAA.
+     */
+    const formatTimestamp = (timestamp) => {
+        if (!timestamp) return '-';
+        const date = new Date(timestamp);
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const year = date.getFullYear();
+        return `${day}/${month}/${year}`;
+    };
+
+    /**
      * Calcula e atualiza os totais de caixas a partir das linhas da tabela.
+     * Atualiza o bloco "Caixas Restantes" com a soma de (Quantidade - Saída).
      */
     const updateTotals = () => {
         totalBoxes = 0;
@@ -52,14 +65,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
         document.querySelectorAll('#tabela-lancamentos tbody tr').forEach(row => {
             const quantity = parseInt(row.dataset.quantity || 0);
+            // Pega o valor real de Saída do dataset
+            const saida = parseInt(row.dataset.saida || 0); 
+            
             totalBoxes += quantity;
-            if (!row.classList.contains('concluido')) {
-                remainingBoxes += quantity;
-            }
+            // O restante é a entrada menos a saída (o que falta)
+            remainingBoxes += (quantity - saida);
         });
 
         totalBlockDiv.textContent = `Total de Caixas: ${totalBoxes}`;
-        remainingBlockDiv.textContent = `Caixas Restantes: ${remainingBoxes}`;
+        remainingBlockDiv.textContent = `Caixas Restantes: ${remainingBoxes}`; 
     }
 
     // Troca produtos ao mudar categoria (Lógica existente)
@@ -99,7 +114,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 product: product,
                 description: description,
                 status: 'pendente', 
-                timestamp: Date.now() 
+                timestamp: Date.now(), // DATA DE LANÇAMENTO INICIAL (DATA DO DIA)
+                saida: 0, // Inicializa a saída em 0
+                dataSaida: null // Data da última saída (opcional)
             };
 
             // Salva no Firebase
@@ -128,7 +145,8 @@ document.addEventListener('DOMContentLoaded', () => {
      */
     function addOrUpdateRowToTable(key, data) {
         let row = document.querySelector(`tr[data-key="${key}"]`);
-        const { quantity, category, product, description, status } = data;
+        // Incluindo os novos campos com valores padrão (saida, dataSaida, timestamp)
+        const { quantity, category, product, description, status, saida = 0, dataSaida = null, timestamp } = data;
         
         const isNewRow = !row;
 
@@ -142,32 +160,49 @@ document.addEventListener('DOMContentLoaded', () => {
             if (oldOkButton) oldOkButton.replaceWith(oldOkButton.cloneNode(true));
         }
         
+        // Novos datasets para cálculo e controle de estado
         row.dataset.quantity = quantity;
+        row.dataset.saida = saida;
+
+        // CÁLCULO: Pegar quantidade - saida = Restante
+        const restantes = quantity - saida;
+        
+        // Mantém o status original, mas adiciona a classe visual se restantes for zero
+        const currentStatus = status || 'pendente';
         row.className = '';
-        if (status === 'concluido') {
+        if (currentStatus === 'concluido') {
             row.classList.add('concluido');
         }
         
         const categoryDisplay = category === 'interno' ? 'Mercado Interno' : 'Mercado Externo';
         const categoryClass = category === 'interno' ? 'categoria-interno' : 'categoria-externo';
+        
+        // Coluna "Data" mostra a data de LANÇAMENTO INICIAL (DATA DO DIA)
+        const dataLancamentoFormatada = formatTimestamp(timestamp); 
 
-        // Recria o HTML da linha
+        // Recria o HTML da linha com as colunas Quantidade, Saída, Restantes e Data
         row.innerHTML = `
             <td>${quantity}</td>
+            <td>${saida}</td>
+            <td>${restantes}</td>
             <td class="${categoryClass}">${categoryDisplay}</td>
             <td>${product}</td>
+            <td>${dataLancamentoFormatada}</td>
             <td>${description || '-'}</td>
             <td>
                 <div class="botoes-acao">
-                    <button class="btn-ok">${status === 'concluido' ? 'Desmarcar' : 'OK'}</button>
-                    <button class="btn-editar btn-editar__monitor" style="display: ${status === 'concluido' ? 'none' : ''}">Editar</button>
-                    <button class="btn-excluir btn-excluir__monitor" style="display: ${status === 'concluido' ? 'none' : ''}">Excluir</button>
+                    <button class="btn-ok">${currentStatus === 'concluido' ? 'Desmarcar' : 'Término'}</button>
+                    <button class="btn-editar btn-editar__monitor" style="display: ${currentStatus === 'concluido' ? 'none' : ''}">Editar</button>
+                    <button class="btn-excluir btn-excluir__monitor" style="display: ${currentStatus === 'concluido' ? 'none' : ''}">Excluir</button>
                 </div>
             </td>
         `;
         
         // Anexa os listeners de evento
         attachRowEventListeners(row, key, data);
+        
+        // Força a atualização dos totais após o DOM ser manipulado
+        updateTotals(); 
     }
     
     /**
@@ -190,16 +225,33 @@ document.addEventListener('DOMContentLoaded', () => {
         const editButton = row.querySelector('.btn-editar');
         const deleteButton = row.querySelector('.btn-excluir');
         
-        // Se a linha está em modo de edição (o que não deve acontecer aqui), não anexa.
         if (!okButton || !editButton || !deleteButton) return; 
 
-        // OK Button Logic (toggle status in Firebase)
+        // OK Button Logic (toggle Saida: 0 ou Saida: quantity)
         okButton.addEventListener('click', () => {
-            const newStatus = row.classList.contains('concluido') ? 'pendente' : 'concluido';
-            update(ref(database, `estoque/${key}`), {
-                status: newStatus
-            }).catch(error => alert('Erro ao atualizar status: ' + error.message));
-            // O listener do onValue cuida da atualização do DOM
+            const currentSaida = parseInt(row.dataset.saida || 0);
+            const originalQuantity = parseInt(row.dataset.quantity || 0);
+            const restantes = originalQuantity - currentSaida;
+
+            let updateData = {};
+            if (restantes > 0) {
+                // Se há restantes, registra a saída total
+                updateData = {
+                    saida: originalQuantity,
+                    dataSaida: Date.now(), // Atualiza a data de saída para agora
+                    status: 'concluido' // Atualiza o status
+                };
+            } else {
+                // Se já saiu tudo (restantes == 0), zera a saída
+                updateData = {
+                    saida: 0,
+                    dataSaida: null,
+                    status: 'pendente' // Atualiza o status
+                };
+            }
+            
+            update(ref(database, `estoque/${key}`), updateData)
+                .catch(error => alert('Erro ao atualizar saída: ' + error.message));
         });
 
         // Delete Button Logic (remove from Firebase)
@@ -207,7 +259,6 @@ document.addEventListener('DOMContentLoaded', () => {
             if (confirm('Tem certeza que deseja excluir este lançamento?')) {
                 remove(ref(database, `estoque/${key}`))
                     .catch(error => alert('Erro ao excluir lançamento: ' + error.message));
-                // O listener do onValue cuida da remoção do DOM
             }
         });
 
@@ -222,14 +273,51 @@ document.addEventListener('DOMContentLoaded', () => {
      */
     function handleEditMode(newRow, key, originalData) {
         const cells = newRow.querySelectorAll('td');
-        const [tdQuantity, tdCategory, tdProduct, tdDescription, tdAction] = cells;
+        const [tdQuantity, tdSaida, tdRestantes, tdCategory, tdProduct, tdData, tdDescription, tdAction] = cells;
 
-        const { quantity: oldQuantity, category: oldCategoryValue, product: oldProduct, description: oldDescription } = originalData;
-
-        // Convert cells to inputs/selects
-        tdQuantity.innerHTML = `<input type="number" class="edit-quantity" value="${oldQuantity}" style="width: 70px;">`;
+        const { 
+            quantity: oldQuantity, 
+            category: oldCategoryValue, 
+            product: oldProduct, 
+            description: oldDescription,
+            saida: oldSaida = 0, 
+            dataSaida: oldDataSaida = null,
+            status: oldStatus 
+        } = originalData;
         
-        // Category Select
+        // 1. Quantidade (Entrada) - Editável
+        tdQuantity.innerHTML = `<input type="number" class="edit-quantity" value="${oldQuantity}" min="1" style="width: 70px;">`;
+        const editQuantityInput = tdQuantity.querySelector('.edit-quantity');
+        
+        // 2. Saída - Editável
+        tdSaida.innerHTML = `<input type="number" class="edit-saida" value="${oldSaida}" min="0" max="${oldQuantity}" style="width: 70px;">`;
+        const editSaidaInput = tdSaida.querySelector('.edit-saida');
+        
+        // 3. Restante (Visualização calculada no modo edição)
+        const initialRestantes = oldQuantity - oldSaida;
+        tdRestantes.innerHTML = `<span class="edit-restantes" style="font-weight: bold;">${initialRestantes}</span>`;
+        const editRestantesSpan = tdRestantes.querySelector('.edit-restantes');
+
+        // Função de recalcular para Saída e Quantidade (Quantidade - Saída)
+        const updateRestantes = () => {
+            const newQty = parseInt(editQuantityInput.value || 0);
+            let newSaida = parseInt(editSaidaInput.value || 0);
+            
+            // Garante que Saída não excede a Quantidade
+            if (newSaida > newQty) {
+                newSaida = newQty;
+                editSaidaInput.value = newSaida;
+            }
+            editSaidaInput.max = newQty; // Atualiza o max da Saída
+            
+            const calculatedRestantes = newQty - newSaida;
+            editRestantesSpan.textContent = calculatedRestantes;
+        };
+
+        editQuantityInput.addEventListener('input', updateRestantes);
+        editSaidaInput.addEventListener('input', updateRestantes);
+
+        // 4. Categoria Select
         tdCategory.innerHTML = `
             <select id="edit-category" class="edit-category" style="width: 120px;">
                 <option value="interno">Mercado Interno</option>
@@ -239,7 +327,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const editCategorySelect = tdCategory.querySelector('.edit-category');
         editCategorySelect.value = oldCategoryValue;
 
-        // Product Select
+        // 5. Product Select
         const editProductSelect = document.createElement('select');
         editProductSelect.classList.add('edit-product');
         editProductSelect.style.width = '120px';
@@ -267,9 +355,13 @@ document.addEventListener('DOMContentLoaded', () => {
             populateProducts(editCategorySelect.value);
         });
 
+        // 6. Data (Coluna Data: mantemos o timestamp original aqui)
+        tdData.textContent = formatTimestamp(originalData.timestamp);
+        
+        // 7. Descrição
         tdDescription.innerHTML = `<input type="text" class="edit-description" value="${oldDescription === '-' ? '' : oldDescription}" style="width: 120px;">`;
-
-        // Change action buttons to Save and Cancel
+        
+        // 8. Change action buttons to Save and Cancel
         tdAction.innerHTML = `
             <button class="btn-salvar">Salvar</button>
             <button class="btn-cancelar">Cancelar</button>
@@ -277,34 +369,57 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Save Button Logic (Update Firebase)
         tdAction.querySelector('.btn-salvar').addEventListener('click', () => {
-            const newQuantity = parseInt(tdQuantity.querySelector('.edit-quantity').value);
+            const newQuantity = parseInt(editQuantityInput.value);
+            const newSaida = parseInt(editSaidaInput.value);
             const newCategoryValue = editCategorySelect.value;
             const newProduct = editProductSelect.value;
             const newDescription = tdDescription.querySelector('.edit-description').value;
             
-            if (!isNaN(newQuantity) && newQuantity > 0 && newCategoryValue && newProduct) {
+            let newTimestampSaida = oldDataSaida;
+            let newStatus = oldStatus; // Começa com o status original
+
+            // Lógica de Saída/Data
+            if (newSaida !== oldSaida && newSaida > 0) {
+                // Se a saída mudou e é maior que zero, atualiza a data de saída
+                newTimestampSaida = Date.now(); 
+            } else if (newSaida === 0) {
+                // Se a saída foi zerada, remove a data
+                newTimestampSaida = null;
+            }
+            
+            // Lógica de Status (CORREÇÃO APLICADA AQUI)
+            const newRestantes = newQuantity - newSaida;
+            if (newRestantes === 0) {
+                 // Se o restante for zero, o produto está concluído (pode ter sido concluído na edição)
+                newStatus = 'concluido'; 
+            } else {
+                // Se houver restante, o status deve ser pendente, mesmo que estivesse 'concluido' antes
+                newStatus = 'pendente';
+            }
+
+            if (!isNaN(newQuantity) && newQuantity > 0 && newCategoryValue && newProduct && !isNaN(newSaida) && newSaida <= newQuantity) {
                 
                 const updatedData = {
                     quantity: newQuantity,
                     category: newCategoryValue,
                     product: newProduct,
                     description: newDescription || '-',
-                    // Inclui o status original para o re-render local funcionar
-                    status: originalData.status 
+                    saida: newSaida, 
+                    dataSaida: newTimestampSaida, 
+                    status: newStatus, // Usa o novo status calculado
+                    timestamp: originalData.timestamp 
                 };
 
                 update(ref(database, `estoque/${key}`), updatedData)
                     .then(() => {
-                        // CORREÇÃO APLICADA: Força a reversão imediata para o modo de visualização.
-                        // O onValue do Firebase também fará o seu trabalho, mas esta chamada garante 
-                        // o feedback instantâneo de que a edição foi salva.
+                        // Força a reversão imediata para o modo de visualização.
                         addOrUpdateRowToTable(key, updatedData); 
                     })
                     .catch(error => {
                         alert('Erro ao salvar edição: ' + error.message);
                     });
             } else {
-                alert('Os dados de edição são inválidos.');
+                alert('Os dados de edição são inválidos. Verifique se a Saída não é maior que a Quantidade.');
             }
         });
 
@@ -352,11 +467,15 @@ document.addEventListener('DOMContentLoaded', () => {
                     addOrUpdateRowToTable(key, entry);
                 });
             } else {
-                tableBody.innerHTML = ''; // Limpa a tabela se não houver dados
+                // Se não houver dados no Firebase:
+                tableBody.innerHTML = ''; // Limpa a tabela
+                
+                // *** CORREÇÃO APLICADA AQUI ***
+                // Chama updateTotals para zerar os blocos Total de Caixas / Restantes
+                updateTotals(); 
             }
             
-            // Recalcula totais
-            updateTotals();
+            // O updateTotals é chamado dentro de addOrUpdateRowToTable (se houver dados)
         });
     }
 
@@ -380,7 +499,7 @@ document.addEventListener('DOMContentLoaded', () => {
     confirmResetButton.addEventListener('click', () => {
         remove(ESTOQUE_REF)
             .then(() => {
-                // O listener do Firebase (onValue) cuida da limpeza do DOM e zerar os totais
+                // O listener do Firebase (onValue) agora cuida da limpeza do DOM e de zerar os totais (graças à correção)
                 deleteModal.classList.remove('delete--active');
                 alert('Todos os lançamentos de estoque foram excluídos com sucesso!');
             })

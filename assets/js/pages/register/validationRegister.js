@@ -12,7 +12,14 @@ const filterInput       = document.getElementById('filter-input__date');
 const applyFilterBtn    = document.querySelector('.filter-button__1');
 const showAllBtn        = document.querySelector('.filter-button__2');
 
-const notificationSound = new Audio('/assets/audio/notification.mp3'); 
+// CORREÇÃO: Caminho do áudio dinâmico para funcionar na raiz (index-operador.html) e nas páginas aninhadas
+let audioPath;
+if (window.location.pathname.includes('/pages/')) {
+    audioPath = '../../assets/audio/notification.mp3';
+} else {
+    audioPath = './assets/audio/notification.mp3';
+}
+const notificationSound = new Audio(audioPath);
 
 const alarmAdd          = document.querySelector('.alarm--add');
 const alarmUpdate       = document.querySelector('.alarm--update');
@@ -352,50 +359,57 @@ if (clickValidation) {
     });
 }
 
+// LÓGICA DE PÁGINA: Mantida para controlar a renderização de conteúdo e modais
 const isRegisterPage = window.location.pathname.includes('register');
 const isHistoryPage  = window.location.pathname.includes('history'); 
         
-if (isRegisterPage) {
-    onValue(ref(database, 'saidas'), (snapshot) => {
-        if(container) {
-            const currentData = snapshot.val() || {};
-            allSaidasData = currentData;
-            const currentKeys = new Set(Object.keys(currentData));
+// Listener de Saídas (AGORA GLOBAL, mas a RENDERIZAÇÃO é restrita à página de registro)
+// Isso garante que o ALARME rode em TODAS as 6 páginas, mas só renderize cards em 'register'.
+onValue(ref(database, 'saidas'), (snapshot) => {
+    const currentData = snapshot.val() || {};
+    allSaidasData = currentData;
+    const currentKeys = new Set(Object.keys(currentData));
 
-            if (isFirstLoad) {
-                lastKnownKeys = currentKeys;
-                isFirstLoad = false;
-            } else {
-                const updatedKeys = [...lastKnownKeys].filter(key => {
-                    const data = currentData[key];
-                    return data && data.updated && key !== currentEditingKey; 
-                });
-                
-                if (updatedKeys.length > 0) {
-                    showAlarm('update');
-                } else {
-                    const addedKeys = [...currentKeys].filter(key => !lastKnownKeys.has(key));
-                    if (addedKeys.length > 0) {
-                        const latestKey = addedKeys[addedKeys.length - 1];
-                        const data = currentData[latestKey];
-                        if (data && !data.updated) { 
-                            showAlarm('add');
-                        }
-                    }
+    if (isFirstLoad) {
+        lastKnownKeys = currentKeys;
+        isFirstLoad = false;
+    } else {
+        const updatedKeys = [...lastKnownKeys].filter(key => {
+            const data = currentData[key];
+            // Garante que o alarme toque APENAS se o card não for o que está sendo editado no momento
+            return data && data.updated && key !== currentEditingKey; 
+        });
+        
+        if (updatedKeys.length > 0) {
+            showAlarm('update');
+        } else {
+            const addedKeys = [...currentKeys].filter(key => !lastKnownKeys.has(key));
+            if (addedKeys.length > 0) {
+                const latestKey = addedKeys[addedKeys.length - 1];
+                const data = currentData[latestKey];
+                if (data && !data.updated) { 
+                    showAlarm('add');
                 }
-                
-                lastKnownKeys = currentKeys;
             }
-
-            container.innerHTML = '';
-            snapshot.forEach((childSnapshot) => {
-                const data = childSnapshot.val();
-                const key  = childSnapshot.key;
-                exitContent(data, key);
-            });
         }
-    });
+        
+        lastKnownKeys = currentKeys;
+    }
+    
+    // RENDERIZAÇÃO DOS CARDS (SÓ NA PÁGINA DE REGISTRO)
+    if (isRegisterPage && container) {
+        container.innerHTML = '';
+        snapshot.forEach((childSnapshot) => {
+            const data = childSnapshot.val();
+            const key  = childSnapshot.key;
+            exitContent(data, key);
+        });
+    }
+});
 
+
+// LÓGICA E MODAIS ESPECÍFICOS DA PÁGINA DE REGISTRO
+if (isRegisterPage) {
     const editModal      = document.querySelector('.edit');
     const editTextarea   = document.querySelector('.edit-textarea');
     const editConfirmBtn = document.querySelector('.button--confirm-edit');
@@ -435,8 +449,10 @@ if (isRegisterPage) {
             }
         });
     }
-    
-} else if (isHistoryPage) {
+} 
+
+// LÓGICA E FILTROS ESPECÍFICOS DA PÁGINA DE HISTÓRICO
+if (isHistoryPage) {
     onValue(ref(database, 'historico'), (snapshot) => {
         if(historyContainer) {
             historyContainer.innerHTML = '';
