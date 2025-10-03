@@ -16,6 +16,12 @@ const validUsers = [
         password: 'adm2025*', 
         destination: 'index.html', 
         fullName: 'Leandro Marostega' 
+    },
+    { 
+        user: 'felipe.lopez', 
+        password: 'admgeral*', 
+        destination: 'index.html', 
+        fullName: 'Felipe Lopez' 
     }
 ];
 

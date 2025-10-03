@@ -16,9 +16,13 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Referências para o modal de exclusão (reset da tabela)
     const resetButton = document.querySelector('.reset-table');
-    const deleteModal = document.querySelector('.delete');
+    const deleteModal = document.querySelector('.delete'); // Modal de Reinício da Tabela (Reset)
     const confirmResetButton = deleteModal.querySelector('.button--link2');
     const cancelResetButton = deleteModal.querySelector('.button--link1');
+    
+    // NOVAS Referências para os modais específicos para a linha da tabela (Termino/Excluir)
+    const finishModal = document.querySelector('.delete--termino'); // Assumindo a classe do modal de Término
+    const cardDeleteModal = document.querySelector('.delete--card'); // Assumindo a classe do modal de Exclusão da Linha
     
     // State Variables (Agora calculados a partir dos dados da tabela)
     let totalBoxes = 0;
@@ -76,6 +80,47 @@ document.addEventListener('DOMContentLoaded', () => {
         totalBlockDiv.textContent = `Total de Caixas: ${totalBoxes}`;
         remainingBlockDiv.textContent = `Caixas Restantes: ${remainingBoxes}`; 
     }
+    
+    /**
+     * NOVO: Função genérica para gerenciar a abertura e ação dos modais de CONFIRMAÇÃO de linha.
+     * @param {HTMLElement} modal - O elemento do modal (.delete--termino ou .delete--card).
+     * @param {string} titleText - O novo texto para o título.
+     * @param {string} bodyText - O novo texto para a descrição.
+     * @param {function} confirmAction - Função a ser executada ao clicar em 'Confirmar'.
+     */
+    const openConfirmationModal = (modal, titleText, bodyText, confirmAction) => {
+        // Garante que apenas um modal específico (não o de reset) esteja "ativo"
+        modal.classList.remove('delete--active'); 
+        
+        const titleElement = modal.querySelector('.delete-title');
+        const textElement = modal.querySelector('.delete-text');
+        const confirmButton = modal.querySelector('.button--link2');
+        const cancelButton = modal.querySelector('.button--link1');
+
+        // 1. Atualiza o conteúdo do modal
+        titleElement.textContent = titleText;
+        textElement.textContent = bodyText;
+
+        // 2. Limpa listeners prévios e recria os botões para evitar múltiplas execuções
+        const newConfirmButton = confirmButton.cloneNode(true);
+        confirmButton.parentNode.replaceChild(newConfirmButton, confirmButton);
+        const newCancelButton = cancelButton.cloneNode(true);
+        cancelButton.parentNode.replaceChild(newCancelButton, cancelButton);
+
+        // 3. Evento de Confirmação
+        newConfirmButton.addEventListener('click', () => {
+            confirmAction();
+            modal.classList.remove('delete--active'); // Fecha após a ação
+        });
+
+        // 4. Evento de Cancelamento
+        newCancelButton.addEventListener('click', () => {
+            modal.classList.remove('delete--active'); // Apenas fecha
+        });
+
+        // 5. Abre o modal
+        modal.classList.add('delete--active');
+    };
 
     // Troca produtos ao mudar categoria (Lógica existente)
     categorySelect.addEventListener('change', () => {
@@ -157,7 +202,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             // Remove listeners existentes antes de recriar o conteúdo (importante no modo edição -> visualização)
             const oldOkButton = row.querySelector('.btn-ok');
-            if (oldOkButton) oldOkButton.replaceWith(oldOkButton.cloneNode(true));
+            if (oldOkButton) oldOkButton.replaceWith(oldOkButton.cloneNode(true)); 
         }
         
         // Novos datasets para cálculo e controle de estado
@@ -189,9 +234,9 @@ document.addEventListener('DOMContentLoaded', () => {
             <td>${product}</td>
             <td>${dataLancamentoFormatada}</td>
             <td>${description || '-'}</td>
-            <td>
+            <td class="table--header__monitor">
                 <div class="botoes-acao">
-                    <button class="btn-ok">${currentStatus === 'concluido' ? 'Desmarcar' : 'Término'}</button>
+                    <button class="btn-ok btn-ok__monitor">${currentStatus === 'concluido' ? 'Desmarcar' : 'Término'}</button>
                     <button class="btn-editar btn-editar__monitor" style="display: ${currentStatus === 'concluido' ? 'none' : ''}">Editar</button>
                     <button class="btn-excluir btn-excluir__monitor" style="display: ${currentStatus === 'concluido' ? 'none' : ''}">Excluir</button>
                 </div>
@@ -227,39 +272,67 @@ document.addEventListener('DOMContentLoaded', () => {
         
         if (!okButton || !editButton || !deleteButton) return; 
 
-        // OK Button Logic (toggle Saida: 0 ou Saida: quantity)
+        // OK Button Logic (toggle Saida: 0 ou Saida: quantity) - AGORA USANDO MODAL
         okButton.addEventListener('click', () => {
             const currentSaida = parseInt(row.dataset.saida || 0);
             const originalQuantity = parseInt(row.dataset.quantity || 0);
             const restantes = originalQuantity - currentSaida;
+            const isConcluido = restantes === 0;
 
-            let updateData = {};
-            if (restantes > 0) {
-                // Se há restantes, registra a saída total
-                updateData = {
+            // Função a ser executada no CONFIRMAR para marcar como concluído
+            const confirmFinish = () => {
+                const updateData = {
                     saida: originalQuantity,
-                    dataSaida: Date.now(), // Atualiza a data de saída para agora
-                    status: 'concluido' // Atualiza o status
+                    dataSaida: Date.now(),
+                    status: 'concluido'
                 };
-            } else {
-                // Se já saiu tudo (restantes == 0), zera a saída
-                updateData = {
+                update(ref(database, `estoque/${key}`), updateData)
+                    .catch(error => alert('Erro ao atualizar término: ' + error.message));
+            };
+            
+            // Função a ser executada no CONFIRMAR para desmarcar (reverter)
+            const confirmUnmark = () => {
+                 const updateData = {
                     saida: 0,
                     dataSaida: null,
-                    status: 'pendente' // Atualiza o status
+                    status: 'pendente'
                 };
+                update(ref(database, `estoque/${key}`), updateData)
+                    .catch(error => alert('Erro ao desmarcar término: ' + error.message));
+            };
+
+            if (isConcluido) {
+                 openConfirmationModal(
+                    finishModal,
+                    'Desmarcar Conclusão',
+                    // MENSAGEM CURTA PARA DESMARCAR
+                    `Produto: ${data.product}. Desmarcar e reverter a saída para zero?`, 
+                    confirmUnmark
+                );
+            } else {
+                 openConfirmationModal(
+                    finishModal,
+                    'Confirmar Término',
+                    // MENSAGEM CURTA PARA TÉRMINO
+                    `Produto: ${data.product} (${restantes} restantes). Confirmar término e totalizar saída?`, 
+                    confirmFinish
+                );
             }
-            
-            update(ref(database, `estoque/${key}`), updateData)
-                .catch(error => alert('Erro ao atualizar saída: ' + error.message));
         });
 
-        // Delete Button Logic (remove from Firebase)
+        // Delete Button Logic (remove from Firebase) - AGORA USANDO MODAL
         deleteButton.addEventListener('click', () => {
-            if (confirm('Tem certeza que deseja excluir este lançamento?')) {
+            const confirmDeletion = () => {
                 remove(ref(database, `estoque/${key}`))
                     .catch(error => alert('Erro ao excluir lançamento: ' + error.message));
-            }
+            };
+            
+            openConfirmationModal(
+                cardDeleteModal,
+                'Confirmar Exclusão',
+                `Tem certeza de que deseja excluir permanentemente o lançamento do produto ${data.product} (${data.quantity} caixas)?`,
+                confirmDeletion
+            );
         });
 
         // Edit Button Logic (Initiate edit mode)
@@ -470,7 +543,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Se não houver dados no Firebase:
                 tableBody.innerHTML = ''; // Limpa a tabela
                 
-                // *** CORREÇÃO APLICADA AQUI ***
                 // Chama updateTotals para zerar os blocos Total de Caixas / Restantes
                 updateTotals(); 
             }
@@ -480,7 +552,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ----------------------------------------------------------------------
-    // Funcionalidade do botão "Reiniciar a tabela" (Reset Firebase)
+    // Funcionalidade do botão "Reiniciar a tabela" (Reset Firebase) 
     // ----------------------------------------------------------------------
     
     // 1. Mostrar modal ao clicar em "Reiniciar a tabela"
@@ -499,7 +571,7 @@ document.addEventListener('DOMContentLoaded', () => {
     confirmResetButton.addEventListener('click', () => {
         remove(ESTOQUE_REF)
             .then(() => {
-                // O listener do Firebase (onValue) agora cuida da limpeza do DOM e de zerar os totais (graças à correção)
+                // O listener do Firebase (onValue) cuida da limpeza do DOM e de zerar os totais
                 deleteModal.classList.remove('delete--active');
                 alert('Todos os lançamentos de estoque foram excluídos com sucesso!');
             })

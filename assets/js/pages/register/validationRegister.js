@@ -85,6 +85,7 @@ const exitContent = (data, key) => {
         card.classList.add('card-updated');
     }
 
+    // HTML DO CARTÃO PRINCIPAL (SEM O ALERTA)
     card.innerHTML = `
         <div class="exit-left">
             <div class="exit-left__user">
@@ -132,7 +133,7 @@ const exitContent = (data, key) => {
         const editModal      = document.querySelector('.edit');
         const editTextarea   = document.querySelector('.edit-textarea');
         
-        currentEditingKey   = card.dataset.key;
+        currentEditingKey    = card.dataset.key;
         currentEditingCard = card;
         
         editTextarea.value = descriptionElement.textContent;
@@ -140,17 +141,33 @@ const exitContent = (data, key) => {
     });
 
     if(container) {
+        // 1. Adiciona o cartão principal (que usa display: flex)
         container.appendChild(card);
+        
+        // 2. Cria o bloco de aviso
+        const warning = document.createElement('div');
+        warning.classList.add('exit-warning');
+        warning.innerHTML = `
+            <p class="exit-warning__area">
+                <img class="exit-warning__image" src="../../assets/img/global/svg/icons/ui/attention-register.svg" alt="Imagem de uma placa de atenção"> 
+                Atenção: finalize 10 min antes do horário de saída.
+            </p>
+        `;
+        
+        // 3. Adiciona o aviso logo após o cartão
+        container.appendChild(warning);
     }
 };
 
+// CORREÇÃO: Função showDeleteConfirmation revisada para garantir que o botão btnConfirm funcione.
 const showDeleteConfirmation = (card) => {
     if (!modal || !btnCancel || !btnConfirm) {
         return;
     }
 
     modal.classList.add('delete--active');
-    modal._currentCard = card;
+    // Armazena a referência do card para usar no clique de confirmação
+    modal._currentCard = card; 
 
     btnCancel.onclick = () => {
         modal.classList.remove('delete--active');
@@ -166,23 +183,26 @@ const showDeleteConfirmation = (card) => {
 
         const key = current.dataset.key;
 
+        // 1. Pega os dados atuais antes de deletar
         get(ref(database, `saidas/${key}`)).then((snapshot) => {
             if (snapshot.exists()) {
                 const data = snapshot.val();
                 
+                // 2. Prepara os dados para o histórico 
                 const historyData = {
                     ...data,
                     deletedAt: new Date().toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'})
                 };
                 
+                // 3. Salva no histórico
                 push(ref(database, 'historico'), historyData)
                 .then(() => {
-                    remove(ref(database, `saidas/${key}`));
+                    // 4. Remove do nó 'saidas' (exclusão)
+                    remove(ref(database, `saidas/${key}`)); 
                 })
                 .catch((error) => {
                     console.error("Erro ao adicionar dados ao histórico: ", error);
                 });
-            } else {
             }
         }).catch((error) => {
             console.error("Erro ao pegar dados para remover: ", error);
@@ -288,27 +308,13 @@ if (alarmAdd) {
     });
 }
 
+// CORREÇÃO: Removida a lógica de resetar a flag 'updated' no Firebase.
+// Isso garante que a classe CSS `card-updated` (borda azul) permaneça.
 if (alarmUpdate) {
     alarmUpdate.querySelector('.alarm-button').addEventListener('click', () => {
         hideAlarm('update');
-
-        const updates = {};
-        let resetNeeded = false;
-
-        for (const key in allSaidasData) {
-            if (allSaidasData[key].updated) {
-                updates[`saidas/${key}/updated`] = null;
-                resetNeeded = true;
-            }
-        }
-
-        if (resetNeeded) {
-            update(ref(database), updates)
-                .then(() => {})
-                .catch((error) => {
-                    console.error("Erro ao resetar flags 'updated':", error);
-                });
-        }
+        // A lógica de resetar a flag 'updated' (que apagava a borda azul)
+        // foi removida daqui, mantendo o status de atualização no Firebase.
     });
 }
 
@@ -364,7 +370,6 @@ const isRegisterPage = window.location.pathname.includes('register');
 const isHistoryPage  = window.location.pathname.includes('history'); 
         
 // Listener de Saídas (AGORA GLOBAL, mas a RENDERIZAÇÃO é restrita à página de registro)
-// Isso garante que o ALARME rode em TODAS as 6 páginas, mas só renderize cards em 'register'.
 onValue(ref(database, 'saidas'), (snapshot) => {
     const currentData = snapshot.val() || {};
     allSaidasData = currentData;

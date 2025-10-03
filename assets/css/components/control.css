@@ -547,10 +547,9 @@
     }
 }
 
-
 @media (min-width: 769px) and (max-width: 1024px) {
     .control {
-        max-width: 90%;
+        max-width: 95%;
         margin: 3rem auto;
     }
     
@@ -578,19 +577,31 @@
     .table-header th,
     .table-body td {
         font-size: 1.5rem;
-        min-width: 120px; 
+        min-width: 80px;
+        padding: 8px 5px;
     }
-    
+
     .table-body td input,
     .table-body td select {
-        max-width: 140px; 
+        max-width: 80px;
         width: 100%;
+        padding: 5px;
     }
+    
+    .table-body td .edit-quantity,
+    .table-body td .edit-saida {
+        width: 60px !important;
+    }
+    
     .table-body td .edit-description {
-        max-width: none; 
+        max-width: 120px;
+    }
+    
+    .table-body td .edit-category,
+    .table-body td .edit-product {
+        max-width: 100px;
     }
 }
-
 
 @media (min-width: 1025px) and (max-width: 1200px) {
     .control {

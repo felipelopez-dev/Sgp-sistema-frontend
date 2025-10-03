@@ -205,7 +205,32 @@ body {
     padding: 2rem;
     background-color: var(--bg-secondary);
     gap: 2rem;
-    border-radius: 1.5rem;
+    border-top-left-radius: 1.5rem;
+    border-top-right-radius: 1.5rem;
+}
+
+.exit-warning {
+    width: 100%; 
+    padding: 10px 20px;
+    border: 1px solid var(--color-warning-border, #f0e68c); 
+    background-color: var(--color-warning-bg, #fffacd);
+    border-bottom-left-radius: 1.5rem;
+    border-bottom-right-radius: 1.5rem;
+    font-size: 0.9em;
+    font-weight: 500;
+    text-align: center;
+    color: var(--color-attention, #DAA520); 
+}
+
+.exit-warning__area {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    align-items: center;
+}
+
+.exit-warning__image {
+    width: 2rem;
 }
 
 .exit-left {
