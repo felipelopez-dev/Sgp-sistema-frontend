@@ -219,7 +219,7 @@ body {
     font-size: 0.9em;
     font-weight: 500;
     text-align: center;
-    color: var(--color-attention, #DAA520); 
+    color: var(--color-red-strong);
 }
 
 .exit-warning__area {
@@ -227,7 +227,6 @@ body {
     gap: 1rem;
     justify-content: center;
     align-items: center;
-		color: var(--color-red-strong);
 }
 
 .exit-warning__image {
