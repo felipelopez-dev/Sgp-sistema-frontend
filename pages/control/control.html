@@ -44,7 +44,7 @@
                 <li class="sgp-header__item">
                     <a href="#" class="sgp-header__link" tabindex="3">Calcular</a>
                     <ul class="sub-menu">
-                        <li><a href="#">Cálculo de Paletização</a></li>
+                        <li><a href="../../pages/palletizing/palletizing.html">Cálculo de Paletização</a></li>
                         <li><a href="../../pages/calculate/calculate.html">Cálculo da Produção</a></li>
                     </ul>
                 </li>
@@ -59,6 +59,9 @@
                         <li><a href="#">Relatório de Registros</a></li>
                     </ul>
                 </li>
+                 <li class="sgp-header__item">
+                    <a href="../../pages/control/control.html" class="sgp-header__link" tabindex="4">Controle de Estoque</a>
+                </li>
                 <li class="sgp-header__item">
                     <a href="#" class="sgp-header__link" tabindex="4">Históricos</a>
                     <ul class="sub-menu">
@@ -68,10 +71,7 @@
                     </ul>
                 </li>
                 <li class="sgp-header__item">
-                    <a href="../../pages/guide/guide.html" class="sgp-header__link" tabindex="4">Manual</a>
-                </li>
-                <li class="sgp-header__item">
-                    <a href="../../pages/control/control.html" class="sgp-header__link" tabindex="4">Controle de Estoque</a>
+                    <a href="../../pages/guide/guide.html" class="sgp-header__link" tabindex="4">Suporte</a>
                 </li>
             </ul>
         </nav>
@@ -91,7 +91,7 @@
                 <li class="sgp-header__item">
                     <a href="#" class="sgp-header__link" tabindex="3">Calcular</a>
                     <ul class="sub-menu">
-                        <li><a href="#">Cálculo de Paletização</a></li>
+                        <li><a href="../../pages/palletizing/palletizing.html">Cálculo de Paletização</a></li>
                         <li><a href="../../pages/calculate/calculate.html">Cálculo da Produção</a></li>
                     </ul>
                 </li>
@@ -107,6 +107,9 @@
                     </ul>
                 </li>
                 <li class="sgp-header__item">
+                    <a href="../../pages/control/control.html" class="sgp-header__link" tabindex="4">Controle de Estoque</a>
+                </li>
+                <li class="sgp-header__item">
                     <a href="#" class="sgp-header__link" tabindex="4">Históricos</a>
                     <ul class="sub-menu">
                         <li><a href="#">Histórico de Estoque</a></li>
@@ -115,10 +118,7 @@
                     </ul>
                 </li>
                 <li class="sgp-header__item">
-                    <a href="../../pages/guide/guide.html" class="sgp-header__link" tabindex="4">Manual</a>
-                </li>
-                <li class="sgp-header__item">
-                    <a href="../../pages/control/control.html" class="sgp-header__link" tabindex="4">Controle de Estoque</a>
+                    <a href="../../pages/guide/guide.html" class="sgp-header__link" tabindex="4">Suporte</a>
                 </li>
                 <li class="sgp-header__item">
                     <a href="javascript:void(0)" onclick="handleLogout()" class="sgp-header__link sgp-header__button-close" tabindex="4">Sair</a>
@@ -277,6 +277,20 @@
         </div>
     </div>
 
+    <div class="modal-reset">
+        <div class="modal-reset__area">
+            <h3 class="modal-reset__title">Reiniciar Estoque</h3>
+            <p class="modal-reset__text">
+                Digite a senha de administrador para reiniciar todos os lançamentos:
+            </p>
+            <input type="password" class="modal-reset__input" placeholder="Senha" />
+            <div class="modal-reset__buttons">
+                <button type="button" class="modal-reset__cancel">Cancelar</button>
+                <button type="button" class="modal-reset__confirm">Confirmar</button>
+            </div>
+        </div>
+    </div>
+    
     <script type="text/javascript" src="../../assets/js/global/darkMode.js" defer></script>
     <script type="text/javascript" src="../../assets/js/global/mobilMenu.js" defer></script>
     <script type="text/javascript" src="../../assets/js/pages/login/loginValidation.js" defer></script>

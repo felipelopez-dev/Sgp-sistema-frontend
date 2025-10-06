@@ -27,7 +27,8 @@ const alarmUpdate       = document.querySelector('.alarm--update');
 let allHistoryData = {};
 let allSaidasData = {};
 let lastKnownKeys = new Set();
-let isFirstLoad = true;
+// Definido como true para a primeira carga, a notificação só ocorre após a primeira mudança.
+let isFirstLoad = true; 
 let isUpdating = false;
 let notificationInterval = null; 
 
@@ -130,10 +131,10 @@ const exitContent = (data, key) => {
         event.stopPropagation(); 
         const descriptionElement = card.querySelector('.exit-center__text');
         
-        const editModal      = document.querySelector('.edit');
-        const editTextarea   = document.querySelector('.edit-textarea');
+        const editModal       = document.querySelector('.edit');
+        const editTextarea    = document.querySelector('.edit-textarea');
         
-        currentEditingKey    = card.dataset.key;
+        currentEditingKey     = card.dataset.key;
         currentEditingCard = card;
         
         editTextarea.value = descriptionElement.textContent;
@@ -141,23 +142,38 @@ const exitContent = (data, key) => {
     });
 
     if(container) {
-        // 1. Adiciona o cartão principal (que usa display: flex)
+        // 1. Adiciona o cartão principal
         container.appendChild(card);
         
-        // 2. Cria o bloco de aviso
-        const warning = document.createElement('div');
-        warning.classList.add('exit-warning');
-        warning.innerHTML = `
-            <p class="exit-warning__area">
-                <img class="exit-warning__image" src="../../assets/img/global/svg/icons/ui/attention-register.svg" alt="Imagem de uma placa de atenção"> 
-                Atenção: finalize 10 min antes do horário de saída.
-            </p>
-        `;
-        
-        // 3. Adiciona o aviso logo após o cartão
-        container.appendChild(warning);
+        // ⚡ ADIÇÃO: Só mostra aviso se nunca foi fechado para essa saída
+        const warningClosed = localStorage.getItem(`exitWarningClosed-${key}`);
+        if (!warningClosed) {
+            const warning = document.createElement('div');
+            warning.classList.add('exit-warning');
+            warning.dataset.key = key;
+
+            warning.innerHTML = `
+                <p class="exit-warning__area">
+                    <img class="exit-warning__image" src="../../assets/img/global/svg/icons/ui/attention-register.svg" alt="Imagem de uma placa de atenção"> 
+                    Atenção: finalize 10 min antes do horário de saída.
+                </p>
+                   <div class="exit-warning__close">
+                    <img class="exit-warning__image-close" src="../../assets/img/global/svg/icons/ui/close-circle-register.svg" alt="Imagem de um X para fechamento."> 
+                </div>
+            `;
+
+            container.appendChild(warning);
+
+            // Quando clicar no X → esconde e salva no localStorage
+            const closeBtn = warning.querySelector('.exit-warning__close');
+            closeBtn.addEventListener('click', () => {
+                warning.remove();
+                localStorage.setItem(`exitWarningClosed-${key}`, 'true');
+            });
+        }
     }
 };
+
 
 // CORREÇÃO: Função showDeleteConfirmation revisada para garantir que o botão btnConfirm funcione.
 const showDeleteConfirmation = (card) => {
@@ -372,34 +388,39 @@ const isHistoryPage  = window.location.pathname.includes('history');
 // Listener de Saídas (AGORA GLOBAL, mas a RENDERIZAÇÃO é restrita à página de registro)
 onValue(ref(database, 'saidas'), (snapshot) => {
     const currentData = snapshot.val() || {};
+    const previousKeys = new Set(lastKnownKeys); 
     allSaidasData = currentData;
     const currentKeys = new Set(Object.keys(currentData));
-
-    if (isFirstLoad) {
-        lastKnownKeys = currentKeys;
-        isFirstLoad = false;
-    } else {
-        const updatedKeys = [...lastKnownKeys].filter(key => {
-            const data = currentData[key];
-            // Garante que o alarme toque APENAS se o card não for o que está sendo editado no momento
-            return data && data.updated && key !== currentEditingKey; 
-        });
+    
+    // --- LÓGICA DE NOTIFICAÇÃO ---
+    // A notificação só ocorre a partir da segunda execução do 'onValue'
+    if (!isFirstLoad) { 
+        let updatedKeysCount = 0;
+        const addedKeys = [...currentKeys].filter(key => !previousKeys.has(key));
         
-        if (updatedKeys.length > 0) {
-            showAlarm('update');
-        } else {
-            const addedKeys = [...currentKeys].filter(key => !lastKnownKeys.has(key));
-            if (addedKeys.length > 0) {
-                const latestKey = addedKeys[addedKeys.length - 1];
-                const data = currentData[latestKey];
-                if (data && !data.updated) { 
-                    showAlarm('add');
-                }
-            }
+        // 1. Detecção de Atualização (O item existe nas chaves anteriores E foi modificado com 'updated: true')
+        for (const key of previousKeys) {
+             const data = currentData[key];
+             // Checa se a chave existia, ainda existe e se foi atualizada
+             if (currentKeys.has(key) && data && data.updated && key !== currentEditingKey) { 
+                 updatedKeysCount++;
+             }
         }
         
-        lastKnownKeys = currentKeys;
+        // 2. Detecção de Adição (O número de chaves aumentou)
+        if (updatedKeysCount > 0) {
+            showAlarm('update');
+        } else if (addedKeys.length > 0) {
+            // Dispara o alarme de adição APENAS se houver novas chaves.
+            showAlarm('add');
+        }
+        
+        // NOTA: A remoção (quando currentKeys.size < previousKeys.size) não ativa NENHUM dos alarmes acima.
     }
+    
+    // ATUALIZAÇÃO das chaves conhecidas DEPOIS de toda a lógica de alarme
+    lastKnownKeys = currentKeys;
+    isFirstLoad = false;
     
     // RENDERIZAÇÃO DOS CARDS (SÓ NA PÁGINA DE REGISTRO)
     if (isRegisterPage && container) {
@@ -415,8 +436,8 @@ onValue(ref(database, 'saidas'), (snapshot) => {
 
 // LÓGICA E MODAIS ESPECÍFICOS DA PÁGINA DE REGISTRO
 if (isRegisterPage) {
-    const editModal      = document.querySelector('.edit');
-    const editTextarea   = document.querySelector('.edit-textarea');
+    const editModal       = document.querySelector('.edit');
+    const editTextarea    = document.querySelector('.edit-textarea');
     const editConfirmBtn = document.querySelector('.button--confirm-edit');
     const editCancelBtn  = document.querySelector('.button--cancel-edit');
 

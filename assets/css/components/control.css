@@ -268,7 +268,7 @@
 }
 
 .btn-cancelar:hover {
-      background-color: var(--color-red-dark);
+    background-color: var(--color-red-dark);
     transform: translateY(-0.0625rem);
 }
 
@@ -277,7 +277,7 @@
     transform: translateY(-0.0625rem);
 }
 
- .btn-editar {
+.btn-editar {
     background-color: var(--color-royal-blue);
 }
 
@@ -390,6 +390,87 @@
     color: var(--color-white);
 }
 
+/* ======================================================= */
+/* MODAL DE RESET (CORREÇÃO APLICADA AQUI) */
+/* ======================================================= */
+.modal-reset {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0,0,0,0.5);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+/* CLASSE CORRIGIDA para corresponder ao JS */
+.modal-reset.modal-reset--active {
+    display: flex;
+}
+
+.modal-reset__area {
+    background-color: #fff;
+    width: 40rem;
+    padding: 2rem;
+    border-radius: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+}
+
+.modal-reset__title {
+    font-size: 2.5rem;
+    font-weight: bold;
+}
+
+.modal-reset__text {
+    font-size: 1.8rem;
+    text-align: center;
+    color: #555;
+}
+
+.modal-reset__input {
+    width: 80%;
+    padding: 1rem;
+    font-size: 1.8rem;
+    border-radius: 1rem;
+    border: 1px solid #ccc;
+    text-align: center;
+}
+
+.modal-reset__buttons {
+    display: flex;
+    gap: 2rem;
+}
+
+.modal-reset__cancel, .modal-reset__confirm {
+    width: 12rem;
+    height: 4.5rem;
+    border: none;
+    border-radius: 1rem;
+    font-size: 1.8rem;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.modal-reset__cancel {
+    background-color: #ccc;
+    color: #333;
+}
+
+.modal-reset__confirm {
+    background-color: #007bff;
+    color: #fff;
+}
+/* ======================================================= */
+/* FIM MODAL DE RESET */
+/* ======================================================= */
+
+/* MEDIA QUERIES (RESPONSIVIDADE) */
 @media (min-width: 320px) and (max-width: 480px) {
     .form-description__area input[type="number"], .form-description__area input[type="text"], .form-description__area select {
         width: 100%;
