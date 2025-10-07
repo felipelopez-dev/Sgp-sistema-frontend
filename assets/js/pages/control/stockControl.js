@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const cancelPasswordButton = resetPasswordModal ? resetPasswordModal.querySelector('.modal-reset__cancel') : null;
     
     // Senha do administrador
-    const ADMIN_PASSWORD = 'admgeral*'; 
+    const ADMIN_PASSWORD = 'operadoradm'; 
 
     let totalBoxes = 0;
     let remainingBoxes = 0;
