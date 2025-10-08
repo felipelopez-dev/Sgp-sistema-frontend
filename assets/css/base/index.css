@@ -393,6 +393,7 @@
 .footer {
     padding: 2rem;
     text-align: center;
+	  font-size: .975rem;
 }
 
 .footer-description {
