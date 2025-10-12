@@ -67,6 +67,12 @@
     outline: 0.1rem solid var(--bg-nonary);
 }
 
+.palletizing--number {
+  width: 48%;
+  margin-bottom: 4rem;
+  
+}
+
 .palletizing-left__btn-calculate {
     padding: 1rem 2rem;
     font-size: 2rem;
@@ -173,6 +179,22 @@
     height: 0.3rem;
     margin: auto;
     margin-bottom: 5rem;
+}
+
+.palletizing-right__select {
+    cursor: pointer;
+    border: 0.1rem solid var(--bg-tertiary);
+    border-radius: 1.4rem;
+    font-size: 1.8rem;
+    outline: none;
+    appearance: none;             
+    -webkit-appearance: none;      
+    -moz-appearance: none;        
+    padding: 2rem 2.5rem 2rem 1rem;
+    background-image: url("../../img/global/svg/icons/ui/arrow-down.svg");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 2rem;
 }
 
 .palletizing-right__area-date {
@@ -370,6 +392,14 @@
     padding: 1rem;
   }
 
+  :is(.palletizing-left, .palletizing-right) {
+    padding: 1rem;
+  }
+  
+  .palletizing-right__option {
+    flex-direction: column;
+  }
+
   .palletizing-left__content-date {
     flex-direction: column;
   }
@@ -406,6 +436,10 @@
   .palletizing {
     width: 95%;
     padding: 1.5rem;
+  }
+
+  .palletizing-right__option {
+    flex-direction: column;
   }
 
   .palletizing-title {

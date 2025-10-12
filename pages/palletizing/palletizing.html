@@ -57,8 +57,6 @@
                     <a href="#" class="sgp-header__link" tabindex="4">Relatórios</a>
                     <ul class="sub-menu">
                         <li><a href="#">Relatório de Estoque</a></li>
-                        <li><a href="#">Relatório da Produção</a></li>
-                        <li><a href="#">Relatório de Registros</a></li>
                     </ul>
                 </li>
                 <li class="sgp-header__item">
@@ -68,7 +66,6 @@
                     <a href="#" class="sgp-header__link" tabindex="4">Históricos</a>
                     <ul class="sub-menu">
                         <li><a href="#">Histórico de Estoque</a></li>
-                        <li><a href="#">Histórico da Produção</a></li>
                         <li><a href="../../pages/history/history.html">Histórico de Registros</a></li>
                     </ul>
                 </li>
@@ -104,8 +101,6 @@
                     <a href="#" class="sgp-header__link" tabindex="4">Relatórios</a>
                     <ul class="sub-menu">
                         <li><a href="#">Relatório de Estoque</a></li>
-                        <li><a href="#">Relatório da Produção</a></li>
-                        <li><a href="#">Relatório de Registros</a></li>
                     </ul>
                 </li>
                 <li class="sgp-header__item">
@@ -115,7 +110,6 @@
                     <a href="#" class="sgp-header__link" tabindex="4">Históricos</a>
                     <ul class="sub-menu">
                         <li><a href="#">Histórico de Estoque</a></li>
-                        <li><a href="#">Histórico da Produção</a></li>
                         <li><a href="../../pages/history/history.html">Histórico de Registros</a></li>
                     </ul>
                 </li>
@@ -153,7 +147,7 @@
 
         <div class="palletizing-left">       
             <div class="palletizing-left__area-input">
-                <label for="palletizing-left__total" class="palletizing-left__label">Quantidade totel de Caixas:</label>
+                <label for="palletizing-left__total" class="palletizing-left__label">Quantidade total de Caixas:</label>
                 <input 
                     type="number" 
                     name="total-box" 
@@ -196,87 +190,157 @@
         </div>
 
         <div class="palletizing-right">
-            <h4 class="palletizing-right__title">
-                Dados de Identificação do Produto
-            </h4>
-            <div class="palletizing-right__vertical"></div>
-            <div class="palletizing-right__area-date">
-                <div class="palletizing-right__area">
-                    <label for="palletizing-right__area-product" class="palletizing-right__label">Nome do Produto:</label>
-                    <input 
-                        type="text"
-                        name="name-product"
-                        id="palletizing-right__area-product"
-                        class="palletizing-right__input"
-                        placeholder="Ex: Sobrepalete s/o"
-                        required
-                    >
-                </div>
-                <div class="palletizing-right__area">
-                    <label for="palletizing-right__area-code" class="palletizing-right__label">Código do Produto</label>
-                    <input 
-                        type="text"
-                        name="code-product"
-                        id="palletizing-right__area-code"
-                        class="palletizing-right__input"
-                        placeholder="Ex: ff00000"
-                        required
-                    >
-                </div>
-            </div>
-
-            <div class="palletizing-right__area-date">
-                <div class="palletizing-right__area">
-                    <label for="palletizing-right__area-load" class="palletizing-right__label">Pedido da Carga (PO):</label>
-                    <input 
-                        type="text"
-                        name="load"
-                        id="palletizing-right__area-load"
-                        class="palletizing-right__input"
-                        placeholder="Ex: po12345"
-                        required
-                    >
-                </div>
-                <div class="palletizing-right__area">
-                    <label for="palletizing-right__area-kg" class="palletizing-right__label">Peso da Carga (Total em Kg):</label>
-                    <input 
-                        type="text"
-                        name="kg-product"
-                        id="palletizing-right__area-code"
-                        class="palletizing-right__input"
-                        placeholder="Ex: 2340 kg"
-                        required
-                    >
-                </div>
-            </div>
-
-            <div class="palletizing-right__area-date palletizing--date">
-                <div class="palletizing-right__area">
-                    <label for="palletizing-right__area-time" class="palletizing-right__label">Data da Produção/Envase:</label>
-                    <input 
-                        type="date"
-                        name="datetime"
-                        id="palletizing-right__area-time"
-                        class="palletizing-right__input"
-                        required
-                    >
-                </div>
-                <div class="palletizing-right__area">
-                    <label for="palletizing-right__area-lote" class="palletizing-right__label">Lote de Produção:</label>
-                    <input 
-                        type="text"
-                        name="code-lote"
-                        id="palletizing-right__area-lote"
-                        class="palletizing-right__input"
-                        placeholder="Ex: fl002025"
-                        required
-                    >
-                </div>
-            </div>
-            
-            <button class="palletizing-right__btn-add">+ Adicionar outra data/lote</button>
-            <button class="palletizing-right__btn-email">Fazer o email</button>
+    <h4 class="palletizing-right__title">
+        Dados de Identificação do Produto
+    </h4>
+    <div class="palletizing-right__vertical"></div>
+    <div class="palletizing-right__area-date">
+        <div class="palletizing-right__area">
+            <label for="palletizing-right__area-product" class="palletizing-right__label">Nome do Produto:</label>
+            <select name="name of product exportetion" class="palletizing-right__select" id="palletizing-right__area-product">
+                <option value="">Selecione o produto</option>
+                <option value="Barriga c/ pele">Barriga c/ pele</option>
+                <option value="Barriga s/ pele">Barriga s/ pele</option>
+                <option value="Carré c/ vért c/ pele">Carré c/ vért c/ pele</option>
+                <option value="Carré c/ vértebra">Carré c/ vértebra</option>
+                <option value="Carré s/ vértebra">Carré s/ vértebra</option>
+                <option value="Costela">Costela</option>
+                <option value="Espinhaço">Espinhaço</option>
+                <option value="Filézinho">Filézinho</option>
+                <option value="Lombo">Lombo</option>
+                <option value="Paleta 90 VL">Paleta 90 VL</option>
+                <option value="Paleta s/ osso">Paleta s/ osso</option>
+                <option value="Patinho 98%">Patinho 98%</option>
+                <option value="Pernil 90 VL">Pernil 90 VL</option>
+                <option value="Pernil 95 VL">Pernil 95 VL</option>
+                <option value="Pernil c/ osso s/ pele">Pernil c/ osso s/ pele</option>
+                <option value="Pernil s/ osso">Pernil s/ osso</option>
+                <option value="Pernil s/ osso 90 VL">Pernil s/ osso 90 VL</option>
+                <option value="Pernil s/ osso 95 VL">Pernil s/ osso 95 VL</option>
+                <option value="Recorte 80 VL">Recorte 80 VL</option>
+                <option value="Recorte 90 VL">Recorte 90 VL</option>
+                <option value="Sobrepaleta c/ osso">Sobrepaleta c/ osso</option>
+                <option value="Sobrepaleta s/ osso">Sobrepaleta s/ osso</option>
+                <option value="OUTRO">Outro</option> </select>
+            <input 
+                type="text" 
+                name="other-product-name"
+                id="product-name-other"
+                class="palletizing-right__input"
+                placeholder="Digite o nome do produto"
+                style="display: none; margin-top: 5px;" 
+            />
         </div>
+
+        <div class="palletizing-right__area">
+            <label for="palletizing-right__area-code" class="palletizing-right__label">Código do Produto</label>
+            <select name="Code of product" id="palletizing-right__area-code" class="palletizing-right__select" >
+                <option value="">Selecione o código</option>
+                <option value="4001">4001</option>
+                <option value="4003">4003</option>
+                <option value="4004">4004</option>
+                <option value="4005">4005</option>
+                <option value="4006">4006</option>
+                <option value="4007">4007</option>
+                <option value="4008">4008</option>
+                <option value="4017">4017</option>
+                <option value="4018">4018</option>
+                <option value="4020">4020</option>
+                <option value="4021">4021</option>
+                <option value="4024">4024</option>
+                <option value="4025">4025</option>
+                <option value="4027">4027</option>
+                <option value="4028">4028</option>
+                <option value="4029">4029</option>
+                <option value="4030">4030</option>
+                <option value="4031">4031</option>
+                <option value="4032">4032</option>
+                <option value="4033">4033</option>
+                <option value="4034">4034</option>
+                <option value="4036">4036</option>
+                <option value="4037">4037</option>
+                <option value="4042">4042</option>
+                <option value="4043">4043</option>
+                <option value="4046">4046</option>
+                <option value="4047">4047</option>
+                <option value="4048">4048</option>
+                <option value="4052">4052</option>             
+                <option value="OUTRO">Outro</option>                  
+            </select>
+            <input 
+                type="text" 
+                name="other-product-code"
+                id="product-code-other"
+                class="palletizing-right__input"
+                placeholder="Digite o código do produto"
+                style="display: none; margin-top: 5px;" 
+            />
+        </div>
+    </div>
+
+    <div class="palletizing-right__area-date">
+        <div class="palletizing-right__area">
+            <label for="palletizing-right__area-load" class="palletizing-right__label">Pedido da Carga (PO):</label>
+            <input 
+                type="text"
+                name="load"
+                id="palletizing-right__area-load"
+                class="palletizing-right__input"
+                value="P:"
+                title="Ex: P:600"
+                required
+            >
+        </div>
+        <div class="palletizing-right__area">
+            <label for="palletizing-right__area-kg" class="palletizing-right__label">Peso da Carga (Total em Kg):</label>
+            <input 
+                type="text"
+                name="kg-product"
+                id="palletizing-right__area-kg"
+                class="palletizing-right__input"
+                placeholder="Ex: 2340 kg"
+                required
+            >
+        </div>
+    </div>
+    <div class="palletizing-right__area">
+        <label for="palletizing-right__area-pallet-number" class="palletizing-right__label label--number">Número do palete:</label>
+        <input 
+            type="text"
+            name="pallet-number"
+            id="palletizing-right__area-pallet-number"
+            class="palletizing-right__input palletizing--number"
+            placeholder="Ex: 1234"
+            required
+        >
+    </div>
+
+    <div class="palletizing-right__area-date palletizing--date">
+        <div class="palletizing-right__area">
+            <label for="palletizing-right__area-time" class="palletizing-right__label">Data da Produção/Envase:</label>
+            <input 
+                type="date"
+                name="datetime"
+                id="palletizing-right__area-time"
+                class="palletizing-right__input"
+                required
+            >
+        </div>
+        <div class="palletizing-right__area">
+            <label for="palletizing-right__area-lote" class="palletizing-right__label">Lote de Produção:</label>
+            <input 
+                type="date" name="code-lote"
+                id="palletizing-right__area-lote"
+                class="palletizing-right__input"
+                placeholder="Ex: fl002025"
+                required
+            >
+        </div>
+    </div>
+    
+    <button class="palletizing-right__btn-add">+ Adicionar outra data/lote</button>
+    <button class="palletizing-right__btn-email">Fazer o email</button>
+</div>
 
         <div class="palletizing-copy">
             <textarea class="palletizing-area__text"></textarea>

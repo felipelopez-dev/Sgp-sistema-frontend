@@ -7,12 +7,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const boxesRemainingElement = document.querySelector('.result--number__three'); 
     
     // --- Seletores da Coluna Direita (Dados do Produto/Relatório) ---
-    const productNameInput = document.getElementById('palletizing-right__area-product');
-    const productCodeInput = document.querySelector('input[name="code-product"]'); 
-    const poInput = document.getElementById('palletizing-right__area-load');
-    const kgInput = document.querySelector('input[name="kg-product"]'); 
+    const productNameSelect = document.getElementById('palletizing-right__area-product'); // SELECT Nome do Produto
+    const productNameOtherInput = document.getElementById('product-name-other');        // INPUT "Outro" Nome do Produto
     
-    // Tentativa de selecionar Responsável e Data (agora protegida contra falhas)
+    const productCodeSelect = document.getElementById('palletizing-right__area-code');  // SELECT Código do Produto
+    const productCodeOtherInput = document.getElementById('product-code-other');      // INPUT "Outro" Código do Produto
+    
+    const poInput = document.getElementById('palletizing-right__area-load');
+    const kgInput = document.getElementById('palletizing-right__area-kg');
+    
+    // ✅ NOVO SELETOR ADICIONADO PARA O CAMPO NÚMERO DO PALETE
+    const palletNumberInput = document.getElementById('palletizing-right__area-pallet-number');
+    
+    // Seletores ignorados no template de email final, mas usados no reset
     const responsibleNameInput = document.getElementById('responsible-name');
     const reportDateInput = document.getElementById('report-date');
 
@@ -21,13 +28,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const emailTextArea = document.querySelector('.palletizing-area__text');
     const copyButton = document.querySelector('.palletizing-area__btn-copy');
     const palletizingRight = document.querySelector('.palletizing-right');
-
-    // ✅ NOVO SELETOR PARA O BOTÃO DE RESET
     const resetButton = document.querySelector('.palletizing-copy__btn-reset'); 
 
     let loteCounter = 0;
 
-    // --- TEMPLATE HTML CORRIGIDO PARA O LAYOUT ---
+    // --- TEMPLATE HTML: LOTE DE PRODUÇÃO é TEXT ---
     const loteTemplateHTML = `
         <div class="palletizing-right__area-date palletizing--date-lote palletizing--dynamic-lote">
             <div class="palletizing-right__option">
@@ -44,7 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="palletizing-right__area">
                     <label for="lote-NEW_LOTE_ID" class="palletizing-right__label">Lote de Produção:</label>
                     <input 
-                        type="text"
+                        type="date" 
                         name="code-lote"
                         id="lote-NEW_LOTE_ID"
                         class="palletizing-right__input"
@@ -57,35 +62,77 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
     `;
 
+    // --- FUNÇÃO DE MÁSCARA DE KG (ENQUANTO DIGITA) ---
+    const applyKgMask = (e) => {
+    let value = e.target.value;
+
+    // Remove tudo que não for número
+    value = value.replace(/\D/g, '');
+
+    if (value === '') {
+        e.target.value = '';
+        return;
+    }
+
+    // Sempre pega os dois últimos dígitos como decimal
+    let integerPart = value.slice(0, -2);
+    let decimalPart = value.slice(-2);
+
+    if (integerPart === '') integerPart = '0';
+
+    // Remove zeros à esquerda
+    integerPart = integerPart.replace(/^0+/, '');
+    if (integerPart === '') integerPart = '0';
+
+    // Aplica separador de milhar
+    integerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+
+    // Monta o valor final
+    e.target.value = `${integerPart},${decimalPart}`;
+};
+
+    
+    // --- FUNÇÃO PARA FORMATAR NO FOCUS OUT (BLUR) ---
+    const formatKgOnBlur = (e) => {
+        let value = e.target.value;
+        
+        value = value.replace(/\./g, ''); 
+        value = value.replace(',', '.'); 
+        
+        const numericValue = parseFloat(value) || 0;
+
+        // Formata para o padrão brasileiro com 2 casas decimais fixas
+        const formattedValue = numericValue.toLocaleString('pt-BR', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
+        
+        e.target.value = formattedValue;
+    };
+
+
     // --- LÓGICA DE CÁLCULO EXATO (Math.floor) ---
     const calculatePalletizing = () => {
-        const totalBoxes = parseInt(totalBoxesInput.value, 10);
-        const boxesPerPallet = parseInt(boxesPerPalletInput.value, 10);
+        const totalBoxes = Number(totalBoxesInput.value);
+        const boxesPerPallet = Number(boxesPerPalletInput.value);
 
-        if (isNaN(totalBoxes) || totalBoxes <= 0 || isNaN(boxesPerPallet) || boxesPerPallet <= 0) {
+        if (totalBoxes <= 0 || boxesPerPallet <= 0 || isNaN(totalBoxes) || isNaN(boxesPerPallet)) {
             palletsNeededElement.textContent = '0';
             boxesUsedElement.textContent = '0';
             boxesRemainingElement.textContent = '0';
             return;
         }
 
-        // CÁLCULO EXATO: Conta apenas paletes COMPLETAMENTE CHEIOS
         const palletsFilled = Math.floor(totalBoxes / boxesPerPallet); 
-        
-        // Caixas utilizadas para ENCHER esses paletes
         const boxesUsedForFilledPallets = palletsFilled * boxesPerPallet;
-        
-        // Caixas que SOBRARAM dessa divisão
         const boxesRemaining = totalBoxes - boxesUsedForFilledPallets; 
         
-        // ATUALIZAÇÃO DO DISPLAY:
-        palletsNeededElement.textContent = palletsFilled.toString();
-        boxesUsedElement.textContent = boxesUsedForFilledPallets.toString();
-        boxesRemainingElement.textContent = boxesRemaining.toString();
+        palletsNeededElement.textContent = palletsFilled;
+        boxesUsedElement.textContent = boxesUsedForFilledPallets;
+        boxesRemainingElement.textContent = boxesRemaining;
     };
 
     const formatLoteData = () => {
-        // Busca todos os blocos que contêm data e lote (incluindo o fixo e os dinâmicos)
         const loteBlocks = palletizingRight.querySelectorAll('.palletizing-right__area-date');
         let loteDetails = [];
 
@@ -94,7 +141,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const loteInput = block.querySelector('input[name="code-lote"]');
             
             if (dateInput && loteInput && dateInput.value.trim() !== '' && loteInput.value.trim() !== '') {
-                // Formata a data de YYYY-MM-DD para DD/MM/YYYY
                 const date = dateInput.value.split('-').reverse().join('/');
                 const lote = loteInput.value.toUpperCase();
                 loteDetails.push(`Lote: ${lote} | Data Prod/Envase: ${date}`);
@@ -107,27 +153,57 @@ document.addEventListener('DOMContentLoaded', () => {
 
         return loteDetails.join('\n');
     };
+    
+    // --- FUNÇÃO PARA GERENCIAR OS CAMPOS "OUTRO" ---
+    const toggleOtherInputs = (selectElement, otherInputElement) => {
+        if (!selectElement || !otherInputElement) return;
+
+        if (selectElement.value === 'OUTRO') {
+            otherInputElement.style.display = 'block';
+            otherInputElement.setAttribute('required', 'required');
+            otherInputElement.focus();
+        } else {
+            otherInputElement.style.display = 'none';
+            otherInputElement.removeAttribute('required');
+            otherInputElement.value = ''; 
+        }
+    };
+
 
     // --- GERAÇÃO DE CONTEÚDO DO E-MAIL ---
     const generateEmailContent = () => {
         calculatePalletizing(); 
         
-        // Captura de valores
+        // LÓGICA DO NOME DO PRODUTO 
+        let finalProductName = 'NÃO INFORMADO';
+        if (productNameSelect) {
+            if (productNameSelect.value === 'OUTRO' && productNameOtherInput && productNameOtherInput.value.trim() !== '') {
+                finalProductName = productNameOtherInput.value.trim();
+            } else if (productNameSelect.value.trim() !== '' && productNameSelect.value !== 'OUTRO') {
+                finalProductName = productNameSelect.value;
+            }
+        }
+        
+        // LÓGICA DO CÓDIGO DO PRODUTO 
+        let finalProductCode = 'NÃO INFORMADO';
+        if (productCodeSelect) {
+            if (productCodeSelect.value === 'OUTRO' && productCodeOtherInput && productCodeOtherInput.value.trim() !== '') {
+                finalProductCode = productCodeOtherInput.value.trim().toUpperCase();
+            } else if (productCodeSelect.value.trim() !== '' && productCodeSelect.value !== 'OUTRO') {
+                finalProductCode = productCodeSelect.value;
+            }
+        }
+        
+        // Captura de valores de Cálculo
         const totalBoxes = totalBoxesInput.value || 'NÃO INFORMADO';
         const boxesPerPallet = boxesPerPalletInput.value || 'NÃO INFORMADO';
         const palletsNeeded = palletsNeededElement.textContent;
-        const boxesUsed = boxesUsedElement.textContent;
         
-        const productName = productNameInput.value || 'NÃO INFORMADO';
-        const productCode = productCodeInput.value || 'NÃO INFORMADO';
+        // Captura de valores de Produto
         const po = poInput.value || 'NÃO INFORMADO';
-        const kg = kgInput.value || 'NÃO INFORMADO'; 
+        const kgFormatted = kgInput.value || 'NÃO INFORMADO'; 
+        const palletNumber = palletNumberInput ? palletNumberInput.value : 'NÃO INFORMADO'; // Captura o valor
 
-        // CAPTURA PROTEGIDA: Usa encadeamento opcional (?) para evitar falhas se os IDs não existirem
-        const responsibleName = responsibleNameInput?.value || 'NÃO INFORMADO';
-        const rawReportDate = reportDateInput?.value; 
-        const formattedReportDate = rawReportDate ? rawReportDate.split('-').reverse().join('/') : 'NÃO INFORMADO';
-        
         const loteData = formatLoteData();
 
         // TEMPLATE DE E-MAIL FINAL E SIMPLES
@@ -137,22 +213,18 @@ Total de Caixas: ${totalBoxes}
 Caixas por Palete (capacidade): ${boxesPerPallet}
 Paletes Necessários: ${palletsNeeded}
 
-
 IDENTIFICAÇÃO DO PRODUTO
 
-Nome do Produto: ${productName}
-Código do Produto: ${productCode}
+Nome do Produto: ${finalProductName}
+Código do Produto: ${finalProductCode}
 Pedido da Carga: ${po}
-Peso Total (kg): ${kg}
+Peso Total (kg): ${kgFormatted}
+Número do Palete: ${palletNumber}
 
 
 DADOS DE LOTE E PRODUÇÃO
 
-${loteData}
-
-
-Nome do responsável: ${responsibleName}
-Data: ${formattedReportDate}`;
+${loteData}`;
 
         emailTextArea.textContent = emailText.trim(); 
     };
@@ -168,18 +240,15 @@ Data: ${formattedReportDate}`;
         tempDiv.innerHTML = uniqueLoteHTML.trim();
         const newBlock = tempDiv.firstChild;
 
-        // Insere o novo bloco ANTES do botão "Adicionar"
         palletizingRight.insertBefore(newBlock, addButton);
 
         const deleteBtn = newBlock.querySelector('.palletizing-right__btn-excluir');
         deleteBtn.addEventListener('click', handleDeleteLote);
     };
 
-    // --- FUNÇÃO DE EXCLUSÃO CORRIGIDA: Permite a remoção dos lotes adicionais ---
     const handleDeleteLote = (event) => {
         event.preventDefault(); 
         const button = event.target;
-        // Encontra o bloco pai do lote (que tem a classe de identificação)
         const loteBlock = button.closest('.palletizing--date-lote'); 
         
         if (loteBlock) {
@@ -187,67 +256,99 @@ Data: ${formattedReportDate}`;
         }
     };
 
-    // --- ✅ FUNÇÃO DE RESETAR A PÁGINA ---
+    // --- FUNÇÃO DE RESETAR A PÁGINA (CORRIGIDA) ---
     const resetPage = (event) => {
-        event.preventDefault(); // Previne o comportamento padrão do botão, se for um <button> em um <form>
+        event.preventDefault();
 
         // 1. Resetar Campos de Cálculo
         totalBoxesInput.value = '';
         boxesPerPalletInput.value = '';
 
         // 2. Resetar Campos de Produto/Relatório
-        productNameInput.value = '';
-        productCodeInput.value = '';
-        poInput.value = '';
-        kgInput.value = '';
-        if (responsibleNameInput) responsibleNameInput.value = '';
+        if (productNameSelect) productNameSelect.value = '';
+        if (productNameOtherInput) {
+            productNameOtherInput.value = '';
+            productNameOtherInput.style.display = 'none';
+        }
+        
+        if (productCodeSelect) productCodeSelect.value = '';
+        if (productCodeOtherInput) {
+            productCodeOtherInput.value = '';
+            productCodeOtherInput.style.display = 'none';
+        }
+
+        poInput.value = 'P:';
+        if (kgInput) kgInput.value = '';
+        
+        // ✅ CORREÇÃO APLICADA: Limpa o campo Número do Palete
+        if (palletNumberInput) palletNumberInput.value = ''; 
+
+        // Limpar campos de Responsável e Data (se existirem)
+        if (responsibleNameInput) responsibleNameInput.value = ''; 
         if (reportDateInput) reportDateInput.value = '';
 
-        // 3. Resetar Lotes (o lote inicial no HTML deve ser limpo)
-        const initialDateInput = document.querySelector('.palletizing-right__area-date:not(.palletizing--dynamic-lote) input[type="date"]');
-        const initialLoteInput = document.querySelector('.palletizing-right__area-date:not(.palletizing--dynamic-lote) input[name="code-lote"]');
+        // 3. Resetar Lotes Iniciais
+        const initialDateInput = document.querySelector('.palletizing--date input[type="date"]');
+        const initialLoteInput = document.querySelector('.palletizing--date input[name="code-lote"]');
+        
         if (initialDateInput) initialDateInput.value = '';
         if (initialLoteInput) initialLoteInput.value = '';
 
         // 4. Remover Lotes Dinâmicos Adicionados
         const dynamicLoteBlocks = palletizingRight.querySelectorAll('.palletizing--dynamic-lote');
         dynamicLoteBlocks.forEach(block => block.remove());
-        loteCounter = 0; // Resetar o contador de lotes
+        loteCounter = 0;
 
         // 5. Resetar Resultados e Área de E-mail
-        calculatePalletizing(); // Atualiza os resultados de cálculo para '0'
-        emailTextArea.textContent = ''; // Limpa a área de texto do e-mail
+        palletsNeededElement.textContent = '0';
+        boxesUsedElement.textContent = '0';
+        boxesRemainingElement.textContent = '0';
 
-        // Opcional: Focar no primeiro campo para usabilidade
+        emailTextArea.textContent = '';
         totalBoxesInput.focus();
     };
 
     // --- LISTENERS DE EVENTO ---
+
+    // LISTENER: Máscara de KG (Enquanto digita)
+    if (kgInput) {
+        kgInput.addEventListener('input', applyKgMask);
+        // Formatação final (,00) (Ao sair do campo)
+        kgInput.addEventListener('blur', formatKgOnBlur);
+    }
+
+    // LISTENER: Ativa o input de "Outro" para Nome do Produto
+    if (productNameSelect) {
+        productNameSelect.addEventListener('change', () => {
+            toggleOtherInputs(productNameSelect, productNameOtherInput);
+        });
+    }
+    
+    // LISTENER: Ativa o input de "Outro" para Código do Produto
+    if (productCodeSelect) {
+        productCodeSelect.addEventListener('change', () => {
+            toggleOtherInputs(productCodeSelect, productCodeOtherInput);
+        });
+    }
 
     // Cálculo automático ao digitar
     [totalBoxesInput, boxesPerPalletInput].forEach(input => {
         input.addEventListener('input', calculatePalletizing);
     });
     
-    // Botão Calcular (caso exista, embora o cálculo seja automático)
-    const calculateBtn = document.querySelector('.palletizing-left__btn-calculate');
-    if (calculateBtn) { 
-        calculateBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            calculatePalletizing();
-        });
-    }
-
+    // Botão Adicionar Lote
     addButton.addEventListener('click', (e) => {
         e.preventDefault();
         addLoteBlock(); 
     });
     
+    // Botão Fazer Email
     emailButton.addEventListener('click', (e) => {
         e.preventDefault();
         generateEmailContent(); 
     });
 
+    // Botão Copiar
     copyButton.addEventListener('click', (e) => {
         e.preventDefault();
         if (emailTextArea.textContent) {
@@ -264,13 +365,13 @@ Data: ${formattedReportDate}`;
         }
     });
 
-    // ✅ NOVO LISTENER PARA O BOTÃO DE RESET
+    // LISTENER PARA O BOTÃO DE RESET
     if (resetButton) {
         resetButton.addEventListener('click', resetPage);
-    } else {
-        console.warn('Botão de reset não encontrado. Certifique-se de que o elemento com a classe .palletizing-copy__btn-reset está no HTML.');
-    }
-
-    // Inicia a funcionalidade
+    } 
+    
+    // Inicialização
     calculatePalletizing();
+    if (productNameSelect) toggleOtherInputs(productNameSelect, productNameOtherInput);
+    if (productCodeSelect) toggleOtherInputs(productCodeSelect, productCodeOtherInput);
 });

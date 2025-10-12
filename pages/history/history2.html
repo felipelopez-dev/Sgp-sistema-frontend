@@ -8,7 +8,7 @@
     <meta http-equiv="pragma" content="no-cache">
     <meta http-equiv="expires" content="0">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Histórico registros</title>
+    <title>Histórico de Estoque</title>
 
    <!-- Favicon -->
     <link rel="icon" type="image/png" href="../../assets/img/favicons/favicon-96x96.png" sizes="96x96">
@@ -25,6 +25,8 @@
     <link rel="stylesheet" href="../../assets/css/base/index.css">
     <link rel="stylesheet" href="../../assets/css/components/register.css">
     <link rel="stylesheet" href="../../assets/css/components/history-register.css">
+    <link rel="stylesheet" href="../../assets/css/components/history2.css">
+
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -64,7 +66,7 @@
                     <a href="../../pages/control/control.html" class="sgp-header__link" tabindex="4">Controle de Estoque</a>
                 </li>
                 <li class="sgp-header__item">
-                    <a href="#" class="sgp-header__link" tabindex="4">Históricos</a>
+                    <a href="#" class="sgp-header__link" tabindex="4">Histórios</a>
                     <ul class="sub-menu">
                         <li><a href="#">Histórico de Estoque</a></li>
                         <li><a href="../../pages/history/history.html">Histórico de Registros</a></li>
@@ -108,7 +110,7 @@
                     <a href="../../pages/control/control.html" class="sgp-header__link" tabindex="4">Controle de Estoque</a>
                 </li>
                 <li class="sgp-header__item">
-                    <a href="#" class="sgp-header__link" tabindex="4">Históricos</a>
+                    <a href="#" class="sgp-header__link" tabindex="4">Histórios</a>
                     <ul class="sub-menu">
                         <li><a href="#">Histórico de Estoque</a></li>
                         <li><a href="../../pages/history/history.html">Histórico de Registros</a></li>
@@ -196,7 +198,16 @@
                 </div>
                 <div class="excluded-header__line"></div>
             </div> 
-            <div class="excluded-area history-content"></div>
+            <!-- Começo do bloco substituído: tabela de histórico -->
+            <div class="excluded-area history-content">
+              <div class="excluded-table-wrapper">
+                <table class="excluded-table" id="historyTable" aria-describedby="historyDesc">
+                  <tbody id="historyBody">
+                    <!-- Linhas serão inseridas dinamicamente por JavaScript -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
         </section>
 
     </div>
@@ -213,7 +224,7 @@
     <script type="text/javascript" src="../../assets/js/global/darkMode.js" defer></script>
     <script type="text/javascript" src="../../assets/js/global/mobilMenu.js" defer></script>
     <script type="module" src="../../assets/js/pages/register/firebaseConfig.js" defer></script>
-    <script type="module" src="../../assets/js/pages/register/validationRegister.js" defer></script>
+    <script type="module" src="../../assets/js/pages/control/stockControl.js" defer></script>
     <script type="text/javascript" src="../../assets/js/pages/login/loginValidation.js" defer></script>
 
 </body>
