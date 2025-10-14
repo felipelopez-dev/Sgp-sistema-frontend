@@ -5,7 +5,7 @@ import { ref, push, onValue, remove, update, get } from "https://www.gstatic.com
 // Referências globais
 const ESTOQUE_REF = ref(database, 'estoque');
 const HISTORICO_EXCLUIDOS_REF = ref(database, 'historicoExcluidos');
-const ADMIN_PASSWORD = 'admgeral*'; // Senha do administrador (USO INSEGURO EM PROD.)
+const ADMIN_PASSWORD = 'operadoradm'; // Senha do administrador (USO INSEGURO EM PROD.)
 
 /**
  * Formata um timestamp (milissegundos) para o formato dd/mm/yyyy.
