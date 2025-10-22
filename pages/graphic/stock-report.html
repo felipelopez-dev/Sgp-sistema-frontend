@@ -8,7 +8,7 @@
     <meta http-equiv="pragma" content="no-cache">
     <meta http-equiv="expires" content="0">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Histórico de Estoque</title>
+    <title>Relatório de Estoque</title>
 
    <!-- Favicon -->
     <link rel="icon" type="image/png" href="../../assets/img/favicons/favicon-96x96.png" sizes="96x96">
@@ -25,8 +25,7 @@
     <link rel="stylesheet" href="../../assets/css/base/index.css">
     <link rel="stylesheet" href="../../assets/css/components/register.css">
     <link rel="stylesheet" href="../../assets/css/components/history-register.css">
-    <link rel="stylesheet" href="../../assets/css/components/history2.css">
-
+    <link rel="stylesheet" href="../../assets/css/components/stock-report.css">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -66,7 +65,7 @@
                     <a href="../../pages/control/control.html" class="sgp-header__link" tabindex="4">Controle de Estoque</a>
                 </li>
                 <li class="sgp-header__item">
-                    <a href="#" class="sgp-header__link" tabindex="4">Histórios</a>
+                    <a href="#" class="sgp-header__link" tabindex="4">Históricos</a>
                     <ul class="sub-menu">
                         <li><a href="#">Histórico de Estoque</a></li>
                         <li><a href="../../pages/history/history.html">Histórico de Registros</a></li>
@@ -110,7 +109,7 @@
                     <a href="../../pages/control/control.html" class="sgp-header__link" tabindex="4">Controle de Estoque</a>
                 </li>
                 <li class="sgp-header__item">
-                    <a href="#" class="sgp-header__link" tabindex="4">Histórios</a>
+                    <a href="#" class="sgp-header__link" tabindex="4">Históricos</a>
                     <ul class="sub-menu">
                         <li><a href="#">Histórico de Estoque</a></li>
                         <li><a href="../../pages/history/history.html">Histórico de Registros</a></li>
@@ -144,73 +143,68 @@
         </div>
     </header>
 
-    <div class="content">
-        <section class="history">
-            <div class="history-area">
-                <h1 class="history-area__title">
-                    Histórico de Mensagens Excluídas
-                </h1>
+    <main class="dashboard">
+        <h1 class="dashboard__title">Dashboard de Estoque</h1>
+        <section class="filters dashboard__filters">
+            <div class="filters__group">
+                <label for="filter-product" class="filters__label">Produto</label>
+                <select id="filter-product" class="filters__select">
+                    <option value="all">Todos</option>
+                    <option value="caixa-baixa">Caixa baixa</option>
+                    <option value="exportacao-barriga">Exportação barriga</option>
+                    <option value="pernil-com-pele">Pernil com pele</option>
+                </select>
             </div>
-            <p class="history-text">
-                Aqui você pode visualizar todos os registos de saída que foram excluídos do sistema SGP, 
-                mantendo a transparência e um registo completo.
-            </p>
-        </section>
-
-        <section class="filter">
-            <div class="filter-area">
-                <div class="filter-area__content">
-                    <img class="filter-area__image" src="../../assets/img/global/svg/icons/ui/filter-register.svg" 
-                    alt="Imagem de um prego">
-                    <h2 class="filter-area__title">
-                        Filtrar Histórico por Data
-                    </h2>
+            <div class="filters__group">
+                <label class="filters__label">Métrica</label>
+                <div class="filters__toggle-group" id="metric-toggle">
+                    <button class="filters__toggle-btn filters__toggle-btn--active" data-value="all">Total + Restante</button>
+                    <button class="filters__toggle-btn" data-value="total">Total</button>
+                    <button class="filters__toggle-btn" data-value="remaining">Restante</button>
                 </div>
-                <div class="filter-area__line"></div>
-            </div>
-            <div class="filter-input__area">
-                <label class="filter-input__label" for="filter-input__date">Selecione uma data:</label>
-                <input 
-                    type="date"
-                    class="filter-input"
-                    name="date"
-                    id="filter-input__date"
-                >
-            </div>
-            <div class="filter-btn">
-                <button type="button" class="filter-button__1 filter--btn">
-                    <img class="filter-button__image" src="../../assets/img/global/svg/icons/ui/calendar-check-register.svg" 
-                    alt="Imagem de calendário">
-                    <span class="filter-button__text">Aplicar filtro</span>
-                </button>
-                <button type="button" class="filter-button__2 filter--btn" >
-                    <img class="filter-button__image" src="../../assets/img/global/svg/icons/ui/list-cross-register.svg" 
-                    alt="Imagem de uma lista">
-                    <span class="filter-button__text">Mostrar todos</span>
-                </button>
             </div>
         </section>
 
-        <section class="excluded">
-            <div class="excluded-header">
-                <div class="excluded-header__area">
-                    <h3 class="excluded-header__title">Registros Excluídos</h3>
-                </div>
-                <div class="excluded-header__line"></div>
-            </div> 
-            <!-- Começo do bloco substituído: tabela de histórico -->
-            <div class="excluded-area history-content">
-              <div class="excluded-table-wrapper">
-                <table class="excluded-table" id="historyTable" aria-describedby="historyDesc">
-                  <tbody id="historyBody">
-                    <!-- Linhas serão inseridas dinamicamente por JavaScript -->
-                  </tbody>
-                </table>
-              </div>
+        <section class="totals dashboard__totals">
+            <div class="totals__card totals__card--tunnel">
+                <div class="totals__icon">🛠️</div>
+                <strong class="totals__title">Total Túnel</strong>
+                <span id="total-tunnel" class="totals__value">0</span>
+            </div>
+            <div class="totals__card totals__card--today">
+                <div class="totals__icon">📦</div>
+                <strong class="totals__title">Total Restante Hoje</strong>
+                <span id="total-today" class="totals__value">0</span>
+            </div>
+            <div class="totals__card totals__card--month">
+                <div class="totals__icon">📅</div>
+                <strong class="totals__title">Total Mês</strong>
+                <span id="total-month" class="totals__value">0</span>
             </div>
         </section>
 
-    </div>
+        <!-- Exportação -->
+        <div class="export dashboard__export">
+            <button id="export-pdf" class="export__btn">Exportar PDF</button>
+            <button id="export-csv" class="export__btn">Exportar CSV</button>
+        </div>
+
+        <section class="summary dashboard__summary">
+            <div class="summary__card summary__card--best">
+                <strong class="summary__title">Maior do Mês</strong>
+                <span id="best-value" class="summary__value">Aguardando dados...</span>
+                <span class="summary__delta" id="best-delta"></span>
+            </div>
+            <div class="summary__card summary__card--worst">
+                <strong class="summary__title">Menor do Mês</strong>
+                <span id="worst-value" class="summary__value">Aguardando dados...</span>
+                <span class="summary__delta" id="worst-delta"></span>
+            </div>
+        </section>
+        <section class="chart dashboard__chart">
+            <canvas id="monthlyChart" class="chart__canvas"></canvas>
+        </section>
+    </main>
 
     <footer class="footer">
         <p class="footer-description">
@@ -224,8 +218,9 @@
     <script type="text/javascript" src="../../assets/js/global/darkMode.js" defer></script>
     <script type="text/javascript" src="../../assets/js/global/mobilMenu.js" defer></script>
     <script type="module" src="../../assets/js/pages/register/firebaseConfig.js" defer></script>
-    <script type="module" src="../../assets/js/pages/control/stockControl.js" defer></script>
     <script type="text/javascript" src="../../assets/js/pages/login/loginValidation.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+    <script type="module" src="../../assets/js/pages/control/stockControl.js" defer></script>
 
 </body>
 </html>
