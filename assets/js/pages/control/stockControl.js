@@ -136,7 +136,113 @@ const initializeStockControl = () => {
 
     function openConfirmationModal(modal,titleText,bodyText,confirmAction){ if(!modal){ confirmAction(); return; } modal.classList.remove('delete--active'); const titleElement = modal.querySelector('.delete-title'); const textElement = modal.querySelector('.delete-text'); const confirmButton = modal.querySelector('.button--link2'); const cancelButton = modal.querySelector('.button--link1'); if(titleElement) titleElement.textContent = titleText; if(textElement) textElement.textContent = bodyText; if(confirmButton && cancelButton){ const cloneConfirm = confirmButton.cloneNode(true); confirmButton.parentNode.replaceChild(cloneConfirm, confirmButton); const cloneCancel = cancelButton.cloneNode(true); cancelButton.parentNode.replaceChild(cloneCancel, cancelButton); cloneConfirm.addEventListener('click',()=>{ confirmAction(); modal.classList.remove('delete--active'); }); cloneCancel.addEventListener('click',()=>{ modal.classList.remove('delete--active'); }); modal.classList.add('delete--active'); } else { confirmAction(); } }
 
-    function handleEditMode(newRow,key,originalData){ const cells = newRow.querySelectorAll('td'); const [tdQuantity, tdSaida, tdRestantes, tdCategory, tdProduct, tdData, tdDescription, tdAction] = cells; const { quantity: oldQuantity, category: oldCategoryValue, product: oldProduct, description: oldDescription, saida: oldSaida=0, dataSaida: oldDataSaida=null } = originalData; tdQuantity.innerHTML = `<input type="number" class="edit-quantity" value="${oldQuantity}" min="1" style="width:70px">`; const editQuantityInput = tdQuantity.querySelector('.edit-quantity'); tdSaida.innerHTML = `<input type="number" class="edit-saida" value="${oldSaida}" min="0" max="${oldQuantity}" style="width:70px">`; const editSaidaInput = tdSaida.querySelector('.edit-saida'); tdRestantes.innerHTML = `<span class="edit-restantes" style="font-weight:bold">${oldQuantity-oldSaida}</span>`; const editRestantesSpan = tdRestantes.querySelector('.edit-restantes'); const updateRestantes = ()=>{ const newQty = parseInt(editQuantityInput.value||0,10); let newSaida = parseInt(editSaidaInput.value||0,10); if(newSaida>newQty){ newSaida = newQty; editSaidaInput.value = newSaida; } editSaidaInput.max = newQty; editRestantesSpan.textContent = newQty - newSaida; }; editQuantityInput.addEventListener('input', updateRestantes); editSaidaInput.addEventListener('input', updateRestantes); tdCategory.innerHTML = `<select id="edit-category" class="edit-category" style="width:120px"><option value="interno">Mercado Interno</option><option value="externo">Mercado Externo</option></select>`; const editCategorySelect = tdCategory.querySelector('.edit-category'); editCategorySelect.value = oldCategoryValue; const editProductSelect = document.createElement('select'); editProductSelect.classList.add('edit-product'); editProductSelect.style.width='120px'; const populateProducts = (categoryValue, selectedProduct)=>{ editProductSelect.innerHTML=''; const prods = productsByCategory[categoryValue] || []; prods.forEach(p=>{ const o = document.createElement('option'); o.value=p; o.textContent=p; editProductSelect.appendChild(o); }); if(selectedProduct && prods.includes(selectedProduct)) editProductSelect.value = selectedProduct; }; populateProducts(oldCategoryValue, oldProduct); tdProduct.innerHTML = ''; tdProduct.appendChild(editProductSelect); editCategorySelect.addEventListener('change', ()=> populateProducts(editCategorySelect.value)); tdData.textContent = formatTimestamp(originalData.timestamp); tdDescription.innerHTML = `<input type="text" class="edit-description" value="${oldDescription==='-'?'':oldDescription}" style="width:120px">`; tdAction.innerHTML = `<button class="btn-salvar">Salvar</button><button class="btn-cancelar">Cancelar</button>`; tdAction.querySelector('.btn-salvar').addEventListener('click', ()=>{ const newQuantity = parseInt(editQuantityInput.value||0,10); const newSaida = parseInt(editSaidaInput.value||0,10); const newCategoryValue = editCategorySelect.value; const newProduct = editProductSelect.value; const newDescription = tdDescription.querySelector('.edit-description').value; let newTimestampSaida = oldDataSaida; if(newSaida !== oldSaida && newSaida>0) newTimestampSaida = Date.now(); else if(newSaida===0) newTimestampSaida = null; const newRestantes = newQuantity - newSaida; const newStatus = newRestantes===0 ? 'concluido' : 'pendente'; if(!isNaN(newQuantity) && newQuantity>0 && newCategoryValue && newProduct && !isNaN(newSaida) && newSaida <= newQuantity){ const updatedData = { quantity: newQuantity, category: newCategoryValue, product: newProduct, description: newDescription||'-', saida: newSaida, dataSaida: newTimestampSaida, status: newStatus, timestamp: originalData.timestamp }; update(ref(database, `estoque/${key}`), updatedData).then(()=> addOrUpdateRowToTable(key, updatedData)).catch(err=>alert('Erro ao salvar edição: '+err.message)); } else alert('Dados inválidos'); }); tdAction.querySelector('.btn-cancelar').addEventListener('click', ()=> addOrUpdateRowToTable(key, originalData)); }
+    // ... (código anterior)
+
+    function handleEditMode(newRow,key,originalData){ 
+        const cells = newRow.querySelectorAll('td'); 
+        const [tdQuantity, tdSaida, tdRestantes, tdCategory, tdProduct, tdData, tdDescription, tdAction] = cells; 
+        const { quantity: oldQuantity, category: oldCategoryValue, product: oldProduct, description: oldDescription, saida: oldSaida=0, dataSaida: oldDataSaida=null } = originalData; 
+        
+        tdQuantity.innerHTML = `<input type="number" class="edit-quantity" value="${oldQuantity}" min="1" style="width:70px">`; 
+        const editQuantityInput = tdQuantity.querySelector('.edit-quantity'); 
+        
+        tdSaida.innerHTML = `<input type="number" class="edit-saida" value="${oldSaida}" min="0" max="${oldQuantity}" style="width:70px">`; 
+        const editSaidaInput = tdSaida.querySelector('.edit-saida'); 
+        
+        tdRestantes.innerHTML = `<span class="edit-restantes" style="font-weight:bold">${oldQuantity-oldSaida}</span>`; 
+        const editRestantesSpan = tdRestantes.querySelector('.edit-restantes'); 
+        
+        const updateRestantes = ()=>{ 
+            const newQty = parseInt(editQuantityInput.value||0,10); 
+            let newSaida = parseInt(editSaidaInput.value||0,10); 
+            if(newSaida>newQty){ newSaida = newQty; editSaidaInput.value = newSaida; } 
+            editSaidaInput.max = newQty; 
+            editRestantesSpan.textContent = newQty - newSaida; 
+        }; 
+        
+        editQuantityInput.addEventListener('input', updateRestantes); 
+        editSaidaInput.addEventListener('input', updateRestantes); 
+        
+        tdCategory.innerHTML = `<select id="edit-category" class="edit-category" style="width:120px"><option value="interno">Mercado Interno</option><option value="externo">Mercado Externo</option></select>`; 
+        const editCategorySelect = tdCategory.querySelector('.edit-category'); 
+        editCategorySelect.value = oldCategoryValue; 
+        
+        const editProductSelect = document.createElement('select'); 
+        editProductSelect.classList.add('edit-product'); 
+        editProductSelect.style.width='120px'; 
+        
+        const populateProducts = (categoryValue, selectedProduct)=>{ 
+            editProductSelect.innerHTML=''; 
+            const prods = productsByCategory[categoryValue] || []; 
+            prods.forEach(p=>{ 
+                const o = document.createElement('option'); 
+                o.value=p; o.textContent=p; 
+                editProductSelect.appendChild(o); 
+            }); 
+            if(selectedProduct && prods.includes(selectedProduct)) editProductSelect.value = selectedProduct; 
+        }; 
+        
+        populateProducts(oldCategoryValue, oldProduct); 
+        
+        tdProduct.innerHTML = ''; 
+        tdProduct.appendChild(editProductSelect); 
+        editCategorySelect.addEventListener('change', ()=> populateProducts(editCategorySelect.value)); 
+        
+        tdData.textContent = formatTimestamp(originalData.timestamp); 
+        
+        tdDescription.innerHTML = `<input type="text" class="edit-description" value="${oldDescription==='-'?'':oldDescription}" style="width:120px">`; 
+        const editDescriptionInput = tdDescription.querySelector('.edit-description');
+
+        tdAction.innerHTML = `<button class="btn-salvar">Salvar</button><button class="btn-cancelar">Cancelar</button>`; 
+        const saveButton = tdAction.querySelector('.btn-salvar');
+
+        const saveAction = ()=>{ 
+            const newQuantity = parseInt(editQuantityInput.value||0,10); 
+            const newSaida = parseInt(editSaidaInput.value||0,10); 
+            const newCategoryValue = editCategorySelect.value; 
+            const newProduct = editProductSelect.value; 
+            const newDescription = editDescriptionInput.value; 
+            let newTimestampSaida = oldDataSaida; 
+            
+            if(newSaida !== oldSaida && newSaida>0) newTimestampSaida = Date.now(); 
+            else if(newSaida===0) newTimestampSaida = null; 
+            
+            const newRestantes = newQuantity - newSaida; 
+            const newStatus = newRestantes===0 ? 'concluido' : 'pendente'; 
+            
+            if(!isNaN(newQuantity) && newQuantity>0 && newCategoryValue && newProduct && !isNaN(newSaida) && newSaida <= newQuantity){ 
+                const updatedData = { 
+                    quantity: newQuantity, 
+                    category: newCategoryValue, 
+                    product: newProduct, 
+                    description: newDescription||'-', 
+                    saida: newSaida, 
+                    dataSaida: newTimestampSaida, 
+                    status: newStatus, 
+                    timestamp: originalData.timestamp 
+                }; 
+                update(ref(database, `estoque/${key}`), updatedData).then(()=> addOrUpdateRowToTable(key, updatedData)).catch(err=>alert('Erro ao salvar edição: '+err.message)); 
+            } else alert('Dados inválidos'); 
+        };
+
+        // Adiciona o evento de clique ao botão Salvar
+        saveButton.addEventListener('click', saveAction);
+
+        // Funções para capturar o Enter nos campos de edição
+        const handleEnterKey = (ev) => {
+            if (ev.key === 'Enter') {
+                ev.preventDefault(); // Evita o comportamento padrão (ex: submeter formulário)
+                saveAction(); // Chama a função de salvar
+            }
+        };
+
+        // Adiciona o event listener de Enter aos campos de input
+        editQuantityInput.addEventListener('keydown', handleEnterKey);
+        editSaidaInput.addEventListener('keydown', handleEnterKey);
+        editDescriptionInput.addEventListener('keydown', handleEnterKey);
+        
+        tdAction.querySelector('.btn-cancelar').addEventListener('click', ()=> addOrUpdateRowToTable(key, originalData)); 
+    }
 
     // Realtime (Leitura e Atualização da Tabela)
     onValue(ESTOQUE_REF, snapshot=>{
