@@ -8,11 +8,6 @@
     box-shadow: 0 0.3125rem 1.25rem rgba(0, 0, 0, 0.1);
 }
 
-.table--header__monitor {
-	display: flex;
-	gap: 1rem;
-}
-
 .control-title {
     font-size: 3.5rem;
     font-weight: 700;
@@ -257,6 +252,7 @@
     box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.15);
     color: var(--color-white);
     cursor: pointer;
+		margin-right: 1rem;
 }
 
 .btn-cancelar {
