@@ -279,144 +279,167 @@ const initializeStockControl = () => {
 
 // --- Histórico (initializeHistoryControl) ---
 const initializeHistoryControl = () => {
-    const historyContainer = document.getElementById('historico-container') || document.getElementById('history-main-container');
-    const dateInput = document.getElementById('filter-input__date');
-    const applyFilterButton = document.querySelector('.filter-button__1');
-    const showAllButton = document.querySelector('.filter-button__2');
-    if (!historyContainer) return;
+    const historyContainer = document.getElementById('historico-container') || document.getElementById('history-main-container');
+    const dateInput = document.getElementById('filter-input__date');
+    const applyFilterButton = document.querySelector('.filter-button__1');
+    const showAllButton = document.querySelector('.filter-button__2');
+    if (!historyContainer) return;
 
-    // Função para formatar timestamp
-    const getLocalDateString = (ts) => {
-        const d = new Date(ts);
-        const day = String(d.getDate()).padStart(2,'0');
-        const month = String(d.getMonth()+1).padStart(2,'0');
-        const year = d.getFullYear();
-        return `${day}/${month}/${year}`;
-    };
+    // Função para formatar timestamp
+    const getLocalDateString = (ts) => {
+        const d = new Date(ts);
+        const day = String(d.getDate()).padStart(2,'0');
+        const month = String(d.getMonth()+1).padStart(2,'0');
+        const year = d.getFullYear();
+        return `${day}/${month}/${year}`;
+    };
 
-    // Cria uma linha da tabela do histórico
-    const createRow = (reg) => {
-        const {quantity=0, saida=0, category, product, description, timestamp} = reg;
-        const restantes = quantity - saida;
-        const catDisp = category==='interno' ? 'Mercado Interno' : 'Mercado Externo';
-        const catClass = category==='interno' ? 'categoria-interno' : 'categoria-externo';
-        return `<tr>
-            <td>${quantity}</td>
-            <td>${saida}</td>
-            <td>${restantes===0?'<span style="color:green;font-weight:bold">Concluído ✅</span>':restantes}</td>
-            <td class="${catClass}">${catDisp}</td>
-            <td>${product||'-'}</td>
-            <td>${formatTimestamp(timestamp)}</td>
-            <td>${description||'-'}</td>
-        </tr>`;
-    };
+    // Cria uma linha da tabela do histórico
+    const createRow = (reg) => {
+        const {quantity=0, saida=0, category, product, description, timestamp} = reg;
+        const restantes = quantity - saida;
+        const catDisp = category==='interno' ? 'Mercado Interno' : 'Mercado Externo';
+        const catClass = category==='interno' ? 'categoria-interno' : 'categoria-externo';
+        return `<tr>
+            <td>${quantity}</td>
+            <td>${saida}</td>
+            <td>${restantes===0?'<span style="color:green;font-weight:bold">Concluído ✅</span>':restantes}</td>
+            <td class="${catClass}">${catDisp}</td>
+            <td>${product||'-'}</td>
+            <td>${formatTimestamp(timestamp)}</td>
+            <td>${description||'-'}</td>
+        </tr>`;
+    };
 
-    // Carrega histórico com filtro opcional
-    const loadHistoryData = (filterDate=null) => {
-        onValue(HISTORICO_EXCLUIDOS_REF, snapshot => {
-            historyContainer.innerHTML = `<div class="excluded-header"><div class="excluded-header__area"><h3 class="excluded-header__title">Estoque excluídos</h3></div><div class="excluded-header__line"></div></div>`;
-            if (!snapshot.exists()) {
-                historyContainer.insertAdjacentHTML('beforeend', `<div style="text-align:center;padding:20px">Nenhum histórico de exclusão registrado no sistema.</div>`);
-                return;
-            }
+    // Carrega histórico com filtro opcional
+    const loadHistoryData = (filterDate=null) => {
+        onValue(HISTORICO_EXCLUIDOS_REF, snapshot => {
+            historyContainer.innerHTML = `<div class="excluded-header"><div class="excluded-header__area"><h3 class="excluded-header__title">Estoque excluídos</h3></div><div class="excluded-header__line"></div></div>`;
+            if (!snapshot.exists()) {
+                historyContainer.insertAdjacentHTML('beforeend', `<div style="text-align:center;padding:20px">Nenhum histórico de exclusão registrado no sistema.</div>`);
+                return;
+            }
 
-            const historyData = snapshot.val();
-            const sortedKeys = Object.keys(historyData).sort((a,b)=> (historyData[b].timestampExclusao||0) - (historyData[a].timestampExclusao||0));
-            let blocks = 0;
+            const historyData = snapshot.val();
+            const sortedKeys = Object.keys(historyData).sort((a,b)=> (historyData[b].timestampExclusao||0) - (historyData[a].timestampExclusao||0));
+            let blocks = 0; // Contador de blocos exibidos
 
-            sortedKeys.forEach(key => {
-                const data = historyData[key];
-                const ts = data.timestampExclusao;
-                const localDate = ts ? getLocalDateString(ts) : '';
+            sortedKeys.forEach(key => {
+                const data = historyData[key];
+                const ts = data.timestampExclusao; // Data de Exclusão (Reset)
+                const localDateExclusao = ts ? getLocalDateString(ts) : '';
+                
+                const registros = data.registros;
+                if (!registros) return;
+
+                // Ordenação original
+                const sortedRecords = Object.values(registros).sort((a, b) => {
+                    if (a.category === 'interno' && b.category === 'externo') return -1; 
+                    if (a.category === 'externo' && b.category === 'interno') return 1; 
+                    return (a.timestamp || 0) - (b.timestamp || 0); // Data de Lançamento (Mais Antigo)
+                });
+                
+                let totalTun = 0, totalRem = 0, rows = '';
+                let hasFilteredRecords = false; // Flag para saber se este bloco tem registros para exibir
+
+                sortedRecords.forEach(r => {
+                    const recordTimestamp = r.timestamp;
+
+                    // --- INÍCIO DA LÓGICA DO FILTRO CORRIGIDA ---
+                    let shouldDisplay = true;
+
+                    if (filterDate) {
+                        // Se não tem timestamp de lançamento, e há filtro, não deve exibir
+                        if (!recordTimestamp) {
+                            shouldDisplay = false; 
+                        } else {
+                            // Converte o timestamp de Lançamento (r.timestamp) para YYYY-MM-DD (Formato do filtro)
+                            const recordDate = new Date(recordTimestamp);
+                            const yyyy = recordDate.getFullYear();
+                            const mm = String(recordDate.getMonth() + 1).padStart(2, '0');
+                            const dd = String(recordDate.getDate()).padStart(2, '0');
+                            const recordDateISO = `${yyyy}-${mm}-${dd}`;
+                            
+                            // Compara a data de lançamento formatada com a data do filtro
+                            if (recordDateISO !== filterDate) {
+                                shouldDisplay = false;
+                            }
+                        }
+                    }
+                    // --- FIM DA LÓGICA DO FILTRO CORRIGIDA ---
+
+                    if (shouldDisplay) {
+                        hasFilteredRecords = true;
+                        rows += createRow(r);
+                        totalTun += (r.quantity||0);
+                        totalRem += ((r.quantity||0) - (r.saida||0));
+                    }
+                });
                 
-                // Filtro de data (se fornecido)
-                if (filterDate) {
-                    const [yyyy, mm, dd] = filterDate.split('-'); // yyyy-mm-dd do input
-                    const inputDateStr = `${dd}/${mm}/${yyyy}`;
-                    if (localDate !== inputDateStr) return;
+                // Se o filtro estiver ativo e não houver registros, não exibe o bloco (return)
+                if (filterDate && !hasFilteredRecords) return;
+
+                // Se houver registros ou se não houver filtro
+                if (sortedRecords.length === 0 || (!filterDate && !hasFilteredRecords)) {
+                    rows = `<tr><td colspan="7" style="text-align:center">Nenhum registro encontrado neste evento.</td></tr>`;
                 }
 
-                const registros = data.registros;
-                if (!registros) return;
 
-                let totalTun = 0, totalRem = 0, rows = '';
-                
-                // CORREÇÃO DE ORDENAÇÃO: Interno primeiro, depois Externo. Dentro de cada categoria, Ordem de Lançamento (Mais Antigo para Mais Novo).
-                const sortedRecords = Object.values(registros).sort((a, b) => {
-                    // ORDENAÇÃO PRIMÁRIA: Categoria ('interno' antes de 'externo')
-                    if (a.category === 'interno' && b.category === 'externo') {
-                        return -1; 
-                    }
-                    if (a.category === 'externo' && b.category === 'interno') {
-                        return 1; 
-                    }
+                const blockHTML = `<div class="excluded-area" data-history-key="${key}">
+                    <div class="history-date">Histórico de Exclusão (Data do Reset): ${localDateExclusao}</div>
+                    <section class="control-card">
+                        <table class="table" id="tabela-lancamentos">
+                            <thead class="table-header">
+                                <tr class="table-header__list">
+                                    <th class="table-header__list">Quantidade</th>
+                                    <th class="table-header__list">Saída</th>
+                                    <th class="table-header__list">Restantes</th>
+                                    <th class="table-header__list">Categoria</th>
+                                    <th class="table-header__list">Produto</th>
+                                    <th class="table-header__list">Data</th>
+                                    <th class="table-header__list">Descrição</th>
+                                </tr>
+                            </thead>
+                            <tbody  class="table-body">${rows}</tbody>
+                        </table>
+                    </section>
+                    <div class="result">
+                        <div class="result-box__tunel">
+                            <p class="result-box__title">Total de Caixas</p>
+                            <div class="result-box">${totalTun}</div>
+                        </div>
+                        <div class="result-box__tunel result-box__remaining">
+                            <p class="result-box__title title--remaining">Caixas Restantes</p>
+                            <div class="result-box">${totalRem}</div>
+                        </div>
+                    </div>
+                </div>`;
 
-                    // ORDENAÇÃO SECUNDÁRIA: Data de Lançamento (mais antigo primeiro - crescente)
-                    return (a.timestamp || 0) - (b.timestamp || 0);
-                });
-                
-                sortedRecords.forEach(r => {
-                    rows += createRow(r);
-                    totalTun += (r.quantity||0);
-                    totalRem += ((r.quantity||0) - (r.saida||0));
-                });
+                historyContainer.insertAdjacentHTML('beforeend', blockHTML);
+                blocks++;
+            });
 
-                if (sortedRecords.length === 0) rows = `<tr><td colspan="7" style="text-align:center">Nenhum registro encontrado neste evento.</td></tr>`;
+            if (blocks === 0) historyContainer.insertAdjacentHTML('beforeend', `<div style="text-align:center;padding:20px">Nenhum histórico encontrado para o período.</div>`);
+        }, error => {
+            console.error('Erro ao ler histórico:', error);
+            historyContainer.insertAdjacentHTML('beforeend', `<div style="text-align:center;padding:20px;color:red">Erro ao conectar com o banco de dados.</div>`);
+        });
+    };
 
-                const blockHTML = `<div class="excluded-area" data-history-key="${key}">
-                    <section class="control-card">
-                        <table class="table" id="tabela-lancamentos">
-                            <thead class="table-header">
-                                <tr class="table-header__list">
-                                    <th class="table-header__list">Quantidade</th>
-                                    <th class="table-header__list">Saída</th>
-                                    <th class="table-header__list">Restantes</th>
-                                    <th class="table-header__list">Categoria</th>
-                                    <th class="table-header__list">Produto</th>
-                                    <th class="table-header__list">Data</th>
-                                    <th class="table-header__list">Descrição</th>
-                                </tr>
-                            </thead>
-                            <tbody  class="table-body">${rows}</tbody>
-                        </table>
-                    </section>
-                    <div class="result">
-                        <div class="result-box__tunel">
-                            <p class="result-box__title">Total de Caixas</p>
-                            <div class="result-box">${totalTun}</div>
-                        </div>
-                        <div class="result-box__tunel result-box__remaining">
-                            <p class="result-box__title title--remaining">Caixas Restantes</p>
-                            <div class="result-box">${totalRem}</div>
-                        </div>
-                    </div>
-                </div>`;
+    // Eventos de filtro
+    applyFilterButton?.addEventListener('click', ()=>{
+        const sel = dateInput?.value;
+        if (sel) loadHistoryData(sel);
+        else alert('Selecione uma data.');
+    });
 
-                historyContainer.insertAdjacentHTML('beforeend', blockHTML);
-                blocks++;
-            });
+    showAllButton?.addEventListener('click', ()=>{
+        if (dateInput) dateInput.value = '';
+        loadHistoryData(null);
+    });
 
-            if (blocks === 0) historyContainer.insertAdjacentHTML('beforeend', `<div style="text-align:center;padding:20px">Nenhum histórico encontrado para o período.</div>`);
-        }, error => {
-            console.error('Erro ao ler histórico:', error);
-            historyContainer.insertAdjacentHTML('beforeend', `<div style="text-align:center;padding:20px;color:red">Erro ao conectar com o banco de dados.</div>`);
-        });
-    };
-
-    // Eventos de filtro
-    applyFilterButton?.addEventListener('click', ()=>{
-        const sel = dateInput?.value;
-        if (sel) loadHistoryData(sel);
-        else alert('Selecione uma data.');
-    });
-
-    showAllButton?.addEventListener('click', ()=>{
-        if (dateInput) dateInput.value = '';
-        loadHistoryData(null);
-    });
-
-    // Inicial
-    loadHistoryData();
+    // Inicial
+    loadHistoryData();
 };
 
 
