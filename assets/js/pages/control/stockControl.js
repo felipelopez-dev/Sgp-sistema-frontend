@@ -389,7 +389,6 @@ const initializeHistoryControl = () => {
 
 
                 const blockHTML = `<div class="excluded-area" data-history-key="${key}">
-                    <div class="history-date">Histórico de Exclusão (Data do Reset): ${localDateExclusao}</div>
                     <section class="control-card">
                         <table class="table" id="tabela-lancamentos">
                             <thead class="table-header">
