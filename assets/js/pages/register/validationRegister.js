@@ -31,6 +31,7 @@ let lastKnownKeys = new Set();
 let isFirstLoad = true; 
 let isUpdating = false;
 let notificationInterval = null; 
+let audioIsUnlocked = false; // 🚩 NOVO: Flag para controlar o estado de desbloqueio do áudio
 
 const modal             = document.querySelector('.delete');
 const btnCancel         = modal ? modal.querySelector('.button--link1') : null;
@@ -38,6 +39,35 @@ const btnConfirm        = modal ? modal.querySelector('.button--link2') : null;
 
 let currentEditingKey   = null;
 let currentEditingCard = null;
+
+// 🚩 NOVO BLOCO: Função para desbloquear o áudio na primeira interação do usuário
+const unlockAudio = () => {
+    if (audioIsUnlocked) return;
+
+    // Tenta reproduzir o áudio com volume 0
+    notificationSound.volume = 0;
+    notificationSound.play()
+        .then(() => {
+            // Sucesso: o áudio está desbloqueado
+            notificationSound.pause();
+            notificationSound.currentTime = 0;
+            notificationSound.volume = 1; // Restaura o volume
+            audioIsUnlocked = true;
+
+            // Remove os listeners para não rodar novamente
+            document.removeEventListener('click', unlockAudio);
+            document.removeEventListener('keydown', unlockAudio);
+        })
+        .catch(e => {
+            // Falha: Áudio ainda bloqueado, mantém volume normal para a próxima tentativa manual
+            notificationSound.volume = 1;
+        });
+};
+
+// 🚩 NOVO BLOCO: Adiciona listeners globais para desbloquear o áudio
+document.addEventListener('click', unlockAudio);
+document.addEventListener('keydown', unlockAudio);
+// FIM NOVO BLOCO
 
 
 const nameOfPersonResponsible = () => {
@@ -131,10 +161,10 @@ const exitContent = (data, key) => {
         event.stopPropagation(); 
         const descriptionElement = card.querySelector('.exit-center__text');
         
-        const editModal       = document.querySelector('.edit');
-        const editTextarea    = document.querySelector('.edit-textarea');
+        const editModal         = document.querySelector('.edit');
+        const editTextarea      = document.querySelector('.edit-textarea');
         
-        currentEditingKey     = card.dataset.key;
+        currentEditingKey       = card.dataset.key;
         currentEditingCard = card;
         
         editTextarea.value = descriptionElement.textContent;
@@ -157,7 +187,7 @@ const exitContent = (data, key) => {
                     <img class="exit-warning__image" src="../../assets/img/global/svg/icons/ui/attention-register.svg" alt="Imagem de uma placa de atenção"> 
                     Atenção: finalize 10 min antes do horário de saída.
                 </p>
-                   <div class="exit-warning__close">
+                    <div class="exit-warning__close">
                     <img class="exit-warning__image-close" src="../../assets/img/global/svg/icons/ui/close-circle-register.svg" alt="Imagem de um X para fechamento."> 
                 </div>
             `;
@@ -282,6 +312,7 @@ const addToHistory = (data, key) => {
 
 const playNotification = () => {
     try {
+        // Se o áudio não foi desbloqueado, o .play() falhará aqui (o que é esperado)
         notificationSound.load(); 
         notificationSound.currentTime = 0; 
         notificationSound.play();
@@ -347,6 +378,11 @@ if (clickValidation) {
                 return;
             }
 
+            // ⚠️ REMOÇÃO DE CÓDIGO REDUNDANTE PARA DESBLOQUEIO
+            // A lógica de desbloqueio foi movida para a função global unlockAudio.
+            // O código abaixo é mantido AQUI, pois estava no seu script original
+            // e tem o objetivo de tentar desbloquear o áudio ao adicionar um card.
+            // Para maior robustez, o novo código global é mais eficaz.
             try {
                 notificationSound.volume = 0;
                 notificationSound.play().then(() => {
@@ -436,8 +472,8 @@ onValue(ref(database, 'saidas'), (snapshot) => {
 
 // LÓGICA E MODAIS ESPECÍFICOS DA PÁGINA DE REGISTRO
 if (isRegisterPage) {
-    const editModal       = document.querySelector('.edit');
-    const editTextarea    = document.querySelector('.edit-textarea');
+    const editModal         = document.querySelector('.edit');
+    const editTextarea      = document.querySelector('.edit-textarea');
     const editConfirmBtn = document.querySelector('.button--confirm-edit');
     const editCancelBtn  = document.querySelector('.button--cancel-edit');
 
