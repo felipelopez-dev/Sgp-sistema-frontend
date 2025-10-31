@@ -31,7 +31,6 @@ let lastKnownKeys = new Set();
 let isFirstLoad = true; 
 let isUpdating = false;
 let notificationInterval = null; 
-let audioIsUnlocked = false; // 🚩 NOVO: Flag para controlar o estado de desbloqueio do áudio
 
 const modal             = document.querySelector('.delete');
 const btnCancel         = modal ? modal.querySelector('.button--link1') : null;
@@ -39,35 +38,6 @@ const btnConfirm        = modal ? modal.querySelector('.button--link2') : null;
 
 let currentEditingKey   = null;
 let currentEditingCard = null;
-
-// 🚩 NOVO BLOCO: Função para desbloquear o áudio na primeira interação do usuário
-const unlockAudio = () => {
-    if (audioIsUnlocked) return;
-
-    // Tenta reproduzir o áudio com volume 0
-    notificationSound.volume = 0;
-    notificationSound.play()
-        .then(() => {
-            // Sucesso: o áudio está desbloqueado
-            notificationSound.pause();
-            notificationSound.currentTime = 0;
-            notificationSound.volume = 1; // Restaura o volume
-            audioIsUnlocked = true;
-
-            // Remove os listeners para não rodar novamente
-            document.removeEventListener('click', unlockAudio);
-            document.removeEventListener('keydown', unlockAudio);
-        })
-        .catch(e => {
-            // Falha: Áudio ainda bloqueado, mantém volume normal para a próxima tentativa manual
-            notificationSound.volume = 1;
-        });
-};
-
-// 🚩 NOVO BLOCO: Adiciona listeners globais para desbloquear o áudio
-document.addEventListener('click', unlockAudio);
-document.addEventListener('keydown', unlockAudio);
-// FIM NOVO BLOCO
 
 
 const nameOfPersonResponsible = () => {
@@ -310,14 +280,20 @@ const addToHistory = (data, key) => {
     }
 };
 
+// ----------------------------------------------------------------------
+// 🚩 CORREÇÃO DO ALARME: Lógica otimizada para restrições de autoplay
+// ----------------------------------------------------------------------
+
 const playNotification = () => {
     try {
-        // Se o áudio não foi desbloqueado, o .play() falhará aqui (o que é esperado)
         notificationSound.load(); 
         notificationSound.currentTime = 0; 
+        // 💡 Tentativa de play. Só funcionará se for a primeira vez
+        // ou se chamado diretamente dentro de um evento de clique do usuário.
         notificationSound.play();
     } catch (error) {
-        if (error.name !== "NotAllowedError") {
+        // Ignora erros de bloqueio de autoplay (NotAllowedError)
+        if (error.name !== "NotAllowedError" && error.name !== "NotSupportedError") {
              console.warn("Erro ao tentar reproduzir o áudio:", error);
         }
     }
@@ -327,11 +303,16 @@ const playNotification = () => {
 const showAlarm = (type) => {
     let alarm = type === 'add' ? alarmAdd : alarmUpdate;
     if (!alarm) return;
+    
+    // 1. Torna o alarme VISUAL ativo (sempre funciona)
     alarm.classList.add('alarm--active');
     
+    // 2. Inicia o intervalo de tentativa de reprodução do som (apenas se não estiver ativo)
     if (notificationInterval === null) {
+        // Tenta tocar imediatamente (será bloqueado se não houve interação)
         playNotification(); 
         
+        // Continua tentando a cada 2 segundos. Funcionará após a primeira interação.
         notificationInterval = setInterval(playNotification, 2000); 
     }
 };
@@ -339,8 +320,11 @@ const showAlarm = (type) => {
 const hideAlarm = (type) => {
     let alarm = type === 'add' ? alarmAdd : alarmUpdate;
     if (!alarm) return;
+    
+    // Esconde o alarme visual
     alarm.classList.remove('alarm--active');
     
+    // Para a tentativa de reprodução do som
     if (notificationInterval !== null) {
         clearInterval(notificationInterval);
         notificationInterval = null;
@@ -349,21 +333,30 @@ const hideAlarm = (type) => {
     }
 };
 
+// ----------------------------------------------------------------------
+// 🚩 LISTENERS DOS BOTÕES DO ALARME: O clique aqui garante o desbloqueio
+// ----------------------------------------------------------------------
+
 if (alarmAdd) {
     alarmAdd.querySelector('.alarm-button').addEventListener('click', () => {
+        // O clique no botão de fechar é a interação que o navegador precisa.
+        playNotification(); 
         hideAlarm('add');
     });
 }
 
 // CORREÇÃO: Removida a lógica de resetar a flag 'updated' no Firebase.
-// Isso garante que a classe CSS `card-updated` (borda azul) permaneça.
+// O clique aqui também desbloqueia o áudio.
 if (alarmUpdate) {
     alarmUpdate.querySelector('.alarm-button').addEventListener('click', () => {
+        // O clique no botão de fechar é a interação que o navegador precisa.
+        playNotification();
         hideAlarm('update');
         // A lógica de resetar a flag 'updated' (que apagava a borda azul)
         // foi removida daqui, mantendo o status de atualização no Firebase.
     });
 }
+// FIM CORREÇÃO ALARME
 
 if (clickValidation) {
     clickValidation.forEach(item => {
@@ -378,11 +371,6 @@ if (clickValidation) {
                 return;
             }
 
-            // ⚠️ REMOÇÃO DE CÓDIGO REDUNDANTE PARA DESBLOQUEIO
-            // A lógica de desbloqueio foi movida para a função global unlockAudio.
-            // O código abaixo é mantido AQUI, pois estava no seu script original
-            // e tem o objetivo de tentar desbloquear o áudio ao adicionar um card.
-            // Para maior robustez, o novo código global é mais eficaz.
             try {
                 notificationSound.volume = 0;
                 notificationSound.play().then(() => {
