@@ -1,0 +1,3 @@
+:is(.btn-excluir__monitor, .btn-editar__monitor, .btn-ok__monitor, .table--header__monitor) {
+    display: none;
+}

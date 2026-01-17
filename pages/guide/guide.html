@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="cache-control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="expires" content="0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Manual | FAQ: SGP</title>
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="../../assets/img/favicons/favicon-96x96.png" sizes="96x96">
+  <link rel="shortcut icon" href="../../assets/img/favicons/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../../assets/img/favicons/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-title" content="SGP">
+  <link rel="manifest" href="../../assets/img/favicons/site.webmanifest">
+  <link rel="icon" type="image/svg+xml" href="../../assets/img/favicons/favicon.svg">
+
+  <!-- Css -->
+  <link rel="stylesheet" href="../../assets/css/global/normalize.css">
+  <link rel="stylesheet" href="../../assets/css/global/variables.css">
+  <link rel="stylesheet" href="../../assets/css/themes/dark-light.css">
+  <link rel="stylesheet" href="../../assets/css/base/index.css">
+  <link rel="stylesheet" href="../../assets/css/components/register.css">
+  <link rel="stylesheet" href="../../assets/css/components/guide-register.css">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap">
+</head>
+
+<body>
+
+
+  <header class="sgp-header" role="banner">
+    <a href="../../index.html" class="sgp-header__brand" aria-label="Voltar para a página inicial">
+      <img src="../../assets/img/global/svg/brand/brand.svg" class="sgp-header__logo" tabindex="1"
+        alt="Logotipo do SGP">
+      <div class="sgp-header__vertical-line"></div>
+    </a>
+    <nav class="sgp-header__menu" role="navigation" aria-label="Menu principal">
+      <ul class="sgp-header__list">
+        <li class="sgp-header__item">
+          <a href="../../index.html" class="sgp-header__link" tabindex="2">Início</a>
+        </li>
+        <li class="sgp-header__item">
+          <a href="#" class="sgp-header__link" tabindex="3">Calcular</a>
+          <ul class="sub-menu">
+            <li><a href="../../pages/palletizing/palletizing.html">Cálculo de Paletização</a></li>
+            <li><a href="../../pages/calculate/calculate.html">Cálculo da Produção</a></li>
+          </ul>
+        </li>
+        <li class="sgp-header__item">
+          <a href="../../pages/register/register.html" class="sgp-header__link" tabindex="4">Registrar saída</a>
+        </li>
+        <li class="sgp-header__item">
+          <a href="#" class="sgp-header__link" tabindex="4">Relatórios</a>
+          <ul class="sub-menu">
+            <li><a href="../../pages/graphic/stock-report.html">Relatório de Estoque</a></li>
+          </ul>
+        </li>
+        <li class="sgp-header__item">
+          <a href="../../pages/control/control.html" class="sgp-header__link" tabindex="4">Controle de Estoque</a>
+        </li>
+        <li class="sgp-header__item">
+          <a href="#" class="sgp-header__link" tabindex="4">Históricos</a>
+          <ul class="sub-menu">
+            <li><a href="../../pages/history/history-control.html">Histórico de Estoque</a></li>
+            <li><a href="../../pages/history/history.html">Histórico de Registros</a></li>
+          </ul>
+        </li>
+        <li class="sgp-header__item">
+          <a href="../../pages/guide/guide.html" class="sgp-header__link" tabindex="4">Suporte</a>
+        </li>
+      </ul>
+    </nav>
+    <div class="header-mobile">
+      <img class="header-mobile__image" src="../../assets/img/global/svg/icons/ui/menu-register.svg"
+        alt="Imagem de menu" title="Botão de menu">
+    </div>
+    <div class="mobile">
+      <button class="close-menu">
+        <img class="close-menu__image" src="../../assets/img/global/svg/icons/ui/close-circle-register.svg"
+          alt="Ícone de fechar menu">
+      </button>
+      <nav class="mobile-menu">
+        <ul class="mobile-menu__content">
+          <li class="sgp-header__item">
+            <a href="../../index.html" class="sgp-header__link" tabindex="2">Início</a>
+          </li>
+          <li class="sgp-header__item">
+            <a href="#" class="sgp-header__link" tabindex="3">Calcular</a>
+            <ul class="sub-menu">
+              <li><a href="../../pages/palletizing/palletizing.html">Cálculo de Paletização</a></li>
+              <li><a href="../../pages/calculate/calculate.html">Cálculo da Produção</a></li>
+            </ul>
+          </li>
+          <li class="sgp-header__item">
+            <a href="../../pages/register/register.html" class="sgp-header__link" tabindex="4">Registrar saída</a>
+          </li>
+          <li class="sgp-header__item">
+            <a href="#" class="sgp-header__link" tabindex="4">Relatórios</a>
+            <ul class="sub-menu">
+              <li><a href="../../pages/graphic/stock-report.html">Relatório de Estoque</a></li>
+            </ul>
+          </li>
+          <li class="sgp-header__item">
+            <a href="../../pages/control/control.html" class="sgp-header__link" tabindex="4">Controle de Estoque</a>
+          </li>
+          <li class="sgp-header__item">
+            <a href="#" class="sgp-header__link" tabindex="4">Históricos</a>
+            <ul class="sub-menu">
+              <li><a href="../../pages/history/history-control.html">Histórico de Estoque</a></li>
+              <li><a href="../../pages/history/history.html">Histórico de Registros</a></li>
+            </ul>
+          </li>
+          <li class="sgp-header__item">
+            <a href="../../pages/guide/guide.html" class="sgp-header__link" tabindex="4">Suporte</a>
+          </li>
+          <li class="sgp-header__item">
+            <a href="javascript:void(0)" onclick="handleLogout()" class="sgp-header__link sgp-header__button-close"
+              tabindex="4">Sair</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+    <div class="sgp-header__area-button">
+      <div class="sgp-header__user" id="userProfileArea">
+        <div class="sgp-header__user-info" id="userMenuToggle">
+          <span class="sgp-header__user-name" id="userNameGreeting">Olá, Usuário!</span>
+          <img src="../../assets/img/global/svg/icons/ui/arrow-down.svg" alt="Abrir menu"
+            class="sgp-header__user-arrow">
+        </div>
+        <ul class="sgp-header__user-menu" id="userMenu">
+          <li><a href="javascript:void(0)" id="logoutBtn" class="logout">Sair</a></li>
+        </ul>
+      </div>
+      <button class="sgp-header__btn-light-dark" aria-label="Alternar entre modo claro e escuro">
+        <div class="sgp-header__rail-mode">
+          <img src="../../assets/img/global/svg/icons/ui/light.svg" tabindex="5"
+            class="sgp-header__img-light icon--dark-light" alt="Modo claro">
+          <img src="../../assets/img/global/svg/icons/ui/dark.svg" alt="Modo escuro" tabindex="6"
+            class="sgp-header__img-dark icon--dark-light">
+        </div>
+      </button>
+    </div>
+  </header>
+
+  <div class="container">
+    <section class="faq">
+      <div class="faq-container">
+        <div class="faq-area">
+          <img class="faq-image" src="../../assets/img/global/svg/icons/ui/help-circle-register.svg"
+            alt="Imagem de ponto de pergunta">
+          <h1 class="faq-title">
+            FAQ: SGP
+          </h1>
+        </div>
+        <p class="faq-text">
+          Encontre respostas rápidas para as suas dúvidas sobre como utilizar
+          o site.
+        </p>
+      </div>
+    </section>
+
+    <section class="question">
+      <div class="question-filter">
+        <input type="text" name="filter-search" class="question-filter__search" placeholder="Pesquisar perguntar...">
+        <div class="question-filter__area">
+          <img class="question-filter__image" src="../../assets/img/global/svg/icons/ui/search-register.svg"
+            alt="Imagem de uma lupa">
+        </div>
+      </div>
+      <div class="question-list">
+        <div class="question-list__area">
+          <img class="question-list__image" src="../../assets/img/global/svg/icons/ui/list-register.svg"
+            alt="Imagem de alguns ponto com linhas ao lado">
+          <h2 class="question-list__subtitle">
+            Perguntas Frequentes
+          </h2>
+        </div>
+        <div class="question-list__line"></div>
+      </div>
+
+      <section class="question-infor">
+        <details class="question-infor__area">
+          <summary class="question-infor__title">Como faço para registrar uma nova saída?</summary>
+          <div class="question-infor__container">
+            <dl class="question-infor__list">
+              <dt class="question-infor__list-title">Abrir o site</dt>
+              <dd class="question-infor__list-description">
+                • Acesse o site "PausaProgramada".
+              </dd>
+
+              <dt class="question-infor__list-title">Preencher os campos</dt>
+              <dd class="question-infor__list-description">
+                • Na seção "Registrar Saída", preencha <strong>Nome</strong>, <strong>Hora de saída</strong>,
+                <strong>Descrição</strong> (máx. 22 caracteres) e <strong>Duração da saída</strong> (em minutos).
+              </dd>
+
+              <dt class="question-infor__list-title">Verificar retorno</dt>
+              <dd class="question-infor__list-description">
+                • Confira o "Retorno previsto", que é calculado automaticamente.
+              </dd>
+
+              <dt class="question-infor__list-title">Adicionar saída</dt>
+              <dd class="question-infor__list-description">
+                • Clique no botão "+ Adicionar Nova Saída".
+              </dd>
+
+              <dt class="question-infor__list-title">Confirmar com senha</dt>
+              <dd class="question-infor__list-description">
+                • Digite a senha na janela e clique em "Confirmar".
+              </dd>
+            </dl>
+          </div>
+        </details>
+      </section>
+
+      <section class="question-infor">
+        <details class="question-infor__area">
+          <summary class="question-infor__title">
+            O que acontece se eu não preencher todos os campos ao registrar uma saída?
+          </summary>
+          <div class="question-infor__container">
+            <p class="question-infor__text">
+              Se você não preencher todos os campos obrigatórios (Nome, Descrição, Hora de saída, Duração da saída),
+              o sistema exibirá uma mensagem de erro abaixo do campo que está faltando. Você precisará corrigir os
+              campos antes de poder adicionar o registro.
+            </p>
+          </div>
+        </details>
+      </section>
+
+      <section class="question-infor">
+        <details class="question-infor__area">
+          <summary class="question-infor__title">
+            O que são os atalhos rápidos na descrição?
+          </summary>
+          <div class="question-infor__container">
+            <p class="question-infor__text">
+              Os atalhos rápidos são botões que você pode clicar para adicionar títulos predefinidos
+              (como "Almoço", "Café da manhã", etc.) na sua descrição, economizando tempo e garantindo consistência.
+            </p>
+          </div>
+        </details>
+      </section>
+
+      <section class="question-infor">
+        <details class="question-infor__area">
+          <summary class="question-infor__title">
+            Posso registrar uma saída com duração maior que 120 minutos?
+          </summary>
+          <div class="question-infor__container">
+            <p class="question-infor__text">
+              Não. A duração máxima permitida para uma saída é de 120 minutos. Se precisar de um período maior,
+              pode ser necessário registrar múltiplas saídas ou usar outro método de comunicação.
+            </p>
+          </div>
+        </details>
+      </section>
+
+      <section class="question-infor">
+        <details class="question-infor__area">
+          <summary class="question-infor__title">
+            O que acontece depois de clicar em "Adicionar Nova Saída"?
+          </summary>
+          <div class="question-infor__container">
+            <p class="question-infor__text">
+              Após clicar no botão, uma janela (modal) de confirmação de
+              senha aparecerá. Você deverá inserir a senha correta para que o registro seja salvo e apareça na lista de
+              "Saídas registradas".
+            </p>
+          </div>
+        </details>
+      </section>
+
+      <section class="question-infor">
+        <details class="question-infor__area">
+          <summary class="question-infor__title">
+            O que deve fazer se esquecer a senha de registo?
+          </summary>
+          <div class="question-infor__container">
+            <p class="question-infor__text">
+              Se você não conseguir entrar com essa
+              senha e ela tiver sido alterada, precisará entrar em contato com o administrador do sistema ou a pessoa
+              responsável pela gestão das senhas na sua equipe.
+            </p>
+          </div>
+        </details>
+      </section>
+
+      <section class="question-infor">
+        <details class="question-infor__area">
+          <summary class="question-infor__title">
+            O que acontece se eu digitar a senha errada ao registar?
+          </summary>
+          <div class="question-infor__container">
+            <p class="question-infor__text">
+              Se a senha estiver incorreta, uma mensagem de erro será exibida na janela da senha. O registro não será
+              salvo até que a senha correta seja inserida.
+            </p>
+          </div>
+        </details>
+      </section>
+
+      <section class="question-infor">
+        <details class="question-infor__area">
+          <summary class="question-infor__title">
+            Qual a duração máxima para uma saída?
+          </summary>
+          <div class="question-infor__container">
+            <p class="question-infor__text">
+              A duração máxima para uma saída é de 120 minutos.
+            </p>
+          </div>
+        </details>
+      </section>
+
+      <section class="question-infor">
+        <details class="question-infor__area">
+          <summary class="question-infor__title">
+            Como o "Retorno Previsto" é calculado?
+          </summary>
+          <div class="question-infor__container">
+            <p class="question-infor__text">
+              O sistema calcula automaticamente o "Retorno Previsto" somando a "Hora de saída" informada com a "Duração
+              da saída" em minutos.
+            </p>
+          </div>
+        </details>
+      </section>
+
+      <section class="question-infor">
+        <details class="question-infor__area">
+          <summary class="question-infor__title">
+            Posso editar um registro de saída depois de adicionado?
+          </summary>
+          <div class="question-infor__container">
+            <p class="question-infor__text">
+              Sim, porém somente o administrador poderá editar os registro de saída.
+            </p>
+          </div>
+        </details>
+      </section>
+
+      <section class="question-infor">
+        <details class="question-infor__area">
+          <summary class="question-infor__title">
+            Como visualizo as saídas registradas?
+          </summary>
+          <div class="question-infor__container">
+            <p class="question-infor__text">
+              As saídas registadas aparecem na secção "Saída registrada", localizada abaixo do formulário de registro.
+              Cada item mostra o nome, horário de saída, horário de retorno, data e descrição da saída.
+            </p>
+          </div>
+        </details>
+      </section>
+
+      <section class="question-infor">
+        <details class="question-infor__area">
+          <summary class="question-infor__title">
+            Como faço para excluir um registro de saída?
+          </summary>
+          <div class="question-infor__container">
+            <dl class="question-infor__list">
+              <dt class="question-infor__list-title">Para excluir um registro:</dt>
+              <dd class="question-infor__list-description">
+                • Clique no ícone da lixeira (🗑️) ao lado do registro que deseja remover.
+              </dd>
+              <dd class="question-infor__list-description">
+                • Confirme a exclusão na primeira janela que aparecer.
+              </dd>
+              <dd class="question-infor__list-description">
+                • Digite a senha na segunda janela e clique em "Confirmar".
+              </dd>
+            </dl>
+          </div>
+        </details>
+      </section>
+
+      <section class="question-infor">
+        <details class="question-infor__area">
+          <summary class="question-infor__title">
+            Qual é a senha para adicionar/excluir registros?
+          </summary>
+          <div class="question-infor__container">
+            <p class="question-infor__text">
+              A senha só será repassado para o colaborador que administra o setor.
+              Lembre-se de a manter em segredo e partilhar
+              apenas com pessoas autorizadas.
+            </p>
+          </div>
+        </details>
+      </section>
+
+      <section class="question-infor">
+        <details class="question-infor__area">
+          <summary class="question-infor__title">
+            Posso deixar uma mensagem para a equipe?
+          </summary>
+          <div class="question-infor__container">
+            <dl class="question-infor__list">
+              <dt class="question-infor__list-title">Sim! Para deixar uma mensagem mais longa:</dt>
+              <dd class="question-infor__list-description">
+                • Role até a área “Digite seu texto aqui”.
+              </dd>
+              <dd class="question-infor__list-description">
+                • Digite a sua mensagem. Um contador mostrará quantos caracteres já foram usados.
+              </dd>
+              <dd class="question-infor__list-description">
+                • Clique em "Confirmar" para salvar ou "Cancelar" para sair.
+              </dd>
+            </dl>
+          </div>
+        </details>
+      </section>
+
+      <section class="question-infor">
+        <details class="question-infor__area">
+          <summary class="question-infor__title">
+            Qual o limite de caracteres para a descrição da saída e para a mensagem?
+          </summary>
+          <div class="question-infor__container">
+            <dl class="question-infor__list">
+              <dt class="question-infor__list-title">Para coloca o nome do responsável:</dt>
+              <dd class="question-infor__list-description">
+                • O limite é de 14 caracteres.
+              </dd>
+
+              <dt class="question-infor__list-title">Para coloca a descrição da mensagem:</dt>
+              <dd class="question-infor__list-description">
+                • O limite é de 330 caracteres.
+              </dd>
+            </dl>
+          </div>
+        </details>
+      </section>
+
+      <section class="question-infor">
+        <details class="question-infor__area">
+          <summary class="question-infor__title">
+            Qual a função do botão de saída no cabeçalho?
+          </summary>
+          <div class="question-infor__container">
+            <p class="question-infor__text">
+              O botão de saída, representado por um ícone de porta, serve para fazer o logout da sessão do usuário.
+              Isso garante a segurança e impede o acesso não autorizado aos registros.
+            </p>
+          </div>
+        </details>
+      </section>
+
+      <section class="question-infor">
+        <details class="question-infor__area">
+          <summary class="question-infor__title">
+            O que é o "Histórico de Mensagens Excluídas"?
+          </summary>
+          <div class="question-infor__container">
+            <p class="question-infor__text">
+              O "Histórico de Mensagens Excluídas" é uma seção que armazena temporariamente todos os registros de
+              saídas que foram removidos do sistema. Ele serve para manter a transparência e um registro completo
+              das ações realizadas.
+            </p>
+          </div>
+        </details>
+      </section>
+
+      <section class="question-infor">
+        <details class="question-infor__area">
+          <summary class="question-infor__title">
+            Como eu filtro o histórico de mensagens excluídas?
+          </summary>
+          <div class="question-infor__container">
+            <p class="question-infor__text">
+              Na seção de histórico, você pode usar a ferramenta "Filtrar Histórico por Data". Basta selecionar a
+              data desejada no campo e clicar em "Aplicar filtro". Para ver todos os registros novamente,
+              clique em "Mostrar todos".
+            </p>
+          </div>
+        </details>
+      </section>
+
+      <section class="question-infor">
+        <details class="question-infor__area">
+          <summary class="question-infor__title">
+            Por quanto tempo os registros excluídos ficam disponíveis?
+          </summary>
+          <div class="question-infor__container">
+            <p class="question-infor__text">
+              Os registros excluídos são informações temporárias e ficam disponíveis para visualização por apenas uma
+              semana. Após esse período, eles são permanentemente removidos.
+            </p>
+          </div>
+        </details>
+      </section>
+
+      <section class="question-infor">
+        <details class="question-infor__area">
+          <summary class="question-infor__title">
+            Como posso pesquisar ou filtrar as perguntas do guia?
+          </summary>
+          <div class="question-infor__container">
+            <p class="question-infor__text">
+              Para encontrar uma pergunta específica, você pode usar a barra de pesquisa na seção de
+              "Perguntas Frequentes". Basta digitar uma palavra-chave e as perguntas serão filtradas.
+              Além disso, você pode "filtrar" visualmente as perguntas, clicando em cada título para expandir
+              ou contrair a resposta, o que ajuda a focar apenas no que é relevante para você.
+            </p>
+          </div>
+        </details>
+      </section>
+
+      <section class="question-infor">
+        <details class="question-infor__area">
+          <summary class="question-infor__title">
+            Por que não consigo ver o botão para registrar uma nova saída?
+          </summary>
+          <div class="question-infor__container">
+            <p class="question-infor__text">
+              Isso acontece porque seu nível de acesso é de Usuário Normal. A funcionalidade de registrar saídas
+              é exclusiva para Usuários Monitores e Administradores. Caso você precise registrar uma saída,
+              solicite a um monitor ou administrador da sua equipe.
+            </p>
+          </div>
+        </details>
+      </section>
+
+      <section class="question-infor">
+        <details class="question-infor__area">
+          <summary class="question-infor__title">
+            O que o Usuário Monitor pode fazer que o Usuário Normal não pode?
+          </summary>
+          <div class="question-infor__container">
+            <p class="question-infor__text">
+              A principal diferença é que o Usuário Monitor tem a permissão para registrar novas saídas
+              para a equipe. Ele pode acessar o painel de registro, enquanto o Usuário Normal não tem essa
+              opção e só pode visualizar as saídas já registradas.
+            </p>
+          </div>
+        </details>
+      </section>
+
+      <section class="question-infor">
+        <details class="question-infor__area">
+          <summary class="question-infor__title">
+            O que o Usuário Administrador pode fazer?
+          </summary>
+          <div class="question-infor__container">
+            <p class="question-infor__text">
+              Possui todas as permissões de um Monitor, além de ter acesso a funcionalidades exclusivas.
+              O Administrador pode visualizar, editar e remover registros, gerenciar outros usuários e alterar
+              configurações da plataforma. Ele é responsável pela gestão e manutenção geral do sistema.
+            </p>
+          </div>
+        </details>
+      </section>
+
+      <section class="question-infor">
+        <details class="question-infor__area">
+          <summary class="question-infor__title">
+            Quem pode ver o histórico de todas as saídas registradas?
+          </summary>
+          <div class="question-infor__container">
+            <p class="question-infor__text">
+              O acesso completo ao histórico de saídas, com todos os registros passados, é uma permissão
+              exclusiva do Usuário Administrador. Essa medida garante que a gestão do histórico seja feita
+              por quem tem a responsabilidade de gerenciar o sistema.
+            </p>
+          </div>
+        </details>
+      </section>
+
+      <section class="question-infor">
+        <details class="question-infor__area">
+          <summary class="question-infor__title">
+            O que devo fazer se esquecer de registrar uma saída?
+          </summary>
+          <div class="question-infor__container">
+            <p class="question-infor__text">
+              Se você esquecer de registrar uma saída, é fundamental informar um Usuário Monitor ou Usuário
+              Administrador da sua equipe assim que possível. Eles têm a permissão para fazer o registro da
+              saída de forma manual para você, garantindo que o histórico de saídas permaneça preciso e atualizado.
+            </p>
+          </div>
+        </details>
+      </section>
+
+      <section class="question-infor">
+        <details class="question-infor__area">
+          <summary class="question-infor__title">
+            O site está disponível 24 horas por dia?
+          </summary>
+          <div class="question-infor__container">
+            <p class="question-infor__text">
+              Sim, o site é uma ferramenta online e está disponível 24 horas por dia, 7 dias por semana. Você pode
+              acessá-lo a qualquer momento, de qualquer dispositivo, desde que tenha uma conexão com a internet.
+            </p>
+          </div>
+        </details>
+      </section>
+
+      <section class="question-infor">
+        <details class="question-infor__area">
+          <summary class="question-infor__title">
+            O que devo fazer se encontrar um erro ou um problema no site?
+          </summary>
+          <div class="question-infor__container">
+            <p class="question-infor__text">
+              Se você identificar algum erro, falha ou comportamento inesperado no site, por favor, entre em
+              contato imediatamente com o Usuário Administrador. Descreva o problema da forma mais detalhada
+              possível (por exemplo, "O botão X não está funcionando quando eu clico nele").
+              Isso nos ajudará a corrigir a falha rapidamente.
+            </p>
+          </div>
+        </details>
+      </section>
+
+      <section class="question-infor">
+        <details class="question-infor__area">
+          <summary class="question-infor__title">
+            O que significa o contorno verde que aparece em um registro?
+          </summary>
+          <div class="question-infor__container">
+            <p class="question-infor__text">
+              A cor verde em volta de um registro, indica que ele foi atualizado com sucesso. Isso é um aviso visual
+              permanente de que a descrição foi alterada.
+            </p>
+          </div>
+        </details>
+      </section>
+
+    </section>
+
+    <section class="start">
+      <h3 class="start-title">
+        Pronto para utilizar SPG da melhor forma!
+      </h3>
+      <a href="../../index.html" class="start-button">
+        Início
+      </a>
+    </section>
+  </div>
+
+  <footer class="footer">
+    <p class="footer-description">
+      © 2025 Desenvolvido por Felipe Lopez - Engenheiro de Software.
+    </p>
+    <p class="footer-text">
+      Projeto com todos os direitos reservados.
+    </p>
+  </footer>
+
+  <script type="text/javascript" src="../../assets/js/global/darkMode.js" defer></script>
+  <script type="text/javascript" src="../../assets/js/pages/register/filterGuide.js" defer></script>
+  <script type="text/javascript" src="../../assets/js/global/mobilMenu.js" defer></script>
+  <script type="text/javascript" src="../../assets/js/pages/login/loginValidation.js" defer></script>
+
+</body>
+
+</html>

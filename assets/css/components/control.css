@@ -1,0 +1,710 @@
+.control {
+    width: 100%;
+    max-width: 120rem;
+    margin: 2.5rem auto;
+    padding: 1.25rem;
+    background-color: var(--bg-primary);
+    border-radius: 0.9375rem;
+    box-shadow: 0 0.3125rem 1.25rem rgba(0, 0, 0, 0.1);
+}
+
+.control-title {
+    font-size: 3.5rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 1.875rem;
+    padding-bottom: 0.9375rem;
+    border-bottom: 0.1875rem solid var(--bg-nonary);
+}
+
+.control-form {
+    padding: 1.875rem;
+    border: 0.0625rem solid var(--border-primary);
+    border-radius: 0.625rem;
+    margin-bottom: 1.875rem;
+    background-color: var(--bg-secondary);
+}
+
+.form-description {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.25rem;
+    align-items: flex-end;
+}
+
+.form-description__area {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-description__area label {
+    font-size: 1.6rem;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+
+.form-description__area input[type="number"],
+.form-description__area input[type="text"],
+.form-description__area select {
+    padding: 0.75rem 0.9375rem;
+    font-size: 1.6rem;
+    border: 0.0625rem solid var(--border-primary);
+    border-radius: 0.5rem;
+    background-color: var(--bg-primary);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    width: 25rem;
+    box-sizing: border-box;
+}
+
+.form-description__area input:focus,
+.form-description__area select:focus {
+    border-color: var(--bg-nonary);
+    box-shadow: 0 0 0 0.125rem var(--color-light-blue);
+    outline: none;
+}
+
+.form-button__area {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    margin-top: 6rem;
+}
+
+.add-table {
+    padding: 1.3rem 3rem;
+    font-size: 1.8rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    background-color: var(--color-dark-blue);
+    color: var(--color-white);
+}
+
+.reset-table {
+    background-color: var(--color-green-emerald);
+    color: var(--color-white);
+    padding: 1.3rem 5rem;
+    font-size: 1.8rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.control-form button[type="submit"]:hover {
+    background-color: var(--bg-button-hover);
+    transform: translateY(-0.125rem);
+}
+
+.control-form button[type="button"]:hover {
+    background-color: var(--bg-button-hover);
+    transform: translateY(-0.125rem);
+}
+
+.form-status {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 0.9375rem 0;
+    margin-bottom: 1.875rem;
+    gap: 1.25rem;
+}
+
+.form-status__total,
+.form-status__remainder {
+    flex: 1;
+    font-size: 2.2rem;
+    font-weight: 700;
+    padding: 1.125rem 1.25rem;
+    border-radius: 0.625rem;
+    text-align: center;
+    box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease;
+}
+
+.form-status__total:hover,
+.form-status__remainder:hover {
+    transform: translateY(-0.1875rem);
+}
+
+.form-status__total {
+    background-color: var(--color-emerald-bg);
+    color: var(--color-emerald-text);
+    border: 0.0625rem solid var(--color-green-border);
+}
+
+.form-status__remainder {
+    background-color: var(--color-amber);
+    color: var(--color-amber-text);
+    border: 0.0625rem solid var(--color-amber-border);
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 2.5rem;
+    box-shadow: 0 0.125rem 0.9375rem rgba(0, 0, 0, 0.1);
+    border-radius: 0.625rem;
+    overflow: hidden;
+}
+
+.table-header th {
+    background-color: var(--bg-tertiary);
+    padding: 0.9375rem 0.625rem;
+    text-align: left;
+    font-size: 1.6rem;
+    font-weight: 700;
+}
+
+.table-body tr {
+    background-color: var(--bg-primary);
+    transition: background-color 0.2s ease;
+}
+
+.table-body tr:nth-child(even) {
+    background-color: var(--bg-secondary);
+}
+
+.table-body tr:hover {
+    background-color: var(--color-lavender-mist);
+}
+
+.table-body td {
+    padding: 0.9375rem 0.625rem;
+    font-size: 1.5rem;
+    border-bottom: 0.0625rem solid var(--bg-tertiary);
+    vertical-align: middle;
+}
+
+.table-body tr.concluido {
+    opacity: 0.6;
+    background-color: var(--color-cloudy-gray) !important;
+    text-decoration: line-through;
+}
+
+.botoes-acao {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.botoes-acao button,
+.table-body td .edit-quantity,
+.table-body td .edit-category,
+.table-body td .edit-product,
+.table-body td .edit-description {
+    padding: 0.5rem 0.625rem;
+    font-size: 1.3rem;
+    border-radius: 0.375rem;
+    font-weight: 600;
+    transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    border: 0.0625rem solid transparent;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.15);
+}
+
+
+.categoria-interno {
+    background-color: var(--color-green-light);
+    color: var(--color-green-dark);
+    font-weight: 600;
+    border: 0.1rem solid var(--color-green-border);
+    border-radius: 0.4rem;
+    text-align: center;
+}
+
+.categoria-externo {
+    background-color: var(--color-amber-light);
+    color: var(--color-amber-dark);
+    font-weight: 600;
+    border: 0.1rem solid var(--color-amber-border);
+    border-radius: 0.4rem;
+    text-align: center;
+}
+
+.botoes-acao button {
+    border: none;
+    color: var(--color-white);
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.botoes-acao .btn-ok {
+    background-color: var(--color-green-emerald-dark);
+}
+.botoes-acao .btn-ok:hover {
+    background-color: var(--color-green-emerald);
+    transform: translateY(-0.0625rem);
+}
+
+.btn-salvar {
+    background-color: var(--color-royal-blue);
+    padding: 0.5rem 0.625rem;
+    font-size: 1.3rem;
+    border-radius: 0.375rem;
+    font-weight: 600;
+    transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    border: 0.0625rem solid transparent;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.15);
+    color: var(--color-white);
+    cursor: pointer;
+		margin-right: 1rem;
+}
+
+.btn-cancelar {
+    background-color: var(--color-red-strong);
+    padding: 0.5rem 0.625rem;
+    font-size: 1.3rem;
+    border-radius: 0.375rem;
+    font-weight: 600;
+    transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    border: 0.0625rem solid transparent;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.15);
+    color: var(--color-white);
+    cursor: pointer;
+}
+
+.btn-cancelar:hover {
+    background-color: var(--color-red-dark);
+    transform: translateY(-0.0625rem);
+}
+
+.btn-salvar:hover {
+    background-color: var(--bg-nonary);
+    transform: translateY(-0.0625rem);
+}
+
+.btn-editar {
+    background-color: var(--color-royal-blue);
+}
+
+.btn-editar:hover {
+    background-color: var(--bg-nonary);
+    transform: translateY(-0.0625rem);
+}
+
+.botoes-acao .btn-excluir {
+    background-color: var(--color-red-strong);
+}
+.botoes-acao .btn-excluir:hover {
+    background-color: var(--color-red-dark);
+    transform: translateY(-0.0625rem);
+}
+
+.table-body td input,
+.table-body td select {
+    padding: 0.3125rem;
+    font-size: 1.4rem;
+    border: 0.0625rem solid var(--border-primary);
+    background-color: var(--bg-secondary);
+    
+    border-radius: 0.25rem;
+    box-sizing: border-box;
+}
+.table-body tr.concluido .botoes-acao button.btn-ok {
+    opacity: 1 !important; 
+    text-decoration: none !important; 
+    background-color: var(--color-red-strong); 
+}
+
+.table-body tr.concluido .botoes-acao button.btn-ok:hover {
+    background-color: var(--color-red-dark); 
+    transform: translateY(-0.0625rem);
+}
+
+.delete {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.delete.delete--active {
+    display: flex; 
+}
+
+.delete-area {
+    padding: 2rem;
+    gap: 2rem;
+    border-radius: 2rem;
+    width: 40rem;
+    height: 22.1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--color-white);
+}
+
+.delete-title {
+    font-size: var(--font-primary);
+    font-size: 2.5rem;
+}
+
+.delete-text {
+    text-align: center;
+    font-family: var(--font-primary);
+    line-height: 1.5;
+    font-size: 1.8rem;
+    color: var(--color-blue-gray);
+}
+
+.delete-button {
+    display: flex;
+    gap: 2rem;
+}
+
+.delete-button__link {
+    cursor: pointer;
+    width: 11.8rem;
+    height: 4.5rem;
+    border: none;
+    border-radius: 1rem;
+    font-size: 1.8rem;
+    font-weight: bold;
+    transition: all 0.5s ease;
+}
+
+.delete-button__link:hover {
+    transform: translateY(-0.3rem);
+    box-shadow: 0 0.8rem 2rem rgba(0, 0, 0, 0.3);
+}
+
+.button--link1 {
+    background-color: var(--bg-tertiary);
+    color: var(--color-blue-gray);
+}
+
+.button--link2 {
+    background-color: var(--bg-quaternary);
+    color: var(--color-white);
+}
+
+/* ======================================================= */
+/* MODAL DE RESET (CORREÇÃO APLICADA AQUI) */
+/* ======================================================= */
+.modal-reset {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0,0,0,0.5);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+/* CLASSE CORRIGIDA para corresponder ao JS */
+.modal-reset.modal-reset--active {
+    display: flex;
+}
+
+.modal-reset__area {
+    background-color: #fff;
+    width: 40rem;
+    padding: 2rem;
+    border-radius: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+}
+
+.modal-reset__title {
+    font-size: 2.5rem;
+    font-weight: bold;
+}
+
+.modal-reset__text {
+    font-size: 1.8rem;
+    text-align: center;
+    color: #555;
+}
+
+.modal-reset__input {
+    width: 80%;
+    padding: 1rem;
+    font-size: 1.8rem;
+    border-radius: 1rem;
+    border: 1px solid #ccc;
+    text-align: center;
+}
+
+.modal-reset__buttons {
+    display: flex;
+    gap: 2rem;
+}
+
+.modal-reset__cancel, .modal-reset__confirm {
+    width: 12rem;
+    height: 4.5rem;
+    border: none;
+    border-radius: 1rem;
+    font-size: 1.8rem;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.modal-reset__cancel {
+    background-color: #ccc;
+    color: #333;
+}
+
+.modal-reset__confirm {
+    background-color: #007bff;
+    color: #fff;
+}
+/* ======================================================= */
+/* FIM MODAL DE RESET */
+/* ======================================================= */
+
+/* MEDIA QUERIES (RESPONSIVIDADE) */
+@media (min-width: 320px) and (max-width: 480px) {
+    .form-description__area input[type="number"], .form-description__area input[type="text"], .form-description__area select {
+        width: 100%;
+    }
+
+    .control {
+        margin: 0.5rem 0.2rem;
+        padding: 0.5rem;
+        width: 100%;
+    }
+    .control-title {
+        font-size: 2.2rem;
+        margin-bottom: 0.8rem;
+    }
+    .control-form {
+        padding: 0.8rem;
+    }
+    .form-description {
+        grid-template-columns: 1fr;
+        gap: 0.8rem;
+    }
+    .control-form button[type="submit"],
+    .control-form button[type="button"] {
+        grid-column: 1 / -1;
+        margin-top: 0.5rem;
+        padding: 0.8rem;
+        font-size: 1.5rem;
+    }
+    .form-status {
+        flex-direction: column;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+    }
+    .form-status__total,
+    .form-status__remainder {
+        font-size: 1.6rem;
+        padding: 0.7rem;
+    }
+
+    .table {
+        display: block;
+        overflow-x: auto;
+    }
+
+    .table-header th {
+        display: table-cell; 
+        font-size: 1.2rem;
+        padding: 0.3rem;
+        min-width: 70px; 
+    }
+    
+    .table-body tr {
+        display: table-row; 
+    }
+    
+    .table-body td {
+        display: table-cell; 
+        font-size: 1.1rem;
+        padding: 0.3rem;
+        white-space: nowrap;
+        vertical-align: middle;
+    }
+
+    .table-body td:nth-child(4) { 
+        white-space: normal;
+        min-width: 100px;
+        max-width: 120px;
+    }
+
+    .table-body td input,
+    .table-body td select {
+        width: 100%;
+        max-width: 55px;
+        padding: 0.1rem;
+        font-size: 1.0rem;
+        min-height: 20px;
+        box-sizing: border-box;
+    }
+
+    .botoes-acao {
+        gap: 0.1rem;
+        flex-wrap: nowrap;
+    }
+    .botoes-acao button,
+    .btn-salvar, .btn-cancelar {
+        padding: 0.15rem 0.3rem;
+        font-size: 0.9rem;
+        min-width: 30px;
+    }
+}
+
+@media (min-width: 481px) and (max-width: 768px) {
+    .control {
+        max-width: 95%;
+        margin: 2rem auto;
+        padding: 1rem;
+    }
+
+    .control-title {
+        font-size: 3rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .form-description {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+    }
+
+    .form-description__area input[type="number"],
+    .form-description__area input[type="text"],
+    .form-description__area select {
+        width: 100%;
+    }
+
+    .control-form button[type="submit"],
+    .control-form button[type="button"] {
+        grid-column: 1 / -1;
+        margin-top: 1rem;
+        font-size: 1.7rem;
+    }
+
+    .form-status {
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .form-status__total,
+    .form-status__remainder {
+        font-size: 2rem;
+        padding: 1rem;
+    }
+
+    .table {
+        display: block; 
+        overflow-x: auto;
+    }
+
+    .table-header th,
+    .table-body td {
+        font-size: 1.4rem;
+        padding: 0.7rem;
+    }
+
+    .table-body td input,
+    .table-body td select {
+        width: 100%;
+        max-width: 100px; 
+        padding: 0.4rem;
+        font-size: 1.3rem;
+        min-height: 30px;
+    }
+    .table-body td .edit-description {
+        max-width: 180px; 
+        white-space: normal;
+    }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+    .control {
+        max-width: 95%;
+        margin: 3rem auto;
+    }
+    
+    .control-title {
+        font-size: 3.2rem;
+    }
+
+    .form-description {
+        grid-template-columns: repeat(3, 1fr); 
+        gap: 1.5rem;
+    }
+
+    .form-description__area input[type="number"],
+    .form-description__area input[type="text"],
+    .form-description__area select {
+        width: 100%;
+    }
+
+    .control-form button[type="submit"],
+    .control-form button[type="button"] {
+        grid-column: span 3;
+        font-size: 1.7rem;
+    }
+    
+    .table-header th,
+    .table-body td {
+        font-size: 1.5rem;
+        min-width: 80px;
+        padding: 8px 5px;
+    }
+
+    .table-body td input,
+    .table-body td select {
+        max-width: 80px;
+        width: 100%;
+        padding: 5px;
+    }
+    
+    .table-body td .edit-quantity,
+    .table-body td .edit-saida {
+        width: 60px !important;
+    }
+    
+    .table-body td .edit-description {
+        max-width: 120px;
+    }
+    
+    .table-body td .edit-category,
+    .table-body td .edit-product {
+        max-width: 100px;
+    }
+}
+
+@media (min-width: 1025px) and (max-width: 1200px) {
+    .control {
+        max-width: 110rem;
+        width: 100%;
+        margin: 3rem auto;
+    }
+
+    .form-description {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1.5rem;
+    }
+    
+    .form-description__area input[type="number"],
+    .form-description__area input[type="text"],
+    .form-description__area select {
+        width: 95%;
+    }
+
+    .control-form button[type="submit"],
+    .control-form button[type="button"] {
+        grid-column: span 2; 
+    }
+}

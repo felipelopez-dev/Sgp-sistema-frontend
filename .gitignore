@@ -1,0 +1,13 @@
+# Dependencies
+node_modules/
+serviceAccountKey.json
+
+# Build files
+dist/
+build/
+
+# Vscode 
+.vscode
+
+# Color file
+color.txt

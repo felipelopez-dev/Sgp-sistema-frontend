@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="cache-control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="pragma" content="no-cache">
+    <meta http-equiv="expires" content="0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Cálculo de Paletização</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../../assets/img/favicons/favicon-96x96.png" sizes="96x96">
+    <link rel="shortcut icon" href="../../assets/img/favicons/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="../../assets/img/favicons/apple-touch-icon.png">
+    <meta name="apple-mobile-web-app-title" content="SGP">
+    <link rel="manifest" href="../../assets/img/favicons/site.webmanifest">
+    <link rel="icon" type="image/svg+xml" href="../../assets/img/favicons/favicon.svg">
+
+    <!-- Css -->
+    <link rel="stylesheet" href="../../assets/css/global/normalize.css">
+    <link rel="stylesheet" href="../../assets/css/global/variables.css">
+    <link rel="stylesheet" href="../../assets/css/themes/dark-light.css">
+    <link rel="stylesheet" href="../../assets/css/base/index.css">
+    <link rel="stylesheet" href="../../assets/css/components/palletizing.css">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap">
+</head>
+
+<body class="container-palletizing">
+
+    <header class="sgp-header" role="banner">
+        <a href="../../index.html" class="sgp-header__brand" aria-label="Voltar para a página inicial">
+            <img src="../../assets/img/global/svg/brand/brand.svg" class="sgp-header__logo" tabindex="1"
+                alt="Logotipo do SGP">
+            <div class="sgp-header__vertical-line"></div>
+        </a>
+        <nav class="sgp-header__menu" role="navigation" aria-label="Menu principal">
+            <ul class="sgp-header__list">
+                <li class="sgp-header__item">
+                    <a href="../../index.html" class="sgp-header__link" tabindex="2">Início</a>
+                </li>
+                <li class="sgp-header__item">
+                    <a href="#" class="sgp-header__link" tabindex="3">Calcular</a>
+                    <ul class="sub-menu">
+                        <li><a href="../../pages/palletizing/palletizing.html">Cálculo de Paletização</a></li>
+                        <li><a href="../../pages/calculate/calculate.html">Cálculo da Produção</a></li>
+                    </ul>
+                </li>
+                <li class="sgp-header__item">
+                    <a href="../../pages/register/register.html" class="sgp-header__link" tabindex="4">Registrar
+                        saída</a>
+                </li>
+                <li class="sgp-header__item">
+                    <a href="#" class="sgp-header__link" tabindex="4">Relatórios</a>
+                    <ul class="sub-menu">
+                        <li><a href="../../pages/graphic/stock-report.html">Relatório de Estoque</a></li>
+                    </ul>
+                </li>
+                <li class="sgp-header__item">
+                    <a href="../../pages/control/control.html" class="sgp-header__link" tabindex="4">Controle de
+                        Estoque</a>
+                </li>
+                <li class="sgp-header__item">
+                    <a href="#" class="sgp-header__link" tabindex="4">Históricos</a>
+                    <ul class="sub-menu">
+                        <li><a href="#">Histórico de Estoque</a></li>
+                        <li><a href="../../pages/history/history.html">Histórico de Registros</a></li>
+                    </ul>
+                </li>
+                <li class="sgp-header__item">
+                    <a href="../../pages/guide/guide.html" class="sgp-header__link" tabindex="4">Suporte</a>
+                </li>
+            </ul>
+        </nav>
+        <div class="header-mobile">
+            <img class="header-mobile__image" src="../../assets/img/global/svg/icons/ui/menu-register.svg"
+                alt="Imagem de menu" title="Botão de menu">
+        </div>
+        <div class="mobile">
+            <button class="close-menu">
+                <img class="close-menu__image" src="../../assets/img/global/svg/icons/ui/close-circle-register.svg"
+                    alt="Ícone de fechar menu">
+            </button>
+            <nav class="mobile-menu">
+                <ul class="mobile-menu__content">
+                    <li class="sgp-header__item">
+                        <a href="../../index.html" class="sgp-header__link" tabindex="2">Início</a>
+                    </li>
+                    <li class="sgp-header__item">
+                        <a href="#" class="sgp-header__link" tabindex="3">Calcular</a>
+                        <ul class="sub-menu">
+                            <li><a href="../../pages/palletizing/palletizing.html">Cálculo de Paletização</a></li>
+                            <li><a href="../../pages/calculate/calculate.html">Cálculo da Produção</a></li>
+                        </ul>
+                    </li>
+                    <li class="sgp-header__item">
+                        <a href="../../pages/register/register.html" class="sgp-header__link" tabindex="4">Registrar
+                            saída</a>
+                    </li>
+                    <li class="sgp-header__item">
+                        <a href="#" class="sgp-header__link" tabindex="4">Relatórios</a>
+                        <ul class="sub-menu">
+                            <li><a href="../../pages/graphic/stock-report.html">Relatório de Estoque</a></li>
+                        </ul>
+                    </li>
+                    <li class="sgp-header__item">
+                        <a href="../../pages/control/control.html" class="sgp-header__link" tabindex="4">Controle de
+                            Estoque</a>
+                    </li>
+                    <li class="sgp-header__item">
+                        <a href="#" class="sgp-header__link" tabindex="4">Históricos</a>
+                        <ul class="sub-menu">
+                            <li><a href="#">Histórico de Estoque</a></li>
+                            <li><a href="../../pages/history/history.html">Histórico de Registros</a></li>
+                        </ul>
+                    </li>
+                    <li class="sgp-header__item">
+                        <a href="../../pages/guide/guide.html" class="sgp-header__link" tabindex="4">Suporte</a>
+                    </li>
+                    <li class="sgp-header__item">
+                        <a href="javascript:void(0)" onclick="handleLogout()"
+                            class="sgp-header__link sgp-header__button-close" tabindex="4">Sair</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <div class="sgp-header__area-button">
+            <div class="sgp-header__user" id="userProfileArea">
+                <div class="sgp-header__user-info" id="userMenuToggle">
+                    <span class="sgp-header__user-name" id="userNameGreeting">Olá, Usuário!</span>
+                    <img src="../../assets/img/global/svg/icons/ui/arrow-down.svg" alt="Abrir menu"
+                        class="sgp-header__user-arrow">
+                </div>
+                <ul class="sgp-header__user-menu" id="userMenu">
+                    <li><a href="javascript:void(0)" id="logoutBtn" class="logout">Sair</a></li>
+                </ul>
+            </div>
+            <button class="sgp-header__btn-light-dark" aria-label="Alternar entre modo claro e escuro">
+                <div class="sgp-header__rail-mode">
+                    <img src="../../assets/img/global/svg/icons/ui/light.svg" tabindex="5"
+                        class="sgp-header__img-light icon--dark-light" alt="Modo claro">
+                    <img src="../../assets/img/global/svg/icons/ui/dark.svg" alt="Modo escuro" tabindex="6"
+                        class="sgp-header__img-dark icon--dark-light">
+                </div>
+            </button>
+        </div>
+    </header>
+
+    <main class="palletizing">
+        <h1 class="palletizing-title">Paletização</h1>
+        <div class="palletizing-title__vertical"></div>
+
+        <div class="palletizing-left">
+            <div class="palletizing-left__area-input">
+                <label for="palletizing-left__total" class="palletizing-left__label">Quantidade total de Caixas:</label>
+                <input type="number" name="total-box" id="palletizing-left__total" class="palletizing-left_input"
+                    placeholder="Exp: 1000" required>
+
+                <label for="palletizing-left__box" class="palletizing-left__label">Caixas por Palete (Capacidade
+                    Máxima):</label>
+                <input type="number" name="palletizing-box" id="palletizing-left__box" class="palletizing-left_input"
+                    placeholder="Exp: 40" required>
+            </div>
+
+            <div class="palletizing-left__area-result">
+                <h3 class="palletizing-left__title-result">
+                    Resultados da Paletização
+                </h3>
+                <div class="palletizing-left__content-date">
+                    <div class="palletizing-result palletizing-result--one">
+                        <div class="palletizing-result__title">Paletes Necessários</div>
+                        <p class="palletizing-result__number result--number__one">0</p>
+                    </div>
+                    <div class="palletizing-result palletizing-result__two">
+                        <div class="palletizing-result__title palletizing-result--title">Caixas Usadas</div>
+                        <p class="palletizing-result__number">0</p>
+                    </div>
+                    <div class="palletizing-result palletizing-result__three">
+                        <div class="palletizing-result__title">Caixas que Sobraram</div>
+                        <p class="palletizing-result__number result--number__three">0</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="palletizing-right">
+            <h4 class="palletizing-right__title">
+                Dados de Identificação do Produto
+            </h4>
+            <div class="palletizing-right__vertical"></div>
+            <div class="palletizing-right__area-date">
+                <div class="palletizing-right__area">
+                    <label for="palletizing-right__area-product" class="palletizing-right__label">Nome do
+                        Produto:</label>
+                    <select name="name of product exportetion" class="palletizing-right__select"
+                        id="palletizing-right__area-product">
+                        <option value="">Selecione o produto</option>
+                        <option value="Barriga c/ pele">Barriga c/ pele</option>
+                        <option value="Barriga s/ pele">Barriga s/ pele</option>
+                        <option value="Carré c/ vért c/ pele">Carré c/ vért c/ pele</option>
+                        <option value="Carré c/ vértebra">Carré c/ vértebra</option>
+                        <option value="Carré s/ vértebra">Carré s/ vértebra</option>
+                        <option value="Costela">Costela</option>
+                        <option value="Espinhaço">Espinhaço</option>
+                        <option value="Filézinho">Filézinho</option>
+                        <option value="Lombo">Lombo</option>
+                        <option value="Paleta 90 VL">Paleta 90 VL</option>
+                        <option value="Paleta s/ osso">Paleta s/ osso</option>
+                        <option value="Patinho 98%">Patinho 98%</option>
+                        <option value="Pernil 90 VL">Pernil 90 VL</option>
+                        <option value="Pernil 95 VL">Pernil 95 VL</option>
+                        <option value="Pernil c/ osso s/ pele">Pernil c/ osso s/ pele</option>
+                        <option value="Pernil s/ osso">Pernil s/ osso</option>
+                        <option value="Pernil s/ osso 90 VL">Pernil s/ osso 90 VL</option>
+                        <option value="Pernil s/ osso 95 VL">Pernil s/ osso 95 VL</option>
+                        <option value="Recorte 80 VL">Recorte 80 VL</option>
+                        <option value="Recorte 90 VL">Recorte 90 VL</option>
+                        <option value="Sobrepaleta c/ osso">Sobrepaleta c/ osso</option>
+                        <option value="Sobrepaleta s/ osso">Sobrepaleta s/ osso</option>
+                        <option value="OUTRO">Outro</option>
+                    </select>
+                    <input type="text" name="other-product-name" id="product-name-other"
+                        class="palletizing-right__input" placeholder="Digite o nome do produto"
+                        style="display: none; margin-top: 5px;" />
+                </div>
+
+                <div class="palletizing-right__area">
+                    <label for="palletizing-right__area-code" class="palletizing-right__label">Código do Produto</label>
+                    <select name="Code of product" id="palletizing-right__area-code" class="palletizing-right__select">
+                        <option value="">Selecione o código</option>
+                        <option value="4001">4001</option>
+                        <option value="4003">4003</option>
+                        <option value="4004">4004</option>
+                        <option value="4005">4005</option>
+                        <option value="4006">4006</option>
+                        <option value="4007">4007</option>
+                        <option value="4008">4008</option>
+                        <option value="4017">4017</option>
+                        <option value="4018">4018</option>
+                        <option value="4020">4020</option>
+                        <option value="4021">4021</option>
+                        <option value="4024">4024</option>
+                        <option value="4025">4025</option>
+                        <option value="4027">4027</option>
+                        <option value="4028">4028</option>
+                        <option value="4029">4029</option>
+                        <option value="4030">4030</option>
+                        <option value="4031">4031</option>
+                        <option value="4032">4032</option>
+                        <option value="4033">4033</option>
+                        <option value="4034">4034</option>
+                        <option value="4036">4036</option>
+                        <option value="4037">4037</option>
+                        <option value="4042">4042</option>
+                        <option value="4043">4043</option>
+                        <option value="4046">4046</option>
+                        <option value="4047">4047</option>
+                        <option value="4048">4048</option>
+                        <option value="4052">4052</option>            
+                        <option value="OUTRO">Outro</option>                  
+                    </select>
+                    <input type="text" name="other-product-code" id="product-code-other"
+                        class="palletizing-right__input" placeholder="Digite o código do produto"
+                        style="display: none; margin-top: 5px;" />
+                </div>
+            </div>
+
+            <div class="palletizing-right__area-date">
+                <div class="palletizing-right__area">
+                    <label for="palletizing-right__area-load" class="palletizing-right__label">Pedido da Carga
+                        (PO):</label>
+                    <input type="text" name="load" id="palletizing-right__area-load" class="palletizing-right__input"
+                        value="P:" title="Ex: P:600" required>
+                </div>
+                <div class="palletizing-right__area">
+                    <label for="palletizing-right__area-kg" class="palletizing-right__label">Peso da Carga (Total em
+                        Kg):</label>
+                    <input type="text" name="kg-product" id="palletizing-right__area-kg"
+                        class="palletizing-right__input" placeholder="Ex: 2340 kg" required>
+                </div>
+            </div>
+            <div class="palletizing-right__area">
+                <label for="palletizing-right__area-pallet-number" class="palletizing-right__label label--number">Número
+                    do palete:</label>
+                <input type="text" name="pallet-number" id="palletizing-right__area-pallet-number"
+                    class="palletizing-right__input palletizing--number" placeholder="Ex: 1234" required>
+            </div>
+
+            <div class="palletizing-right__area-date palletizing--date">
+                <div class="palletizing-right__area">
+                    <label for="palletizing-right__area-time" class="palletizing-right__label">Data da
+                        Produção/Envase:</label>
+                    <input type="date" name="datetime" id="palletizing-right__area-time"
+                        class="palletizing-right__input" required>
+                </div>
+                <div class="palletizing-right__area">
+                    <label for="palletizing-right__area-lote" class="palletizing-right__label">Lote de Produção:</label>
+                    <input type="date" name="code-lote" id="palletizing-right__area-lote"
+                        class="palletizing-right__input" placeholder="Ex: fl002025" required>
+                </div>
+            </div>
+
+            <button class="palletizing-right__btn-add">+ Adicionar outra data/lote</button>
+            <button class="palletizing-right__btn-email">Fazer o email</button>
+        </div>
+
+        <div class="palletizing-copy">
+            <textarea class="palletizing-area__text"></textarea>
+            <div class="palletizing-copy__area">
+                <button class="palletizing-area__btn-copy">Copiar</button>
+                <button class="palletizing-copy__btn-reset">Reiniciar</button>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="footer">
+        <p class="footer-description">
+            © 2025 Desenvolvido por Felipe Lopez - Engenheiro de Software.
+        </p>
+        <p class="footer-text">
+            Projeto com todos os direitos reservados.
+        </p>
+    </footer>
+
+    <script type="text/javascript" src="../../assets/js/global/darkMode.js" defer></script>
+    <script type="text/javascript" src="../../assets/js/global/mobilMenu.js" defer></script>
+    <script type="text/javascript" src="../../assets/js/pages/palletizing/palletizingCalculate.js" defer></script>
+    <script type="text/javascript" src="../../assets/js/pages/login/loginValidation.js" defer></script>
+
+</body>
+
+</html>

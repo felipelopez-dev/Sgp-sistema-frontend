@@ -1,0 +1,315 @@
+/* =========================================================
+   CONTAINER PRINCIPAL
+========================================================= */
+.sgp-report {
+    width: 100%;
+    max-width: 120rem;
+    margin: 2.5rem auto;
+    padding: 2rem;
+    background-color: var(--bg-primary);
+    border-radius: 0.9375rem;
+    box-shadow: 0 0.3125rem 1.25rem rgba(0, 0, 0, 0.1);
+}
+
+/* =========================================================
+   HEADER
+========================================================= */
+.report-header {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+    align-items: center;
+}
+
+.report-header__title {
+    font-size: 2rem;
+    font-weight: 600;
+    color: #0f172a;
+}
+
+/* =========================================================
+   CONTROLES
+========================================================= */
+.report-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    align-items: center;
+    width: 100%;
+}
+
+.report-start {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.report-label {
+    font-size: 13px;
+    color: #556;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    margin-bottom: 0.5rem;
+}
+
+/* =========================================================
+   BOTÕES
+========================================================= */
+.report-button__area {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.btn {
+    background: #0b69ff;
+    color: #ffffff;
+    padding: 0.55rem 1.1rem;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn:hover {
+    background-color: #40a8f5;
+}
+
+.btn.ghost {
+    background: transparent;
+    color: #0b69ff;
+    border: 1px solid #dbe6ff;
+}
+
+.btn.ghost:hover {
+    background-color: #40a8f5;
+    color: #ffffff;
+}
+
+/* =========================================================
+   RESUMO
+========================================================= */
+.report-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 2rem;
+  margin: 3rem 0;
+}
+
+.report-summary .card {
+  position: relative;
+  padding: 1.2rem;
+  padding-left: 3.2rem; /* espaço pro círculo */
+  border-radius: 12px;
+  background: #f8fbff;
+  box-shadow: inset 0 0 0 1px #e6eeff;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.report-summary .card::before {
+  content: "";
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+}
+
+/* hover mantém o seu comportamento */
+.report-summary .card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 40px rgba(2, 6, 23, 0.12);
+}
+
+/* texto */
+.report-summary .card small {
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: #64748b;
+  text-transform: uppercase;
+}
+
+.report-summary .card h3 {
+  font-size: 1.6rem;
+  margin-top: 0.4rem;
+  color: #0f172a;
+}
+
+/* ---------- CORES DOS 6 BLOCOS ---------- */
+.report-summary .card:nth-child(1)::before { background: #10B981; }
+.report-summary .card:nth-child(2)::before { background: #F59E0B; }
+.report-summary .card:nth-child(3)::before { background: #3B82F6; }
+.report-summary .card:nth-child(4)::before { background: #8B5CF6; }
+.report-summary .card:nth-child(5)::before { background: #F97316; }
+.report-summary .card:nth-child(6)::before { background: #EF4444; }
+
+
+/* =========================================================
+   CONTEÚDO PRINCIPAL
+========================================================= */
+.report-content {
+    display: grid;
+    grid-template-columns: 1fr 360px;
+    gap: 1.5rem;
+    padding: 1rem;
+    background: #ffffff;
+    border-radius: 0.9375rem;
+    box-shadow: 0 0.3125rem 1.25rem rgba(0, 0, 0, 0.08);
+}
+
+/* =========================================================
+   GRÁFICO
+========================================================= */
+.report-chart {
+    background: linear-gradient(180deg, #ffffff 0%, #f9fbff 100%);
+    border-radius: 14px;
+    padding: 1rem;
+    min-height: 360px;
+    box-shadow: 0 10px 32px rgba(2, 6, 23, 0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.report-chart:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 14px 40px rgba(2, 6, 23, 0.12);
+}
+
+.report-chart canvas {
+    width: 100% !important;
+    max-height: 320px;
+}
+
+/* =========================================================
+   TABELA
+========================================================= */
+.report-table {
+    display: flex;
+    flex-direction: column;
+    max-height: calc(100vh - 260px);
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 0.75rem;
+    box-shadow: 0 10px 32px rgba(2, 6, 23, 0.08);
+}
+
+.report-table h4 {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #1f2937;
+}
+
+/* Área rolável */
+.report-table > div {
+    overflow-y: auto;
+    overflow-x: hidden;
+    flex: 1;
+}
+
+/* Tabela */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table th,
+.table td {
+    padding: 8px 10px;
+    font-size: 13px;
+    border-bottom: 1px solid #eee;
+    text-align: left;
+}
+
+/* Cabeçalho fixo */
+.table thead th {
+    position: sticky;
+    top: 0;
+    background: #ffffff;
+    z-index: 2;
+    font-weight: 600;
+}
+
+/* =========================================================
+   INTERCALAÇÃO DE CORES (DETALHE DO DIA)
+========================================================= */
+
+/* Linhas ímpares */
+.table tbody tr:nth-child(odd) {
+    background-color: #ffffff;
+}
+
+/* Linhas pares com #c0c2c7 suave */
+.table tbody tr:nth-child(even) {
+    background-color: #c0c2c71a; /* 10% de opacidade */
+}
+
+/* Hover */
+.table tbody tr:hover {
+    background-color: #e8eeff;
+    transition: background-color 0.2s ease;
+}
+
+/* =========================================================
+   RESPONSIVIDADE
+========================================================= */
+
+/* 320px – 480px */
+@media (max-width: 480px) {
+    .sgp-report {
+        padding: 1rem;
+        margin: 1rem 0.5rem;
+    }
+
+    .report-content {
+        grid-template-columns: 1fr;
+    }
+
+    .report-chart canvas {
+        max-height: 200px;
+    }
+
+    .table th,
+    .table td {
+        font-size: 12px;
+        padding: 6px;
+    }
+
+    .btn {
+        width: 100%;
+    }
+}
+
+/* 481px – 768px */
+@media (min-width: 481px) and (max-width: 768px) {
+    .report-content {
+        grid-template-columns: 1fr;
+    }
+
+    .report-chart canvas {
+        max-height: 240px;
+    }
+}
+
+/* 769px – 1024px */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .report-content {
+        grid-template-columns: 1fr 300px;
+    }
+}
+
+/* 1025px – 1200px */
+@media (min-width: 1025px) and (max-width: 1200px) {
+    .report-content {
+        grid-template-columns: 1fr 340px;
+    }
+}

@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="cache-control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="pragma" content="no-cache">
+    <meta http-equiv="expires" content="0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Registro de saída</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../../assets/img/favicons/favicon-96x96.png" sizes="96x96">
+    <link rel="shortcut icon" href="../../assets/img/favicons/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="../../assets/img/favicons/apple-touch-icon.png">
+    <meta name="apple-mobile-web-app-title" content="SGP">
+    <link rel="manifest" href="../../assets/img/favicons/site.webmanifest">
+    <link rel="icon" type="image/svg+xml" href="../../assets/img/favicons/favicon.svg">
+
+    <!-- Css -->
+    <link rel="stylesheet" href="../../assets/css/global/normalize.css">
+    <link rel="stylesheet" href="../../assets/css/global/variables.css">
+    <link rel="stylesheet" href="../../assets/css/themes/dark-light.css">
+    <link rel="stylesheet" href="../../assets/css/base/index.css">
+    <link rel="stylesheet" href="../../assets/css/components/register.css">
+    <link rel="stylesheet" href="../../assets/css/components/register-operator.css">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap">
+</head>
+
+<body class="dark-register">
+
+    <header class="sgp-header" role="banner">
+        <a href="../../index-operador.html" class="sgp-header__brand" aria-label="Voltar para a página inicial">
+            <img src="../../assets/img/global/svg/brand/brand.svg" class="sgp-header__logo" tabindex="1"
+                alt="Logotipo do SGP">
+            <div class="sgp-header__vertical-line"></div>
+        </a>
+        <nav class="sgp-header__menu" role="navigation" aria-label="Menu principal">
+            <ul class="sgp-header__list">
+                <li class="sgp-header__item">
+                    <a href="../../index-operador.html" class="sgp-header__link" tabindex="2">Início</a>
+                </li>
+                <li class="sgp-header__item">
+                    <a href="#" class="sgp-header__link" tabindex="3">Calcular</a>
+                    <ul class="sub-menu">
+                        <li><a href="#">Cálculo de Paletização</a></li>
+                        <li><a href="../../pages/calculate/calculate-operador.html">Cálculo da Produção</a></li>
+                    </ul>
+                </li>
+                <li class="sgp-header__item">
+                    <a href="../../pages/register/register-operador.html" class="sgp-header__link"
+                        tabindex="4">Registrar saída</a>
+                </li>
+                <li class="sgp-header__item">
+                    <a href="#" class="sgp-header__link" tabindex="4">Relatórios</a>
+                    <ul class="sub-menu">
+                        <li><a href="../../pages/graphic/stock-report-operador.html">Relatório de Estoque</a></li>
+                    </ul>
+                </li>
+                <li class="sgp-header__item">
+                    <a href="../../pages/control/control-operador.html" class="sgp-header__link" tabindex="4">Controle
+                        de Estoque</a>
+                </li>
+                <li class="sgp-header__item">
+                    <a href="#" class="sgp-header__link" tabindex="4">Históricos</a>
+                    <ul class="sub-menu">
+                        <li><a href="../../pages/history/history-control-operador.html">Histórico de Estoque</a></li>
+                        <li><a href="../../pages/history/history-operador.html">Histórico de Registros</a></li>
+                    </ul>
+                </li>
+                <li class="sgp-header__item">
+                    <a href="../../pages/guide/guide-operador.html" class="sgp-header__link" tabindex="4">Suporte</a>
+                </li>
+            </ul>
+        </nav>
+        <div class="header-mobile">
+            <img class="header-mobile__image" src="../../assets/img/global/svg/icons/ui/menu-register.svg"
+                alt="Imagem de menu" title="Botão de menu">
+        </div>
+        <div class="mobile">
+            <button class="close-menu">
+                <img class="close-menu__image" src="../../assets/img/global/svg/icons/ui/close-circle-register.svg"
+                    alt="Ícone de fechar menu">
+            </button>
+            <nav class="mobile-menu">
+                <ul class="mobile-menu__content">
+                    <li class="sgp-header__item">
+                        <a href="../../index-operador.html" class="sgp-header__link" tabindex="2">Início</a>
+                    </li>
+                    <li class="sgp-header__item">
+                        <a href="#" class="sgp-header__link" tabindex="3">Calcular</a>
+                        <ul class="sub-menu">
+                            <li><a href="#">Cálculo de Paletização</a></li>
+                            <li><a href="../../pages/calculate/calculate-operador.html">Cálculo da Produção</a></li>
+                        </ul>
+                    </li>
+                    <li class="sgp-header__item">
+                        <a href="../../pages/register/register-operador.html" class="sgp-header__link"
+                            tabindex="4">Registrar saída</a>
+                    </li>
+                    <li class="sgp-header__item">
+                        <a href="#" class="sgp-header__link" tabindex="4">Relatórios</a>
+                        <ul class="sub-menu">
+                            <li><a href="../../pages/graphic/stock-report-operador.html">Relatório de Estoque</a></li>
+                        </ul>
+                    </li>
+                    <li class="sgp-header__item">
+                        <a href="../../pages/control/control-operador.html" class="sgp-header__link"
+                            tabindex="4">Controle de Estoque</a>
+                    </li>
+                    <li class="sgp-header__item">
+                        <a href="#" class="sgp-header__link" tabindex="4">Históricos</a>
+                        <ul class="sub-menu">
+                            <li><a href="../../pages/history/history-control-operador.html">Histórico de Estoque</a>
+                            </li>
+                            <li><a href="../../pages/history/history-operador.html">Histórico de Registros</a></li>
+                        </ul>
+                    </li>
+                    <li class="sgp-header__item">
+                        <a href="../../pages/guide/guide-operador.html" class="sgp-header__link"
+                            tabindex="4">Suporte</a>
+                    </li>
+                    <li class="sgp-header__item">
+                        <a href="javascript:void(0)" onclick="handleLogout()"
+                            class="sgp-header__link sgp-header__button-close" tabindex="4">Sair</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <div class="sgp-header__area-button">
+            <div class="sgp-header__user" id="userProfileArea">
+                <div class="sgp-header__user-info" id="userMenuToggle">
+                    <span class="sgp-header__user-name" id="userNameGreeting">Olá, Usuário!</span>
+                    <img src="../../assets/img/global/svg/icons/ui/arrow-down.svg" alt="Abrir menu"
+                        class="sgp-header__user-arrow">
+                </div>
+                <ul class="sgp-header__user-menu" id="userMenu">
+                    <li><a href="javascript:void(0)" id="logoutBtn" class="logout">Sair</a></li>
+                </ul>
+            </div>
+            <button class="sgp-header__btn-light-dark" aria-label="Alternar entre modo claro e escuro">
+                <div class="sgp-header__rail-mode">
+                    <img src="../../assets/img/global/svg/icons/ui/light.svg" tabindex="5"
+                        class="sgp-header__img-light icon--dark-light" alt="Modo claro">
+                    <img src="../../assets/img/global/svg/icons/ui/dark.svg" alt="Modo escuro" tabindex="6"
+                        class="sgp-header__img-dark icon--dark-light">
+                </div>
+            </button>
+        </div>
+    </header>
+
+    <div class="register" id="register-operator">
+        <h1 class="register-title">
+            Registrar de saída
+        </h1>
+
+        <div class="register-card">
+            <div class="register-card__area">
+                <div class="register-card__area-input">
+                    <label class="register-card__label" for="register-card__input-name">Nome:</label>
+                    <input type="text" class="register-card__input" id="register-card__input-name" name="name"
+                        placeholder="Nome do responsável" required maxlength="14" tabindex="5">
+                    <span class="register-validation"></span>
+                </div>
+
+                <div class="register-card__area-input">
+                    <label class="register-card__label" for="register-card__input-time">Hora de saída:</label>
+                    <input type="time" class="register-card__input register-card--time" id="register-card__input-time"
+                        name="time" required tabindex="6">
+                    <span class="register-validation"></span>
+                </div>
+            </div>
+
+            <div class="register-card__area">
+                <div class="register-card__area-input">
+                    <label class="register-card__label" for="register-card__input-return">Duração da saída
+                        (minutos):</label>
+                    <input type="number" class="register-card__input" id="register-card__input-return" name="return"
+                        placeholder="Ex: 30" required min="1" max="120" tabindex="7"
+                        title="Duração até 2 horas ou 120 minutos.">
+                    <span class="register-validation"></span>
+                </div>
+
+                <div class="register-card__area-input">
+                    <label class="register-card__label" for="register-return">Retorno previsto</label>
+                    <p class="register-return" id="register-return" tabindex="8">
+                        --:--
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="register-description">
+            <div class="register-description__title register-card__label">Descrição</div>
+            <textarea maxlength="330" placeholder="Adicione uma breve descrição..."
+                class="register-description__text register-card__input"></textarea>
+            <span class="register-validation"></span>
+            <p class="register-description__title-button">
+                Atalhos rápidos: clique para adicionar um título à descrição e começar a escrever.
+            </p>
+            <div class="register-description__area-button">
+                <button class="register-description__button button--coffee">Café da manhã</button>
+                <button class="register-description__button button--lunch">Almoço</button>
+                <button class="register-description__button button--interval">Intervalo </button>
+                <button class="register-description__button button-others">Outros</button>
+            </div>
+        </div>
+
+        <button class="register-button__add register-button" tabindex="9">
+            + Adicionar Nova Saída
+        </button>
+    </div>
+
+    <div class="exit">
+        <h2 class="exit-title">
+            Saída registrada
+        </h2>
+
+        <!-- the card structure is in javascript - file validationRegister.js - funciton exitContent -->
+        <div class="exit-content"></div>
+    </div>
+
+    <!-- button of delete -->
+    <div class="delete">
+        <div class="delete-area">
+            <h3 class="delete-title">
+                Confirmar Exclusão
+            </h3>
+            <p class="delete-text">
+                Tem certeza de que deseja excluir este registro de saída?
+            </p>
+            <div class="delete-button">
+                <button type="button" tabindex="1" class="delete-button__link button--link1">
+                    Cancelar
+                </button>
+                <button type="button" tabindex="2" class="delete-button__link button--link2">
+                    Confirmar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="edit">
+        <div class="edit-area">
+            <h3 class="edit-title ">
+                Editar Descrição
+            </h3>
+            <p class="edit-text">
+                Altere a descrição do registro abaixo:
+            </p>
+            <textarea maxlength="330" class="edit-textarea"></textarea>
+            <div class="edit-button">
+                <button type="button" tabindex="1" class="edit-button__link button--link1 button--cancel-edit">
+                    Cancelar
+                </button>
+                <button type="button" tabindex="2" class="edit-button__link button--link2 button--confirm-edit">
+                    Salvar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Block of alarm update -->
+    <div class="alarm alarm--add">
+        <div class="alarm-mensage">
+            <div class="alarm-title">Nova saída registrada!</div>
+            <img src="../../assets/img/global/svg/icons/ui/bell-register.svg" class="alarm-image" alt="Imagem de sino">
+        </div>
+        <div class="alarm-card__button">
+            <button class="alarm-button">
+                ok
+            </button>
+        </div>
+    </div>
+
+    <div class="alarm alarm--update">
+        <div class="alarm-mensage">
+            <div class="alarm-title">Uma atulização nova!</div>
+            <img src="../../assets/img/global/svg/icons/ui/bell-register.svg" class="alarm-image" alt="Imagem de sino">
+        </div>
+        <div class="alarm-card__button">
+            <button class="alarm-button button--update">
+                ok
+            </button>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p class="footer-description">
+            © 2025 Desenvolvido por Felipe Lopez - Engenheiro de Software.
+        </p>
+        <p class="footer-text">
+            Projeto com todos os direitos reservados.
+        </p>
+    </footer>
+
+    <script type="text/javascript" src="../../assets/js/global/darkMode.js" defer></script>
+    <script type="module" src="../../assets/js/pages/register/firebaseConfig.js" defer></script>
+    <script type="module" src="../../assets/js/pages/register/validationRegister.js" defer></script>
+    <script type="text/javascript" src="../../assets/js/pages/register/timeDescription.js" defer></script>
+    <script type="text/javascript" src="../../assets/js/global/mobilMenu.js" defer></script>
+    <script type="text/javascript" src="../../assets/js/pages/login/loginValidation.js" defer></script>
+
+</body>
+
+</html>

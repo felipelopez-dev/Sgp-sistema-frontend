@@ -1,0 +1,83 @@
+#register-operator {
+    display: none;
+}
+
+:is(.delete--operator, .edit--operator) {
+    display: none;
+}
+
+
+.alarm {
+    position: fixed;
+    top: 9rem;
+    left: 100vw; /* Posição inicial fora da tela (direita) */
+    width: 30rem;
+    height: 10rem;
+    background-color: var(--color-red);
+    display: none; /* Inicia escondido */
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+    border-radius: 2rem;
+    gap: 1rem;
+    box-shadow: 0 0.4rem 1.2rem rgba(0,0,0,0.3);
+    font-weight: bold;
+    z-index: 9999;
+    /* Adicionando a transição para o movimento suave */
+    transition: left 0.5s ease-in-out; 
+}
+
+/* Esta é a classe que o JavaScript irá adicionar para MOSTRAR o card. */
+.alarm--active {
+    left: calc(100vw - 32rem); /* Mova o alarme para uma posição visível */
+    display: flex; /* Faz o card aparecer */
+}
+
+.alarm-image {
+    width: 3rem;
+    height: 3rem;
+    animation: swing 1.2s cubic-bezier(.4,.02,.18,1) infinite;
+}
+
+.alarm-mensage {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+}
+
+.alarm-title {
+    font-size: 2rem;
+    color: var(--color-white);
+    font-weight: bold;
+}
+
+.alarm-card__button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.alarm-button {
+    width: 6rem;
+    padding: 0.5rem;
+    border-radius: 1rem;
+    border: none;
+    cursor: pointer;
+    transition: all 0.5s ease;
+    font-size: 2rem;
+    background-color: var(--color-white);
+    color: var(--color-dark);
+}
+
+.alarm-button:hover {
+     transform: translateY(0.3rem);
+     background-color: var(--color-gray-border);
+}
+
+@keyframes swing {
+    0% { transform: rotate(-12deg) translateY(0); }
+    50% { transform: rotate(10deg) translateY(2px); }
+    100% { transform: rotate(-12deg) translateY(0); }
+}

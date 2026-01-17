@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="cache-control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="pragma" content="no-cache">
+    <meta http-equiv="expires" content="0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Controle de Estoque</title>
+
+    <link rel="icon" type="image/png" href="../../assets/img/favicons/favicon-96x96.png" sizes="96x96">
+    <link rel="shortcut icon" href="../../assets/img/favicons/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="../../assets/img/favicons/apple-touch-icon.png">
+    <meta name="apple-mobile-web-app-title" content="SGP">
+    <link rel="manifest" href="../../assets/img/favicons/site.webmanifest">
+    <link rel="icon" type="image/svg+xml" href="../../assets/img/favicons/favicon.svg">
+
+    <link rel="stylesheet" href="../../assets/css/global/normalize.css">
+    <link rel="stylesheet" href="../../assets/css/global/variables.css">
+    <link rel="stylesheet" href="../../assets/css/themes/dark-light.css">
+    <link rel="stylesheet" href="../../assets/css/base/index.css">
+    <link rel="stylesheet" href="../../assets/css/components/register.css">
+    <link rel="stylesheet" href="../../assets/css/components/control.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap">
+</head>
+
+<body class="dark-register">
+
+    <header class="sgp-header" role="banner">
+        <a href="../../index.html" class="sgp-header__brand" aria-label="Voltar para a página inicial">
+            <img src="../../assets/img/global/svg/brand/brand.svg" class="sgp-header__logo" tabindex="1"
+                alt="Logotipo do SGP">
+            <div class="sgp-header__vertical-line"></div>
+        </a>
+        <nav class="sgp-header__menu" role="navigation" aria-label="Menu principal">
+            <ul class="sgp-header__list">
+                <li class="sgp-header__item">
+                    <a href="../../index.html" class="sgp-header__link" tabindex="2">Início</a>
+                </li>
+                <li class="sgp-header__item">
+                    <a href="#" class="sgp-header__link" tabindex="3">Calcular</a>
+                    <ul class="sub-menu">
+                        <li><a href="../../pages/palletizing/palletizing.html">Cálculo de Paletização</a></li>
+                        <li><a href="../../pages/calculate/calculate.html">Cálculo da Produção</a></li>
+                    </ul>
+                </li>
+                <li class="sgp-header__item">
+                    <a href="../../pages/register/register.html" class="sgp-header__link" tabindex="4">Registrar
+                        saída</a>
+                </li>
+                <li class="sgp-header__item">
+                    <a href="#" class="sgp-header__link" tabindex="4">Relatórios</a>
+                    <ul class="sub-menu">
+                        <li><a href="../../pages/graphic/stock-report.html">Relatório de Estoque</a></li>
+                    </ul>
+                </li>
+                <li class="sgp-header__item">
+                    <a href="../../pages/control/control.html" class="sgp-header__link" tabindex="4">Controle de
+                        Estoque</a>
+                </li>
+                <li class="sgp-header__item">
+                    <a href="#" class="sgp-header__link" tabindex="4">Históricos</a>
+                    <ul class="sub-menu">
+                        <li><a href="../../pages/history/history-control.html">Histórico de Estoque</a></li>
+                        <li><a href="../../pages/history/history.html">Histórico de Registros</a></li>
+                    </ul>
+                </li>
+                <li class="sgp-header__item">
+                    <a href="../../pages/guide/guide.html" class="sgp-header__link" tabindex="4">Suporte</a>
+                </li>
+            </ul>
+        </nav>
+        <div class="header-mobile">
+            <img class="header-mobile__image" src="../../assets/img/global/svg/icons/ui/menu-register.svg"
+                alt="Imagem de menu" title="Botão de menu">
+        </div>
+        <div class="mobile">
+            <button class="close-menu">
+                <img class="close-menu__image" src="../../assets/img/global/svg/icons/ui/close-circle-register.svg"
+                    alt="Ícone de fechar menu">
+            </button>
+            <nav class="mobile-menu">
+                <ul class="mobile-menu__content">
+                    <li class="sgp-header__item">
+                        <a href="../../index.html" class="sgp-header__link" tabindex="2">Início</a>
+                    </li>
+                    <li class="sgp-header__item">
+                        <a href="#" class="sgp-header__link" tabindex="3">Calcular</a>
+                        <ul class="sub-menu">
+                            <li><a href="../../pages/palletizing/palletizing.html">Cálculo de Paletização</a></li>
+                            <li><a href="../../pages/calculate/calculate.html">Cálculo da Produção</a></li>
+                        </ul>
+                    </li>
+                    <li class="sgp-header__item">
+                        <a href="../../pages/register/register.html" class="sgp-header__link" tabindex="4">Registrar
+                            saída</a>
+                    </li>
+                    <li class="sgp-header__item">
+                        <a href="#" class="sgp-header__link" tabindex="4">Relatórios</a>
+                        <ul class="sub-menu">
+                            <li><a href="../../pages/graphic/stock-report.html">Relatório de Estoque</a></li>
+                        </ul>
+                    </li>
+                    <li class="sgp-header__item">
+                        <a href="../../pages/control/control.html" class="sgp-header__link" tabindex="4">Controle de
+                            Estoque</a>
+                    </li>
+                    <li class="sgp-header__item">
+                        <a href="#" class="sgp-header__link" tabindex="4">Históricos</a>
+                        <ul class="sub-menu">
+                            <li><a href="../../pages/history/history-control.html">Histórico de Estoque</a></li>
+                            <li><a href="../../pages/history/history.html">Histórico de Registros</a></li>
+                        </ul>
+                    </li>
+                    <li class="sgp-header__item">
+                        <a href="../../pages/guide/guide.html" class="sgp-header__link" tabindex="4">Suporte</a>
+                    </li>
+                    <li class="sgp-header__item">
+                        <a href="javascript:void(0)" onclick="handleLogout()"
+                            class="sgp-header__link sgp-header__button-close" tabindex="4">Sair</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <div class="sgp-header__area-button">
+            <div class="sgp-header__user" id="userProfileArea">
+                <div class="sgp-header__user-info" id="userMenuToggle">
+                    <span class="sgp-header__user-name" id="userNameGreeting">Olá, Usuário!</span>
+                    <img src="../../assets/img/global/svg/icons/ui/arrow-down.svg" alt="Abrir menu"
+                        class="sgp-header__user-arrow">
+                </div>
+                <ul class="sgp-header__user-menu" id="userMenu">
+                    <li><a href="javascript:void(0)" id="logoutBtn" class="logout">Sair</a></li>
+                </ul>
+            </div>
+            <button class="sgp-header__btn-light-dark" aria-label="Alternar entre modo claro e escuro">
+                <div class="sgp-header__rail-mode">
+                    <img src="../../assets/img/global/svg/icons/ui/light.svg" tabindex="5"
+                        class="sgp-header__img-light icon--dark-light" alt="Modo claro">
+                    <img src="../../assets/img/global/svg/icons/ui/dark.svg" alt="Modo escuro" tabindex="6"
+                        class="sgp-header__img-dark icon--dark-light">
+                </div>
+            </button>
+        </div>
+    </header>
+
+    <div class="control">
+        <h1 class="control-title">Controle de Estoque</h1>
+
+        <form class="control-form" id="formulario-lancamento">
+            <div class="form-description">
+                <div class="form-description__area">
+                    <label for="form__box-quantity">Quantidade de Caixas:</label>
+                    <input type="number" name="box-quantity" id="quantidade" required>
+                </div>
+                <div class="form-description__area">
+                    <label for="form__category">Categoria:</label>
+                    <select name="category" id="categoria" required>
+                        <option value="">Selecione a Categoria</option>
+                        <option value="interno">Mercado Interno</option>
+                        <option value="externo">Mercado Externo</option>
+                    </select>
+                </div>
+                <div class="form-description__area">
+                    <label for="form__product">Produtos:</label>
+                    <select name="product" id="produto" required disabled>
+                        <option value="">Selecione um Produto</option>
+                    </select>
+                </div>
+                <div class="form-description__area">
+                    <label for="form__text-description">Descrição (Opcional):</label>
+                    <input type="text" name="form__text-description" id="descricao">
+                </div>
+            </div>
+            <div class="form-button__area">
+                <button type="submit" class="add-table">
+                    Adicionar lançamento
+                </button>
+                <button type="button" class="reset-table">
+                    Reiniciar a tabela
+                </button>
+            </div>
+        </form>
+        <div class="form-status">
+            <div class="form-status__total" id="bloco-total">
+                Total de Caixas: 0
+            </div>
+            <div class="form-status__remainder" id="bloco-restante">
+                Caixas Restantes: 0
+            </div>
+        </div>
+        <table class="table" id="tabela-lancamentos">
+            <thead class="table-header">
+                <tr class="table-header__list">
+                    <th class="table-header__list">Quantidade</th>
+                    <th class="table-header__list">Saída</th>
+                    <th class="table-header__list">Restantes</th>
+                    <th class="table-header__list">Categoria</th>
+                    <th class="table-header__list">Produto</th>
+                    <th class="table-header__list">Data</th>
+                    <th class="table-header__list">Descrição</th>
+                    <th class="table-header__list">Ações</th>
+                </tr>
+            </thead>
+            <tbody class="table-body">
+            </tbody>
+        </table>
+    </div>
+
+    <footer class="footer">
+        <p class="footer-description">
+            © 2025 Desenvolvido por Felipe Lopez - Engenheiro de Software.
+        </p>
+        <p class="footer-text">
+            Projeto com todos os direitos reservados.
+        </p>
+    </footer>
+
+    <!-- button of delete -->
+    <div class="delete">
+        <div class="delete-area">
+            <h3 class="delete-title">
+                Confirmar Exclusão
+            </h3>
+            <p class="delete-text">
+                Tem certeza de que deseja excluir este reiniciar a tabela de estoque?
+            </p>
+            <div class="delete-button">
+                <button type="button" tabindex="1" class="delete-button__link button--link1">
+                    Cancelar
+                </button>
+                <button type="button" tabindex="2" class="delete-button__link button--link2">
+                    Confirmar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- delete of termino -->
+    <div class="delete delete--termino">
+        <div class="delete-area">
+            <h3 class="delete-title">
+                Confirmar Exclusão
+            </h3>
+            <p class="delete-text">
+                Tem certeza de que deseja excluir este reiniciar a tabela de estoque?
+            </p>
+            <div class="delete-button">
+                <button type="button" tabindex="1" class="delete-button__link button--link1">
+                    Cancelar
+                </button>
+                <button type="button" tabindex="2" class="delete-button__link button--link2">
+                    Confirmar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- delete of card -->
+    <div class="delete delete--card">
+        <div class="delete-area">
+            <h3 class="delete-title">
+                Confirmar Exclusão
+            </h3>
+            <p class="delete-text">
+                Tem certeza de que deseja excluir este reiniciar a tabela de estoque?
+            </p>
+            <div class="delete-button">
+                <button type="button" tabindex="1" class="delete-button__link button--link1">
+                    Cancelar
+                </button>
+                <button type="button" tabindex="2" class="delete-button__link button--link2">
+                    Confirmar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-reset">
+        <div class="modal-reset__area">
+            <h3 class="modal-reset__title">Reiniciar Estoque</h3>
+            <p class="modal-reset__text">
+                Digite a senha de administrador para reiniciar todos os lançamentos:
+            </p>
+            <input type="password" class="modal-reset__input" placeholder="Senha" />
+            <div class="modal-reset__buttons">
+                <button type="button" class="modal-reset__cancel">Cancelar</button>
+                <button type="button" class="modal-reset__confirm">Confirmar</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="../../assets/js/global/darkMode.js" defer></script>
+    <script type="text/javascript" src="../../assets/js/global/mobilMenu.js" defer></script>
+    <script type="text/javascript" src="../../assets/js/pages/login/loginValidation.js" defer></script>
+    <script type="module" src="../../assets/js/pages/control/stockControl.js" defer></script>
+     
+</body>
+
+</html>

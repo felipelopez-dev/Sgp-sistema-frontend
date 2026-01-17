@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="cache-control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="pragma" content="no-cache">
+    <meta http-equiv="expires" content="0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Relatório de Estoque</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../../assets/img/favicons/favicon-96x96.png" sizes="96x96">
+    <link rel="shortcut icon" href="../../assets/img/favicons/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="../../assets/img/favicons/apple-touch-icon.png">
+    <meta name="apple-mobile-web-app-title" content="SGP">
+    <link rel="manifest" href="../../assets/img/favicons/site.webmanifest">
+    <link rel="icon" type="image/svg+xml" href="../../assets/img/favicons/favicon.svg">
+
+    <!-- Css -->
+    <link rel="stylesheet" href="../../assets/css/global/normalize.css">
+    <link rel="stylesheet" href="../../assets/css/global/variables.css">
+    <link rel="stylesheet" href="../../assets/css/themes/dark-light.css">
+    <link rel="stylesheet" href="../../assets/css/base/index.css">
+    <link rel="stylesheet" href="../../assets/css/components/register.css">
+    <link rel="stylesheet" href="../../assets/css/components/history-register.css">
+    <link rel="stylesheet" href="../../assets/css/components/dashboard.css">
+    <link rel="stylesheet" href="../../assets/css/components/register-operator.css">
+
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap">
+</head>
+
+<body class="dark-register">
+
+    <header class="sgp-header" role="banner">
+        <a href="../../index-operador.html" class="sgp-header__brand" aria-label="Voltar para a página inicial">
+            <img src="../../assets/img/global/svg/brand/brand.svg" class="sgp-header__logo" tabindex="1"
+                alt="Logotipo do SGP">
+            <div class="sgp-header__vertical-line"></div>
+        </a>
+        <nav class="sgp-header__menu" role="navigation" aria-label="Menu principal">
+            <ul class="sgp-header__list">
+                <li class="sgp-header__item">
+                    <a href="../../index-operador.html" class="sgp-header__link" tabindex="2">Início</a>
+                </li>
+                <li class="sgp-header__item">
+                    <a href="#" class="sgp-header__link" tabindex="3">Calcular</a>
+                    <ul class="sub-menu">
+                        <li><a href="#">Cálculo de Paletização</a></li>
+                        <li><a href="../../pages/calculate/calculate-operador.html">Cálculo da Produção</a></li>
+                    </ul>
+                </li>
+                <li class="sgp-header__item">
+                    <a href="../../pages/register/register-operador.html" class="sgp-header__link"
+                        tabindex="4">Registrar saída</a>
+                </li>
+                <li class="sgp-header__item">
+                    <a href="#" class="sgp-header__link" tabindex="4">Relatórios</a>
+                    <ul class="sub-menu">
+                        <li><a href="../../pages/graphic/stock-report-operador.html">Relatório de Estoque</a></li>
+                    </ul>
+                </li>
+                <li class="sgp-header__item">
+                    <a href="../../pages/control/control-operador.html" class="sgp-header__link" tabindex="4">Controle
+                        de Estoque</a>
+                </li>
+                <li class="sgp-header__item">
+                    <a href="#" class="sgp-header__link" tabindex="4">Históricos</a>
+                    <ul class="sub-menu">
+                        <li><a href="../../pages/history/history-control-operador.html">Histórico de Estoque</a></li>
+                        <li><a href="../../pages/history/history-operador.html">Histórico de Registros</a></li>
+                    </ul>
+                </li>
+                <li class="sgp-header__item">
+                    <a href="../../pages/guide/guide-operador.html" class="sgp-header__link" tabindex="4">Suporte</a>
+                </li>
+            </ul>
+        </nav>
+        <div class="header-mobile">
+            <img class="header-mobile__image" src="../../assets/img/global/svg/icons/ui/menu-register.svg"
+                alt="Imagem de menu" title="Botão de menu">
+        </div>
+        <div class="mobile">
+            <button class="close-menu">
+                <img class="close-menu__image" src="../../assets/img/global/svg/icons/ui/close-circle-register.svg"
+                    alt="Ícone de fechar menu">
+            </button>
+            <nav class="mobile-menu">
+                <ul class="mobile-menu__content">
+                    <li class="sgp-header__item">
+                        <a href="../../index-operador.html" class="sgp-header__link" tabindex="2">Início</a>
+                    </li>
+                    <li class="sgp-header__item">
+                        <a href="#" class="sgp-header__link" tabindex="3">Calcular</a>
+                        <ul class="sub-menu">
+                            <li><a href="#">Cálculo de Paletização</a></li>
+                            <li><a href="../../pages/calculate/calculate-operador.html">Cálculo da Produção</a></li>
+                        </ul>
+                    </li>
+                    <li class="sgp-header__item">
+                        <a href="../../pages/register/register-operador.html" class="sgp-header__link"
+                            tabindex="4">Registrar saída</a>
+                    </li>
+                    <li class="sgp-header__item">
+                        <a href="#" class="sgp-header__link" tabindex="4">Relatórios</a>
+                        <ul class="sub-menu">
+                            <li><a href="../../pages/graphic/stock-report-operador.html">Relatório de Estoque</a></li>
+                        </ul>
+                    </li>
+                    <li class="sgp-header__item">
+                        <a href="../../pages/control/control-operador.html" class="sgp-header__link"
+                            tabindex="4">Controle de Estoque</a>
+                    </li>
+                    <li class="sgp-header__item">
+                        <a href="#" class="sgp-header__link" tabindex="4">Históricos</a>
+                        <ul class="sub-menu">
+                            <li><a href="../../pages/history/history-control-operador.html">Histórico de Estoque</a>
+                            </li>
+                            <li><a href="../../pages/history/history-operador.html">Histórico de Registros</a></li>
+                        </ul>
+                    </li>
+                    <li class="sgp-header__item">
+                        <a href="../../pages/guide/guide-operador.html" class="sgp-header__link"
+                            tabindex="4">Suporte</a>
+                    </li>
+                    <li class="sgp-header__item">
+                        <a href="javascript:void(0)" onclick="handleLogout()"
+                            class="sgp-header__link sgp-header__button-close" tabindex="4">Sair</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <div class="sgp-header__area-button">
+            <div class="sgp-header__user" id="userProfileArea">
+                <div class="sgp-header__user-info" id="userMenuToggle">
+                    <span class="sgp-header__user-name" id="userNameGreeting">Olá, Usuário!</span>
+                    <img src="../../assets/img/global/svg/icons/ui/arrow-down.svg" alt="Abrir menu"
+                        class="sgp-header__user-arrow">
+                </div>
+                <ul class="sgp-header__user-menu" id="userMenu">
+                    <li><a href="javascript:void(0)" id="logoutBtn" class="logout">Sair</a></li>
+                </ul>
+            </div>
+            <button class="sgp-header__btn-light-dark" aria-label="Alternar entre modo claro e escuro">
+                <div class="sgp-header__rail-mode">
+                    <img src="../../assets/img/global/svg/icons/ui/light.svg" tabindex="5"
+                        class="sgp-header__img-light icon--dark-light" alt="Modo claro">
+                    <img src="../../assets/img/global/svg/icons/ui/dark.svg" alt="Modo escuro" tabindex="6"
+                        class="sgp-header__img-dark icon--dark-light">
+                </div>
+            </button>
+        </div>
+    </header>
+
+
+    <section class="sgp-report card">
+        <header class="report-header">
+            <h2 class="report-header__title">Relatório Diário — Túnel / Caixas</h2>
+            <div class="report-controls">
+                <div class="report-start">
+                    <div class="report-start__area">
+                        <label class="report-label">Período (mês)</label>
+                        <input id="report-month" type="month" />
+                    </div>
+
+                    <div class="report-start__area">
+                        <label class="report-label">Produto</label>
+                        <select id="report-product">
+                            <option value="">Todos</option>
+                        </select>
+                    </div>
+                    <button id="report-apply" class="btn">Aplicar</button>
+                </div>
+                <div class="report-button__area">
+                    <button id="export-csv" class="btn ghost">CSV</button>
+                    <button id="export-xlsx" class="btn ghost">Excel</button>
+                    <button id="export-pdf" class="btn ghost">PDF</button>
+                </div>
+            </div>
+        </header>
+
+        <div class="report-summary" id="report-summary">
+            <!-- cards dinamicos: total do mes, melhor dia, total restante -->
+        </div>
+
+        <div class="report-content">
+            <div class="report-chart card">
+                <canvas id="dailyChart" height="120"></canvas>
+            </div>
+
+            <div class="report-table card">
+                <h4>Detalhe por dia</h4>
+                <div style="overflow:auto">
+                    <table id="dailyTable" class="table">
+                        <thead>
+                            <tr>
+                                <th>Dia</th>
+                                <th>Total Caixas</th>
+                                <th>Caixas Restantes</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div id="monthly-summary" class="summary-grid"></div>
+
+    <!-- Block of alarm update -->
+    <div class="alarm alarm--add">
+        <div class="alarm-mensage">
+            <div class="alarm-title">Nova saída registrada!</div>
+            <img src="../../assets/img/global/svg/icons/ui/bell-register.svg" class="alarm-image" alt="Imagem de sino">
+        </div>
+        <div class="alarm-card__button">
+            <button class="alarm-button">
+                ok
+            </button>
+        </div>
+    </div>
+
+    <div class="alarm alarm--update">
+        <div class="alarm-mensage">
+            <div class="alarm-title">Uma atulização nova!</div>
+            <img src="../../assets/img/global/svg/icons/ui/bell-register.svg" class="alarm-image" alt="Imagem de sino">
+        </div>
+        <div class="alarm-card__button">
+            <button class="alarm-button button--update">
+                ok
+            </button>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p class="footer-description">
+            © 2025 Desenvolvido por Felipe Lopez - Engenheiro de Software.
+        </p>
+        <p class="footer-text">
+            Projeto com todos os direitos reservados.
+        </p>
+    </footer>
+
+    <!-- Scripts globais -->
+    <script src="../../assets/js/global/darkMode.js" defer></script>
+    <script src="../../assets/js/global/mobilMenu.js" defer></script>
+
+    <!-- Firebase (sempre antes de qualquer JS que use o banco) -->
+    <script type="module" src="../../assets/js/pages/register/firebaseConfig.js"></script>
+    <script type="module" src="../../assets/js/pages/register/validationRegister.js" defer></script>
+
+    <!-- Login -->
+    <script src="../../assets/js/pages/login/loginValidation.js" defer></script>
+
+    <!-- Chart.js (gráficos) -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+
+    <!-- Excel (SheetJS) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+    <!-- PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <!-- Relatório (SEMPRE POR ÚLTIMO) -->
+    <script type="module" src="../../assets/js/pages/control/stockReport.js"></script>
+
+</body>
+
+</html>
